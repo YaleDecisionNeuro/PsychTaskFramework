@@ -101,6 +101,8 @@ DrawFormattedText(Data.stimulus.win, ['Block ' num2str(blockNum)],'center','cent
 drawRef(Data)
 Screen('flip',Data.stimulus.win);
 waitForBackTick;
+
+% run the trials left from the first session
 for trial=Data.numTrials/2 + 1:Data.numTrials %change here to start after half the trials (LR)
     Data.trialTime(trial).trialStartTime=datevec(now);
     Data=drawLotto_LSRA(Data,trial);
@@ -124,6 +126,7 @@ eval(sprintf('save %s.mat Data',Data.filename))
 Screen('CloseAll')
 end
 
+% Below are functions
 function Data=drawLotto_LSRA(Data,trial);
 eval(sprintf('lotteryValueDims=Data.stimulus.textDims.lotteryValues.Digit%g;',length(num2str(Data.vals(trial)))));
 if strcmp(Data.colorKey{Data.colors(trial)},'blue')
@@ -299,6 +302,7 @@ end
 end
 
 %Broke DataSummary into Block 1&2 Gains/Block 3&4 Loss
+% Data.Summary is used for getting subject's response for a certain trial. Used for doing payment.
 function Data=experimentSummary(Data)
 block=1;
 trial=1;
