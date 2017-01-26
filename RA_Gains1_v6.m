@@ -40,11 +40,11 @@ Data.stimulus.responseWindowDur=3.5;
 Data.stimulus.feedbackDur=.5;
 Data.stimulus.lottoDisplayDur=6;
 
-n_repeats=1;
-riskyVals=[5,6,7,8,10,12,14,16,19,23,27,31,37,44,52,61,73,86,101,120];
+n_repeats=4;
+riskyVals=[5,8,12,17,25];
 riskyProbs=[.75 .5 .25];
 [valsR, probs, repeat]=ndgrid(riskyVals,riskyProbs, 1:n_repeats);
-ambigVals=[5,6,7,8,10,12,14,16,19,23,27,31,37,44,52,61,73,86,101,120];
+ambigVals=[5,8,12,17,25];
 ambigLevels=[.24 .5 .74];
 [valsA, ambigs, repeat]=ndgrid(ambigVals,ambigLevels, 1:n_repeats);
  
@@ -147,41 +147,81 @@ Y3=Y2+Data.stimulus.lotto.height*blueProb; % bottom of blue
 
 Y2occ=Y1+Data.stimulus.lotto.height*((1-Data.ambigs(trial))/2); % top of occ
 Y3occ=Y2occ+Data.stimulus.lotto.height*((Data.ambigs(trial))); % bottom of occ
-
+move_const = 0.2*H;
+if Data.refSide == 1
+    move_const = -1 * move_const;
+end 
+move_rect = [0, move_const];
 Screen(Data.stimulus.win, 'FillRect', 1  );
-lottoRedDims=[W/2-Data.stimulus.lotto.width/2, Y1, W/2+Data.stimulus.lotto.width/2, Y2];
+lottoRedDims=[W/2-Data.stimulus.lotto.width/2, Y1+move_const, W/2+Data.stimulus.lotto.width/2, Y2+move_const];
 Screen(Data.stimulus.win,'FillRect',[255 0 0],lottoRedDims);
-lottoBlueDims=[W/2-Data.stimulus.lotto.width/2, Y2, W/2+Data.stimulus.lotto.width/2, Y3];
+lottoBlueDims=[W/2-Data.stimulus.lotto.width/2, Y2+move_const, W/2+Data.stimulus.lotto.width/2, Y3+move_const];
 Screen(Data.stimulus.win,'FillRect',[0 0 255],lottoBlueDims);
-lottoAmbigDims=[W/2-Data.stimulus.lotto.width/2, Y2occ, W/2+Data.stimulus.lotto.width/2, Y3occ];
+lottoAmbigDims=[W/2-Data.stimulus.lotto.width/2, Y2occ+move_const, W/2+Data.stimulus.lotto.width/2, Y3occ+move_const];
 Screen(Data.stimulus.win,'FillRect',[127 127 127],lottoAmbigDims);
 if strcmp(Data.colorKey{Data.colors(trial)},'blue')
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.lotteryValues);
     lotteryValueDims = getTextDims(Data.stimulus.win, sprintf('$%s',num2str(Data.vals(trial))),Data.stimulus.fontSize.lotteryValues);
-    Screen('DrawText',Data.stimulus.win, sprintf('$%s',num2str(Data.vals(trial))),W/2-lotteryValueDims(1)/2, Y3, Data.stimulus.fontColor);
+    Screen('DrawText', Data.stimulus.win, sprintf('$%s',num2str(Data.vals(trial))), ...
+        W/2-lotteryValueDims(1)/2, ...
+        Y3 + move_const, ...
+        Data.stimulus.fontColor);
     zeroValueDims = getTextDims(Data.stimulus.win,'$0',Data.stimulus.fontSize.lotteryValues);
-    Screen('DrawText',Data.stimulus.win, '$0',W/2-zeroValueDims(1)/2, Y1-zeroValueDims(2), Data.stimulus.fontColor);
+    Screen('DrawText',Data.stimulus.win, '$0', ...
+        W/2-zeroValueDims(1)/2, ...
+        Y1-zeroValueDims(2) + move_const, ...
+        Data.stimulus.fontColor);
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.probabilities);
     if Data.ambigs(trial)==0
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(blueProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(redProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(blueProb*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(redProb*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
     else
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
     end
 elseif strcmp(Data.colorKey{Data.colors(trial)},'red')
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.lotteryValues);
     lotteryValueDims = getTextDims(Data.stimulus.win, sprintf('$%s',num2str(Data.vals(trial))),Data.stimulus.fontSize.lotteryValues);
-    Screen('DrawText',Data.stimulus.win, sprintf('$%s',num2str(Data.vals(trial))),W/2-lotteryValueDims(1)/2, Y1-lotteryValueDims(2), Data.stimulus.fontColor);
+    Screen('DrawText',Data.stimulus.win, sprintf('$%s',num2str(Data.vals(trial))), ...
+        W/2-lotteryValueDims(1)/2, ...
+        Y1-lotteryValueDims(2) + move_const, ...
+        Data.stimulus.fontColor);
     zeroValueDims = getTextDims(Data.stimulus.win,'$0',Data.stimulus.fontSize.lotteryValues);
-    Screen('DrawText',Data.stimulus.win, '$0',W/2-zeroValueDims(1)/2, Y3, Data.stimulus.fontColor);
+    Screen('DrawText',Data.stimulus.win, '$0', ...
+        W/2-zeroValueDims(1)/2, ...
+        Y3 + move_const, ...
+        Data.stimulus.fontColor);
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.probabilities);
     if Data.ambigs(trial)==0
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(blueProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(redProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(blueProb*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(redProb*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
     else
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)), ...
+            W/2-Data.stimulus.textDims.probabilities(1)/2, ...
+            Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2 + move_const, ...
+            Data.stimulus.fontColor);
     end
 end
 
@@ -194,57 +234,49 @@ while elapsedTime<Data.stimulus.lottoDisplayDur
 end
 
 Screen('FillOval', Data.stimulus.win, [0 255 0], [Data.stimulus.winrect(3)/2-20 Data.stimulus.winrect(4)/2-20 Data.stimulus.winrect(3)/2+20 Data.stimulus.winrect(4)/2+20]);
-drawRef(Data)
+% drawRef(Data)
 Screen('flip',Data.stimulus.win);
 Data.trialTime(trial).respStartTime=datevec(now);
 elapsedTime=etime(datevec(now),Data.trialTime(trial).respStartTime);
-while elapsedTime<Data.stimulus.responseWindowDur
+while 1 %elapsedTime<Data.stimulus.responseWindowDur commented the former code out for nystagmus task
     [keyisdown, secs, keycode, deltaSecs] = KbCheck;
-    if keyisdown && (keycode(KbName('2@')) || keycode(KbName('1!')))
+    if keyisdown && (keycode(KbName('Up')) || keycode(KbName('Down')))
         elapsedTime=etime(datevec(now),Data.trialTime(trial).respStartTime);
         break
     end
     elapsedTime=etime(datevec(now),Data.trialTime(trial).respStartTime);
 end
 
-if keyisdown && keycode(KbName('1!'))            %% Reversed keys '1' and '2' - DE
+H=Data.stimulus.winrect(4);
+W=Data.stimulus.winrect(3);
+feedbackLength = 40;
+upDims = [W/2 - feedbackLength/2, ...
+    .4 * H - feedbackLength/2, ...
+    W/2 + feedbackLength/2, ...
+    .4 * H + feedbackLength/2];
+downDims = [W/2 - feedbackLength/2, ...
+    .6 * H - feedbackLength/2, ...
+    W/2 + feedbackLength/2, ...
+    .6 * H + feedbackLength/2];
+
+upColor = [255 255 255];
+downColor = [255 255 255];
+
+if keyisdown && keycode(KbName('Up'))            %% Reversed keys '1' and '2' - DE
     Data.choice(trial)=1;
     Data.rt(trial)=elapsedTime;
-    if Data.refSide==2
-        yellowDims=[.5*Data.stimulus.winrect(3)/10 -100 .5*Data.stimulus.winrect(3)/10 -100]+[4.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 4.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-        whiteDims=[.5*Data.stimulus.winrect(3)/10 -100 .5*Data.stimulus.winrect(3)/10 -100]+[5.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 5.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-    else
-        yellowDims=[-.5*Data.stimulus.winrect(3)/10 -100 -.5*Data.stimulus.winrect(3)/10 -100]+[4.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 4.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-        whiteDims=[-.5*Data.stimulus.winrect(3)/10 -100 -.5*Data.stimulus.winrect(3)/10 -100]+[5.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 5.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-    end
-    yellowColor=[255 255 0];
-elseif keyisdown && keycode(KbName('2@'))        %% Reversed keys '2' and '1' - DE
+    upColor=[255 255 0];
+elseif keyisdown && keycode(KbName('Down'))        %% Reversed keys '2' and '1' - DE
     Data.choice(trial)=2;
     Data.rt(trial)=elapsedTime;
-    if Data.refSide==2
-        whiteDims=[.5*Data.stimulus.winrect(3)/10 -100 .5*Data.stimulus.winrect(3)/10 -100]+[4.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 4.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-        yellowDims=[.5*Data.stimulus.winrect(3)/10 -100 .5*Data.stimulus.winrect(3)/10 -100]+[5.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 5.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-    else
-        whiteDims=[-.5*Data.stimulus.winrect(3)/10 -100 -.5*Data.stimulus.winrect(3)/10 -100]+[4.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 4.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-        yellowDims=[-.5*Data.stimulus.winrect(3)/10 -100 -.5*Data.stimulus.winrect(3)/10 -100]+[5.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 5.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-    end
-    Data.rt(trial)=elapsedTime;
-    yellowColor=[255 255 0];
+    downColor=[255 255 0];
 else
     Data.choice(trial)=0;
     Data.rt(trial)=NaN;
-    yellowColor=[255 255 255];
-    if Data.refSide==2
-        whiteDims=[.5*Data.stimulus.winrect(3)/10 -100 .5*Data.stimulus.winrect(3)/10 -100]+[4.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 4.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-        yellowDims=[.5*Data.stimulus.winrect(3)/10 -100 .5*Data.stimulus.winrect(3)/10 -100]+[5.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 5.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-    else
-        whiteDims=[-.5*Data.stimulus.winrect(3)/10 -100 -.5*Data.stimulus.winrect(3)/10 -100]+[4.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 4.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-        yellowDims=[-.5*Data.stimulus.winrect(3)/10 -100 -.5*Data.stimulus.winrect(3)/10 -100]+[5.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 5.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
-    end
 end
-Screen(Data.stimulus.win,'FillRect',yellowColor,yellowDims);
-Screen(Data.stimulus.win,'FillRect',[255 255 255],whiteDims);
-drawRef(Data)
+Screen(Data.stimulus.win,'FillRect', upColor, upDims);
+Screen(Data.stimulus.win,'FillRect', downColor, downDims);
+% drawRef(Data)
 Screen('flip',Data.stimulus.win);
 
 Data.trialTime(trial).feedbackStartTime=datevec(now);
@@ -254,7 +286,7 @@ while elapsedTime<Data.stimulus.feedbackDur
 end
 
 Screen('FillOval', Data.stimulus.win, [255 255 255], [Data.stimulus.winrect(3)/2-20 Data.stimulus.winrect(4)/2-20 Data.stimulus.winrect(3)/2+20 Data.stimulus.winrect(4)/2+20]);
-drawRef(Data)
+% drawRef(Data)
 Screen('flip',Data.stimulus.win);
 
 Data.trialTime(trial).ITIStartTime=datevec(now);
@@ -300,21 +332,21 @@ function drawRef(Data)
 H=Data.stimulus.winrect(4);
 W=Data.stimulus.winrect(3);
 if Data.refSide==1
-    refDims.x=W/4;
+    refDims.y=.75*H;
 elseif Data.refSide==2
-    refDims.x=3*(W/4);
+    refDims.y=.25*H;
 end
-refDims.y=H/4;
+refDims.x=W/2;
 Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.refValues);
-% refTextDims = gettextDims(Data.stimulus.win, '$5', Data.stimulus.fontSize.refValues);
-Screen('DrawText',Data.stimulus.win, '$5',refDims.x, refDims.y, Data.stimulus.fontColor);
+refTextDims = getTextDims(Data.stimulus.win, '$5', Data.stimulus.fontSize.refValues);
+Screen('DrawText',Data.stimulus.win, '$5', refDims.x - refTextDims(1)/2, refDims.y, Data.stimulus.fontColor);
 end
 
 %%
 function waitForBackTick;
 while 1
     [keyisdown, secs, keyCode, deltaSecs] = KbCheck;
-    if keyisdown && keyCode(KbName('5%'))==1
+    if keyisdown && keyCode(KbName('space'))==1
         break
     end
 end
