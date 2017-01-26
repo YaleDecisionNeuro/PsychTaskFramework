@@ -1,4 +1,4 @@
-function RA_Loss1(observer);
+function RA_Loss1_v7(observer);
 KbName('KeyNamesWindows');
 s = RandStream.create('mt19937ar','seed',sum(100*clock));
 RandStream.setGlobalStream(s);
@@ -96,10 +96,12 @@ DrawFormattedText(Data.stimulus.win, ['Block ' num2str(blockNum)],'center','cent
 drawRef(Data)
 Screen('flip',Data.stimulus.win);
 waitForBackTick;
+Data.stimulus.textDims.probabilities = getTextDims(Data.stimulus.win,'50', Data.stimulus.fontSize.probabilities);% get the text dimensons for probability
 for trial=1:Data.numTrials/2 %change here to stop after half the trials (LR)
     Data.trialTime(trial).trialStartTime=datevec(now);
     Data=drawLotto_LSRA(Data,trial);
     Data.trialTime(trial).trialEndTime=datevec(now);
+    eval(sprintf('save %s.mat Data',Data.filename))
     if mod(trial,31)==0
         blockNum=blockNum+1;
         Screen(Data.stimulus.win, 'FillRect',1);
@@ -119,8 +121,9 @@ eval(sprintf('save %s.mat Data',Data.filename))
 Screen('CloseAll')
 end
 
-function Data=drawLotto_LSRA(Data,trial);
-eval(sprintf('lotteryValueDims=Data.stimulus.textDims.lotteryValues.Digit%g;',length(num2str(Data.vals(trial)))));
+%%
+function Data=drawLotto_LSRA(Data,trial)
+%eval(sprintf('lotteryValueDims=Data.stimulus.textDims.lotteryValues.Digit%g;',length(num2str(Data.vals(trial)))));% text dimension depending on how long the text is
 if strcmp(Data.colorKey{Data.colors(trial)},'blue')
     redProb=1-Data.probs(trial);
     blueProb=Data.probs(trial);
@@ -131,12 +134,12 @@ end
 
 H=Data.stimulus.winrect(4);
 W=Data.stimulus.winrect(3);
-Y1=(H-Data.stimulus.lotto.height)/2;
-Y2=Y1+Data.stimulus.lotto.height*redProb;
-Y3=Y2+Data.stimulus.lotto.height*blueProb;
+Y1=(H-Data.stimulus.lotto.height)/2; % top of red 
+Y2=Y1+Data.stimulus.lotto.height*redProb; % top of blue
+Y3=Y2+Data.stimulus.lotto.height*blueProb; % bottom of blue
 
-Y2occ=Y1+Data.stimulus.lotto.height*((1-Data.ambigs(trial))/2);
-Y3occ=Y2occ+Data.stimulus.lotto.height*((Data.ambigs(trial)));
+Y2occ=Y1+Data.stimulus.lotto.height*((1-Data.ambigs(trial))/2); % top of occ
+Y3occ=Y2occ+Data.stimulus.lotto.height*((Data.ambigs(trial))); % bottom of occ
 
 Screen(Data.stimulus.win, 'FillRect', 1  );
 lottoRedDims=[W/2-Data.stimulus.lotto.width/2, Y1, W/2+Data.stimulus.lotto.width/2, Y2];
@@ -147,27 +150,31 @@ lottoAmbigDims=[W/2-Data.stimulus.lotto.width/2, Y2occ, W/2+Data.stimulus.lotto.
 Screen(Data.stimulus.win,'FillRect',[127 127 127],lottoAmbigDims);
 if strcmp(Data.colorKey{Data.colors(trial)},'blue')
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.lotteryValues);
-    DrawFormattedText(Data.stimulus.win, sprintf('-$%s',num2str(Data.vals(trial))),W/2-lotteryValueDims(1)/2, Y3, Data.stimulus.fontColor);
-    DrawFormattedText(Data.stimulus.win, '$0',W/2-Data.stimulus.textDims.lotteryValues.Digit1(1)/2, Y1-lotteryValueDims(2), Data.stimulus.fontColor);
+    lotteryValueDims = getTextDims(Data.stimulus.win, sprintf('-$%s',num2str(Data.vals(trial))),Data.stimulus.fontSize.lotteryValues);
+    Screen('DrawText',Data.stimulus.win, sprintf('-$%s',num2str(Data.vals(trial))),W/2-lotteryValueDims(1)/2, Y3, Data.stimulus.fontColor);
+    zeroValueDims = getTextDims(Data.stimulus.win,'$0',Data.stimulus.fontSize.lotteryValues);
+    Screen('DrawText',Data.stimulus.win, '$0',W/2-zeroValueDims(1)/2, Y1-zeroValueDims(2), Data.stimulus.fontColor);
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.probabilities);
     if Data.ambigs(trial)==0
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str(blueProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str(redProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(blueProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(redProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
     else
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
     end
 elseif strcmp(Data.colorKey{Data.colors(trial)},'red')
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.lotteryValues);
-    DrawFormattedText(Data.stimulus.win, sprintf('-$%s',num2str(Data.vals(trial))),W/2-lotteryValueDims(1)/2, Y1-lotteryValueDims(2), Data.stimulus.fontColor);
-    DrawFormattedText(Data.stimulus.win, '$0',W/2-Data.stimulus.textDims.lotteryValues.Digit1(1)/2, Y3, Data.stimulus.fontColor);
+    lotteryValueDims = getTextDims(Data.stimulus.win, sprintf('-$%s',num2str(Data.vals(trial))),Data.stimulus.fontSize.lotteryValues);
+    Screen('DrawText',Data.stimulus.win, sprintf('-$%s',num2str(Data.vals(trial))),W/2-lotteryValueDims(1)/2, Y1-lotteryValueDims(2), Data.stimulus.fontColor);
+    zeroValueDims = getTextDims(Data.stimulus.win,'$0',Data.stimulus.fontSize.lotteryValues);
+    Screen('DrawText',Data.stimulus.win, '$0',W/2-zeroValueDims(1)/2, Y3, Data.stimulus.fontColor);
     Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.probabilities);
     if Data.ambigs(trial)==0
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str(blueProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str(redProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(blueProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y2+(Y3-Y2)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str(redProb*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
     else
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
-        DrawFormattedText(Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y3occ+(Y3-Y3occ)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
+        Screen('DrawText',Data.stimulus.win, sprintf('%s',num2str((1-Data.ambigs(trial))/2*100)),W/2-Data.stimulus.textDims.probabilities(1)/2, Y1+(Y2occ-Y1)/2-Data.stimulus.textDims.probabilities(2)/2, Data.stimulus.fontColor);
     end
 end
 
@@ -239,7 +246,6 @@ while elapsedTime<Data.stimulus.feedbackDur
     elapsedTime=etime(datevec(now),Data.trialTime(trial).feedbackStartTime);
 end
 
-eval(sprintf('save %s.mat Data',Data.filename))
 Screen('FillOval', Data.stimulus.win, [255 255 255], [Data.stimulus.winrect(3)/2-20 Data.stimulus.winrect(4)/2-20 Data.stimulus.winrect(3)/2+20 Data.stimulus.winrect(4)/2+20]);
 drawRef(Data)
 Screen('flip',Data.stimulus.win);
@@ -250,28 +256,39 @@ while elapsedTime<Data.stimulus.lottoDisplayDur+Data.stimulus.responseWindowDur+
     elapsedTime=etime(datevec(now),Data.trialTime(trial).trialStartTime);
 end
 end
+
+%%
+function textDims = getTextDims(win,myText,textSize)
+Screen('TextSize',win,textSize);
+textRect = Screen ('TextBounds',win,myText);
+textDims = [textRect(3) textRect(4)]; % text width and height
+end
+%%
 function params = setParams_LSRA;
 params.fontName='Ariel';
 params.fontColor=[255 255 255];
 params.fontSize.probabilities=20;
-params.textDims.probabilities=[31 30];
-params.fontSize.refProbabilities=10;
-params.textDims.refProbabilities=[12 19];
+% params.textDims.probabilities=[31 30]; % use getTextDims in the very beginning
+params.fontSize.refProbabilities=10; % is it used?
+% params.textDims.refProbabilities=[12 19];
 
 params.fontSize.lotteryValues=42;
-params.textDims.lotteryValues.Digit1=[64 64];
-params.textDims.lotteryValues.Digit2=[92 64];
-params.textDims.lotteryValues.Digit3=[120 64];
+%params.textDims.lotteryValues.Digit1=[64 64];
+%params.textDims.lotteryValues.Digit2=[92 64];
+%params.textDims.lotteryValues.Digit3=[120 64];
 
 params.fontSize.refValues=42;
-params.textDims.refValues.Digit1=[31 30];
-params.textDims.refValues.Digit2=[42 30];
+% params.textDims.refValues.Digit1=[31 30];
+% params.textDims.refValues.Digit2=[42 30];
 
 params.lotto.width=150;
 params.lotto.height=300;
-params.ref.width=50;
-params.ref.height=100;
+% params.ref.width=50; % is it used?
+% params.ref.height=100; % is it used?
+params.occ.width = 180;
 end
+
+%%
 function drawRef(Data)
 H=Data.stimulus.winrect(4);
 W=Data.stimulus.winrect(3);
@@ -282,8 +299,10 @@ elseif Data.refSide==2
 end
 refDims.y=H/4;
 Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.refValues);
-DrawFormattedText(Data.stimulus.win, '-$5',refDims.x, refDims.y, Data.stimulus.fontColor);
+% refTextDims = gettextDims(Data.stimulus.win, '-$5', Data.stimulus.fontSize.refValues);
+Screen('DrawText',Data.stimulus.win, '-$5',refDims.x, refDims.y, Data.stimulus.fontColor);
 end
+%%
 function waitForBackTick;
 while 1
     [keyisdown, secs, keycode, deltaSecs] = KbCheck;
