@@ -1,4 +1,9 @@
 function drawRef(Data)
+% Draws the stable reference value on screen
+% TODO: Separate `Data` into `settings` and ... individual settings?
+% Inputs: screen size (`.winrect`), side to draw on (`refSide`),
+%   screen ID? (`.win`), font size
+% TODO: $5 should be drawn from settings
 H=Data.stimulus.winrect(4);
 W=Data.stimulus.winrect(3);
 if Data.refSide==1
