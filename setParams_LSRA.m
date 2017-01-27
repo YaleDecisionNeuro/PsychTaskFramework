@@ -20,4 +20,9 @@ params.lotto.width=150;
 params.lotto.height=300;
 params.ref.width=50;
 params.ref.height=100;
+
+params.colors_prob = [255 0 0; 0 0 255]; % RGB values
+params.color_ambig = [127 127 127];
+
+params.color_background = [0 0 0];
 end
