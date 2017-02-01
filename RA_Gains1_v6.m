@@ -38,6 +38,7 @@ Data.stimulus.responseWindowDur=3.5;
 Data.stimulus.feedbackDur=.5;
 Data.stimulus.lottoDisplayDur=6;
 
+%% Set up a random trial order
 % Risk and ambig levels, amount levels
 n_repeats=1;
 riskyVals=[5,6,7,8,10,12,14,16,19,23,27,31,37,44,52,61,73,86,101,120];
@@ -46,22 +47,26 @@ riskyProbs=[.75 .5 .25];
 ambigVals=[5,6,7,8,10,12,14,16,19,23,27,31,37,44,52,61,73,86,101,120];
 ambigLevels=[.24 .5 .74];
 [valsA, ambigs, repeat]=ndgrid(ambigVals,ambigLevels, 1:n_repeats);
- 
-% make colors sum to same value.
-% The numbers in the vectors are tial numbers, they are of the same color . 20 trials total
+
+% Make equal number of colors within each block
+% The numbers in the vectors are trial numbers, they are of the same color . 20 trials total
 % Two colors, blue and red
 colorIndex1=[1     2     5     6     7    11    14    15    18    20];
 colorIndex2=[3     4     8     9    10    12    13    16    17    19];
- 
+% Contain a specific pseudorandom [*] order of trial indices; all indices will have the winning amount associated to the same color in a given block
+% [*] Pseudorandom rule: no more than three consecutive equal color*win
+
 Data.numTrials = length(valsR(:))+length(valsA(:));
 vals=[valsR(:); valsA(:)];
 probs=[probs(:); .5*ones(size(ambigs(:)))];
 ambigs=[zeros(size(ambigs(:))); ambigs(:)];
- 
+% At this point, all of `vals`, `probs` and `ambigs` contain relevant values indexed by `i`
+
 start=1;
 for cond=1:6 % start = 1,21, 41, 61, 81, 101
     finish=start+19; % finish = 21,40,60,80,100,120
     assocColorIndex=randperm(2); % shuffle two colors
+    % `colors` contains only color assignments for this block, `shufColors` for the entire set of trials
     colors(colorIndex1)=assocColorIndex(1);
     colors(colorIndex2)=assocColorIndex(2);
     shufColors(start:finish)=colors;
@@ -69,6 +74,7 @@ for cond=1:6 % start = 1,21, 41, 61, 81, 101
 end
 
 % Randomize trial order
+% NOTE: All trial values + parameters are set up, what's generated here is order via `randperm`
 paramPrep=[vals probs ambigs shufColors' randperm(length(vals))']; % make the parameters in to matrix. Each row is a trial. The last column is the randomized trial order
 expParams=sortrows(paramPrep,5); % present trial in randomized order
 
@@ -79,24 +85,27 @@ F1=S1+29; % last trial of each block, 30 trials per block
 S2=[1 32 63 94]; % start of each block's second trial. The first trial is the catch trial that would be added later
 F2=S2+30; % last rial of each block, 31 trials per block
 tmpColors=[randperm(2) randperm(2)];
-ITIs=[4*ones(1,(length(vals(:)))/12) 6*ones(1,(length(vals(:)))/12) 8*ones(1,(length(vals(:)))/12)];
+ITIs = [4 * ones(1, (length(vals(:))) / 12), ...
+    6 * ones(1, (length(vals(:))) / 12), ...
+    8 * ones(1, (length(vals(:))) / 12)];
 
 %Set up stimulus parameters for the first trial in every block. ITI = 10s
+%Start of each block is a test trial with $4 victory at 50%, 0 ambiguity, a random color, and ITI of 10 sec
 for block=1:4
-Data.vals(S2(block))=4;
-Data.vals(S2(block)+1:F2(block))=expParams(S1(block):F1(block),1);
- 
-Data.probs(S2(block))=.5;
-Data.probs(S2(block)+1:F2(block))=expParams(S1(block):F1(block),2);
- 
-Data.ambigs(S2(block))=0;
-Data.ambigs(S2(block)+1:F2(block))=expParams(S1(block):F1(block),3);
- 
-Data.colors(S2(block))=tmpColors(block);
-Data.colors(S2(block)+1:F2(block))=expParams(S1(block):F1(block),4);
- 
-Data.ITIs(S2(block))=10;
-Data.ITIs(S2(block)+1:F2(block))=ITIs(randperm(length(ITIs)));
+    Data.vals(S2(block))=4;
+    Data.vals(S2(block)+1:F2(block))=expParams(S1(block):F1(block),1);
+
+    Data.probs(S2(block))=.5;
+    Data.probs(S2(block)+1:F2(block))=expParams(S1(block):F1(block),2);
+
+    Data.ambigs(S2(block))=0;
+    Data.ambigs(S2(block)+1:F2(block))=expParams(S1(block):F1(block),3);
+
+    Data.colors(S2(block))=tmpColors(block);
+    Data.colors(S2(block)+1:F2(block))=expParams(S1(block):F1(block),4);
+
+    Data.ITIs(S2(block))=10;
+    Data.ITIs(S2(block)+1:F2(block))=ITIs(randperm(length(ITIs)));
 end
 
 % write trial parameters into the Data struct
@@ -105,14 +114,15 @@ Data.probs=Data.probs';
 Data.ambigs=Data.ambigs';
 Data.numTrials=length(Data.vals);
 
+%% Start running trial blocks
 blockNum=1;
-Screen(Data.stimulus.win, 'FillRect',1);
+Screen(Data.stimulus.win, 'FillRect', 1);
 Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.lotteryValues);
-DrawFormattedText(Data.stimulus.win, ['Block ' num2str(blockNum)],'center','center',Data.stimulus.fontColor);
+DrawFormattedText(Data.stimulus.win, ['Block ' num2str(blockNum)], 'center', 'center', Data.stimulus.fontColor);
 drawRef(Data)
-Screen('flip',Data.stimulus.win);
+Screen('flip', Data.stimulus.win);
 
-waitForBackTick;% Wait for input of 5 (either through pressing keyboard, or scanner)
+waitForBackTick;
 
 for trial=1:Data.numTrials/2 %change here to stop after half the trials (LR) The gain trials are separated into two sessions
     Data.trialTime(trial).trialStartTime=datevec(now);
@@ -221,7 +231,7 @@ while elapsedTime<Data.stimulus.responseWindowDur % while the resposne time limi
 end
 
 % record response, and specify feedback drawing parameters
-if keyisdown && keyCode(KbName('1!'))            %% Reversed keys '1' and '2' - DE
+if keyisdown && keyCode(KbName('1!'))
     Data.choice(trial)=1;
     Data.rt(trial)=elapsedTime;
     if Data.refSide==2 % if ref is on the right
@@ -232,7 +242,7 @@ if keyisdown && keyCode(KbName('1!'))            %% Reversed keys '1' and '2' - 
         whiteDims=[-.5*Data.stimulus.winrect(3)/10 -100 -.5*Data.stimulus.winrect(3)/10 -100]+[5.5*Data.stimulus.winrect(3)/10-20 Data.stimulus.winrect(4)/2-20 5.5*Data.stimulus.winrect(3)/10+20 Data.stimulus.winrect(4)/2+20];
     end
     yellowColor=[255 255 0]; % yellow
-elseif keyisdown && keyCode(KbName('2@'))        %% Reversed keys '2' and '1' - DE
+elseif keyisdown && keyCode(KbName('2@'))
     Data.choice(trial)=2;
     Data.rt(trial)=elapsedTime;
     if Data.refSide==2
@@ -271,7 +281,7 @@ while elapsedTime<Data.stimulus.feedbackDur
 end
 
 % draw ITI cue
-eval(sprintf('save %s.mat Data',Data.filename))
+eval(sprintf('save %s.mat Data', Data.filename))
 Screen('FillOval', Data.stimulus.win, [255 255 255], [Data.stimulus.winrect(3)/2-20 Data.stimulus.winrect(4)/2-20 Data.stimulus.winrect(3)/2+20 Data.stimulus.winrect(4)/2+20]);
 drawRef(Data)
 Screen('flip',Data.stimulus.win);

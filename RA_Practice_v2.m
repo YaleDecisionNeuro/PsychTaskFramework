@@ -87,7 +87,6 @@ for trial = 1:Data.numTrials
             DrawFormattedText(Data.stimulus.win, 'Finished Practice', ...
               'center', 'center', Data.stimulus.fontColor);
         end
-        %drawRef(Data) % Don't display for practice finishing
 
         % Display screen and with for press of 5 to terminate
         Screen('flip', Data.stimulus.win);
@@ -97,6 +96,8 @@ end
 Screen('CloseAll') % Turn screen off
 end
 
+% This function does much more than draw the lotto -- it displays the trial, obtains feedback, records it, and displays everything else before the beginning of the next trial
+% TODO: Rename to `runTrial`
 function Data=drawLotto_LSRA(Data, trial)
 
 % There are hard-coded `.Digit1`, `.Digit2` and `.Digit3` values in `setParams_LSRA`.
