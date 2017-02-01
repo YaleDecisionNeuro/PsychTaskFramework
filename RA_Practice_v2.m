@@ -28,7 +28,7 @@ else
 end
 
 %% Window settings
-whichScreen = 0; % windowPtr?
+whichScreen = 1; % FIXME: Move to settings (and possibly set with debug flag)
 Data.stimulus = setParams_LSRA();
 
 % Open a window
@@ -161,8 +161,9 @@ for i = 1:length(amtOrder)
 end
 clear temp;
 
+randomConstantAdjustment = 50; % FIXME: Random constant adjustment
 xCoords = [W/2 - digitWidth(1)/2, W/2 - digitWidth(2)/2];
-yCoords = [Y3, Y1 - digitHeight(1)];
+yCoords = [Y3, Y1 - digitHeight(1)] + randomConstantAdjustment;
 
 Screen('TextSize', Data.stimulus.win, Data.stimulus.fontSize.lotteryValues);
 DrawFormattedText(Data.stimulus.win, sprintf('$%s', num2str(amtOrder(1))), ...
