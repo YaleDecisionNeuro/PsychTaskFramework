@@ -1,6 +1,7 @@
 function waitForBackTick;
-    % TODO: get default from settings
-    % TODO: Allow change through argument
+    % TODO: Make modular
+    % TODO: Return the key that broke the while
+    % FIXME: Use KbQueueCheck instead of KbCheck, as per Harvard CBS FAQ
 while 1
     [keyisdown, secs, keyCode, deltaSecs] = KbCheck;
     if keyisdown && keyCode(KbName('5%'))==1

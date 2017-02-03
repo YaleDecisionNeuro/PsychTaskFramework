@@ -1,7 +1,7 @@
 function report = choiceReport(Data, trial)
   choice = Data.choice(trial);
   if choice == 0
-    answer = 'Failed to answer';
+    answer = 'Failed to answer ';
   else
     answer = sprintf('Answered %d ', choice);
   end
