@@ -40,6 +40,7 @@ s.reference.dims = [50 100];
 s.reference.pos = [];
 s.reference.fontSize = s.default.fontSize;
 s.reference.fontColor = s.default.fontColor;
+s.reference.format = '-$%d';
 % s.reference.img (src, dims, position)
 % inheriting font from default
 
@@ -59,6 +60,8 @@ s.lottery.stakes.fontSize = s.default.fontSize;
 s.lottery.stakes.fontColor = s.default.fontColor;
 s.lottery.stakes.posTop = []; % to be computed later?
 s.lottery.stakes.posBottom = []; % to be computed later?
+s.lottery.stakes.format = '-$%d';
+% TODO: Different format for zero and non-zero? -$0 looks odd
 
 s.lottery.probLabels.fontSize = 20;
 s.lottery.probLabels.fontColor = s.default.fontColor;
@@ -96,6 +99,7 @@ s.game.colors = [2 1 2];
 s.game.numTrials = length(s.game.stakes); % FIXME: Should be the longest of the above?
 % TODO: Should probably automatically `repmat` any shorter fields (and warn about that). Or, rather, should be handled in its own constructor. But this will do for now.
 
+% s.game.trials = table(s.game.stakes', s.game.probs', s.game.ambigs');
 %% Changes
 % FIXME: This fails with sub-subfields, or rather, replaces them wholesale
 % TODO: Make recursive
