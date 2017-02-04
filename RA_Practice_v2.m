@@ -35,12 +35,12 @@ Data.numTrials = settings.game.numTrials;
 Data.ITIs  = settings.game.ITIs;
 Data.colors = settings.game.colors;
 
-%% Window settings
-whichScreen = settings.device.screenId;
+%% Window setup
 % Open a window
 % TODO: Conditional on provided `settings.device.screenDims`?
-[settings.device.windowPtr, settings.device.screenDims] = Screen('OpenWindow', ...
-  whichScreen, settings.background.color);
+[settings.device.windowPtr, settings.device.screenDims] = ...
+  Screen('OpenWindow', settings.device.screenId, ...
+  settings.background.color);
 windowPtr = settings.device.windowPtr;
 
 % Paint background

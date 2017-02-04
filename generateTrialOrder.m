@@ -1,4 +1,4 @@
-[orderedValues, orderedProbs, orderedAmbigs, orderedColors] = function generateTrialOrder(vals, probs, ambigs, colors, trialRepeats, blockSize, includeTrial)
+function [orderedValues, orderedProbs, orderedAmbigs, orderedColors] = generateTrialOrder(vals, probs, ambigs, colors, trialRepeats, blockSize, includeTrial)
 % TODO: Replace all input arguments with `settings`
 if ~exists('colors', 'var')
   colors = [1 2];
@@ -28,5 +28,7 @@ if remainder ~= 0
   allTrialColors = [allTrialColors, colors(1 : remainder)];
 end
 
+  function table = injectRowAtIndex(row, rowIndex)
 
+  end
 end
