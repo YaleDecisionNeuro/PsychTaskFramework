@@ -1,15 +1,13 @@
-function [Data] = saveData(Data, folder)
-  % TODO: More importantly than this, loadOrCreateDataFile(observer, pwd)!
-  % If folder doesn't exist, save in .filename, wherever that might fall
-  filename = Data.filename;
-  if exist('folder', 'var')
-    if ~exist(folder, 'dir')
-      mkdir(folder);
-    end
-    filename = fullfile(folder, filename);
-    % Assume that if folder was provided, Data.filename is just filename and not path
-  end
-  filename = [Data.filename '.mat'];
-  disp(['Saving to ', filename]);
-  save(filename, Data);
+function [Data] = saveData(Data)
+% SAVEDATA Saves a participant data file to `Data.filename`. Ensures that it
+%   stores the struct Data correctly, such that `loadOrCreate` can load it
+%   properly.
+%
+% (WARNING: The function assumes that the trial-handling functions haven't
+% overwritten previous records in Data, and as such, overwrites the file
+% without warning.)
+
+  % Assume that if folder was provided, Data.filename is just filename and not path
+  disp(['Saving to ', Data.filename]);
+  save(Data.filename, 'Data');
 end

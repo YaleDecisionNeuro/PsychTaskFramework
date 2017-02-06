@@ -9,11 +9,18 @@ KbName(settings.device.KbName);
 s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
 RandStream.setGlobalStream(s);
 
-% Find-or-create participant data file
+% Find-or-create participant data file *in appropriate location*
 fname = [num2str(observer) '.mat'];
 folder = fullfile(pwd, 'data');
 fname = [folder filesep fname];
-Data = loadOrCreate(fname); % TODO: Create
+[ Data, participantExisted ] = loadOrCreate(observer, fname); % TODO: Create
+
+% TODO: Prompt experimenter if this is correct
+if participantExisted
+  disp('Participant file exists, reusing...')
+else
+  disp('Participant has no file, creating...')
+end
 
 % Save participant ID + date
 % TODO: Prompt for correctness before launching PTB?
@@ -35,11 +42,30 @@ end
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
   settings.background.color);
-windowPtr = settings.device.windowPtr;
 
 %% Display blocks
 % Option A: Iterate over blocks, passing to runBlock all it'll need in a loop
 % Option B: Run each block with separate settings; handle any prompts / continuations here, or pass different callbacks
 % Option C: Run things trial-by-trial, passing different settings to each
 % Option D: Run down a table of trials, each with a "block type", and let runTrial handle each
+
+%% Option B
+% Need to:
+% 1. pass the per-block function the trial properties
+% 2. specify the kind of setting the trials have, to save
+settings.game.block.kind = 'Gains';
+settings.game.trialFn = @RA_drawTrial;
+settings.reference.format = '$%d';
+settings.lottery.stakesettings.format = '$%d';
+settings.game.stakes = [50 80 110];
+settings.game.fails = 0; % but could be a 1xn matrix
+settings.game.reference = 5; % but could be a 1xn matrix
+settings.game.probs = [.6 .5 .30];
+settings.game.ambigs = [0 .5 0];
+settings.game.ITIs  = [2 4 2];
+settings.game.colors = [1 2 1];
+settings.game.numTrials = length(settings.game.stakes); % FIXME: Should be the longest of the above?
+
+% TODO: `settings` should include a pre-trial and post-trial callback function (to e.g. display block number)
+Data = runBlock(Data, settings);
 end

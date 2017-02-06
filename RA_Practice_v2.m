@@ -55,9 +55,9 @@ waitForBackTick; % Wait for 5 or @ to hit before proceeding
 
 % NOTE: This is an abstraction for trials within a single block
 for trial = 1 : settings.game.numTrials
-  Data.trialTime(trial).trialStartTime = datevec(now);
-  Data = drawTrial(Data, trial, settings); % Draw lottery
-  Data.trialTime(trial).trialEndTime = datevec(now);
+  % Data.trialTime(trial).trialStartTime = datevec(now);
+  Data = RA_drawTrial(Data, trial, settings); % Draw lottery
+  % Data.trialTime(trial).trialEndTime = datevec(now);
 
   % blockNum = blockNum + 1;
   drawBgr(Data, settings);
@@ -70,17 +70,4 @@ DrawFormattedText(windowPtr, 'Finished Practice', ...
 Screen('flip', windowPtr);
 waitForBackTick;
 Screen('CloseAll') % Turn screen off
-end
-
-% This function displays the trial choice, obtains feedback, records it, and
-% displays everything else before the beginning of the next trial
-function Data = drawTrial(Data, trial, settings)
-% Record the properties of this trial to Data
-Data.currTrial = trial; % FIXME: this is dumb, there must be a better way
-
-Data = drawTask(Data, settings);
-Data = handleResponse(Data, settings);
-disp(choiceReport(Data, trial));
-Data = drawFeedback(Data, settings);
-Data = drawIntertrial(Data, settings);
 end

@@ -89,6 +89,10 @@ s.game.choiceDisplayDur = 6;
 
 s.game.colorKey = {'blue', 'red'}; % Useful?
 
+s.game.blockType = 'Gains';
+s.game.trialFn = @RA_drawTrial; % currently a local function - and it knows what subparts it needs?
+% s.game.preBlockFn = @someFn;
+% s.game.postBlockFn = @someFn;
 s.game.stakes = [5 16 19];
 s.game.fails = 0; % but could be a 1xn matrix
 s.game.reference = 5; % but could be a 1xn matrix
