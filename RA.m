@@ -37,6 +37,14 @@ end
 % Generate a number of separate blocks, then iterate through them?
 % Just run trials with ad-hoc intermissions? (This was the old way, sort of)
 
+% 1. Bring in levels from `settings`
+% 2. Define the repeat row
+% 3. Bring in RA_generateTrialOrder to create `trials`
+% 4. Add the constant columns (stakes_loss, reference_value, trial_type)
+% 5. Pass row subsets to runBlock
+%
+% TODO: Mix in with losses right here?
+
 %% Set up window
 % TODO: Conditional on provided `settings.device.screenDims`?
 [settings.device.windowPtr, settings.device.screenDims] = ...
