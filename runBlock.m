@@ -19,18 +19,19 @@ function Data = runBlock(Data, blockSettings)
   if isfield(blockSettings.game, 'preBlockFn')
     blockSettings.game.preBlockFn(Data, blockSettings);
   end
-  %% 2. Iterate through trials
 
-  numTrials = blockSettings.game.numTrials;
+  %% 2. Iterate through trials
+  numTrials = blockSettings.game.numTrials; % FIXME: This should be clear from property table
   % FIXME: Should be passed as a goddamn table
   drawTrial = blockSettings.game.trialFn;
 
   if ~isa(drawTrial, 'function_handle')
     error(['Function to draw trials not supplied! Make sure that you''ve set' ...
-      'settings.game.trialFn = @your_function_to_draw_trials']);
+      ' settings.game.trialFn = @your_function_to_draw_trials']);
   end
 
   for i = 1:numTrials
+    % FIXME: Should only receive per-trial data from drawTrial and collate them
     Data = drawTrial(Data, i, blockSettings);
   end
   %% 3. Save participant file after block

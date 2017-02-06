@@ -111,7 +111,7 @@ s.game.numTrials = length(s.game.stakes); % FIXME: Should be the longest of the 
 if exist('changes', 'var')
   props = fieldnames(changes);
   for i = 1:numel(props)
-    s.(props{i}) = changes.(props{i});
+    % s.(props{i}) = changes.(props{i});
   end
 end
 
