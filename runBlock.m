@@ -21,25 +21,39 @@ function Data = runBlock(Data, blockSettings)
   end
 
   %% 2. Iterate through trials
-  numTrials = blockSettings.game.numTrials; % FIXME: This should be clear from property table
-  % FIXME: Should be passed as a goddamn table
-  drawTrial = blockSettings.game.trialFn;
+  trials = blockSettings.game.trials;
+  numTrials = size(trials, 1); % equivalent to `height(trials)`
 
+  drawTrial = blockSettings.game.trialFn;
   if ~isa(drawTrial, 'function_handle')
     error(['Function to draw trials not supplied! Make sure that you''ve set' ...
       ' settings.game.trialFn = @your_function_to_draw_trials']);
   end
 
+  collectedData = [];
   for i = 1:numTrials
-    % FIXME: Should only receive per-trial data from drawTrial and collate them
-    Data = drawTrial(Data, i, blockSettings);
+    trialSettings = trials(i, :);
+    trialData = drawTrial(trialSettings, blockSettings);
+    trialRecord = [trialSettings struct2table(trialData)];
+    collectedData = appendRow(trialRecord, ...
+      collectedData);
   end
   %% 3. Save participant file after block
-  save(Data.filename, 'Data');
+  % FIXME
+  % save(Data.filename, 'Data');
 
   %% 4. If settings say so, do something after block
   if isfield(blockSettings.game, 'postBlockFn')
     blockSettings.game.postBlockFn(Data, blockSettings);
   end
   % ("Ready for next one? Press button...") - this is a natural break
+end
+
+% Helper function
+function [ tbl ] = appendRow(row, tbl)
+  if isempty(tbl)
+    tbl = row;
+  else
+    tbl = [tbl; row]; % will scream if table and row have different columns
+  end
 end

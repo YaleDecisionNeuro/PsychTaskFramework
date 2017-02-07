@@ -5,7 +5,8 @@ function [ Data, existed ] = loadOrCreate(participantId, fname)
 % FIXME: Currently expects that the folder in which to save data exists
 existed = exist(fname, 'file');
 if existed
-  Data = load(fname, 'Data');
+  temp = load(fname, 'Data');
+  Data = temp.Data;
 else
   Data.observer = participantId;
   Data.filename = fname;

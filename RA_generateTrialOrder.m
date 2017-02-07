@@ -1,12 +1,18 @@
-function [ trialTbl ] = RA_generateTrialOrder(allStakes, allProbs, allAmbigs, allColors, trialRepeats, includeTrial, includeIndex)
+function [ trialTbl ] = RA_generateTrialOrder(levelSettings, includeTrial, includeIndex)
 % RA_GENERATETRIALORDER Generates a random order of trials that contain all
 %   combinations of the `all*` variables (except `allColors`), `nRepeat` times.
 %   It will also add to the final trial table the row `includeTrial` at indices
 %   passed in `includeIndex`. It returns a randomly sorted table containing all
 %   changing elements of the monteray R&A trials.
 
-% TODO: Replace all input arguments with `settings`?
 % TODO: does `trialRepeats` do what I think it does?
+
+allStakes = levelSettings.stakes;
+allProbs = levelSettings.probs;
+allAmbigs = levelSettings.ambigs;
+allColors = levelSettings.colors;
+trialRepeats = levelSettings.repeats;
+
 if ~exist('allColors', 'var')
   allColors = [1 2];
 end

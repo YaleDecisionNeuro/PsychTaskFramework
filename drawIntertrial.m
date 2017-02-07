@@ -1,30 +1,29 @@
-function [ Data ] = drawIntertrial(Data, settings, callback)
-W = settings.device.screenDims(3); % width
-H = settings.device.screenDims(4); % height
-windowPtr = settings.device.windowPtr;
+function [ trialData ] = drawIntertrial(trialData, trialSettings, blockSettings, callback)
+W = blockSettings.device.screenDims(3); % width
+H = blockSettings.device.screenDims(4); % height
+windowPtr = blockSettings.device.windowPtr;
 
 center = [W / 2, H / 2];
-Screen('FillOval', windowPtr, settings.intertrial.color, ...
-  centerRectDims(center, settings.intertrial.dims));
+Screen('FillOval', windowPtr, blockSettings.intertrial.color, ...
+  centerRectDims(center, blockSettings.intertrial.dims));
 Screen('flip', windowPtr);
-Data = timeIntertrial(Data, settings);
-if exist('callback', 'var') & isHandle(callback)
-  Data = callback(Data, settings);
+trialData = timeIntertrial(trialData, trialSettings, blockSettings);
+if exist('callback', 'var') && isHandle(callback)
+  trialData = callback(trialData, trialSettings, blockSettings);
 end
 end
 
 % Local function with timing responsibility
-function Data = timeIntertrial(Data, settings)
-trial = Data.currTrial;
-Data.trialTime(trial).ITIStartTime = datevec(now);
+function trialData = timeIntertrial(trialData, trialSettings, blockSettings)
+trialData.ITIStartTime = datevec(now);
 
-elapsedTime = etime(datevec(now), Data.trialTime(trial).trialStartTime);
+elapsedTime = etime(datevec(now), trialData.trialStartTime);
 
-totalTrialTime = settings.game.choiceDisplayDur + ...
-  settings.game.responseWindowDur + ...
-  settings.game.feedbackDur + ...
-  settings.game.ITIs(trial);
+totalTrialTime = blockSettings.game.durations.choice + ...
+  blockSettings.game.durations.response + ...
+  blockSettings.game.durations.feedback + ...
+  trialSettings.ITIs;
 while elapsedTime < totalTrialTime
-    elapsedTime = etime(datevec(now), Data.trialTime(trial).trialStartTime);
+    elapsedTime = etime(datevec(now), trialData.trialStartTime);
 end
 end
