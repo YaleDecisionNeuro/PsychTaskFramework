@@ -37,13 +37,21 @@ end
 % Generate a number of separate blocks, then iterate through them?
 % Just run trials with ad-hoc intermissions? (This was the old way, sort of)
 
+repeatRow = table(4, 0.5, 0, randperm(2, 1), 'VariableNames', {'stakes', 'probs', 'ambigs', 'colors'});
+repeatIndex = [1 32 63 94]; % TODO: Derive from block.length and repeatPosition
+% TODO: Extract the row injection into a separate function done after the fact, so that it can be done without knowledge of the result
+trials = RA_generateTrialOrder(settings.game.levels.stakes, ...
+  settings.game.levels.probs, settings.game.levels.ambigs, ...
+  settings.game.levels.colors, settings.game.levelRepeats, ...
+  repeatRow, repeatIndex);
 % 1. Bring in levels from `settings`
 % 2. Define the repeat row
 % 3. Bring in RA_generateTrialOrder to create `trials`
 % 4. Add the constant columns (stakes_loss, reference_value, trial_type)
+% 5. Mix around ITI order
 % 5. Pass row subsets to runBlock
 %
-% TODO: Mix in with losses right here?
+% TODO: Mix in with losses right here? How?
 
 %% Set up window
 % TODO: Conditional on provided `settings.device.screenDims`?

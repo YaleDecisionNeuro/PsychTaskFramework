@@ -85,6 +85,7 @@ F1=S1+29; % last trial of each block, 30 trials per block
 S2=[1 32 63 94]; % start of each block's second trial. The first trial is the catch trial that would be added later
 F2=S2+30; % last rial of each block, 31 trials per block
 tmpColors=[randperm(2) randperm(2)];
+% Per-block ITI lengths
 ITIs = [4 * ones(1, (length(vals(:))) / 12), ...
     6 * ones(1, (length(vals(:))) / 12), ...
     8 * ones(1, (length(vals(:))) / 12)];

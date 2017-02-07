@@ -87,12 +87,29 @@ s.game.responseWindowDur = 3.5; % 0 means indefinite
 s.game.feedbackDur = .5;
 s.game.choiceDisplayDur = 6;
 
+s.game.durations.choice = 6;
+s.game.durations.response = 3.5;
+s.game.durations.feedback = 0.5;
+s.game.durations.ITIs = [4 6 8];
+% These have to be in each block, in some order -- in most fMRI block designs, the block has to be constant.
+
 s.game.colorKey = {'blue', 'red'}; % Useful?
 
-s.game.blockType = 'Gains';
+s.game.block.type = 'Gains';
+s.game.block.length = 31;
+s.game.block.repeatIndex = 1; % where will the test of stochastic dominance be
+s.game.levels.stakes = [5, 6, 7, 8, 10, 12, 14, 16, 19, 23, 27, 31, 37, 44, 52, 61, 73, 86, 101, 120];
+s.game.levels.probs = [.25 .5 .75];
+s.game.levels.ambigs = [.24 .5 .74];
+s.game.levels.stakes_loss = 0;
+s.game.levels.colors = [1 2];
+s.game.levelRepeats = 1;
+
 s.game.trialFn = @RA_drawTrial; % currently a local function - and it knows what subparts it needs?
 % s.game.preBlockFn = @someFn;
 % s.game.postBlockFn = @someFn;
+
+% Keeping following  values for temporary backwards compatibility
 s.game.stakes = [5 16 19];
 s.game.fails = 0; % but could be a 1xn matrix
 s.game.reference = 5; % but could be a 1xn matrix
