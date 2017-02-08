@@ -144,7 +144,7 @@ s.game.levels.repeats = 1;
 % Currently, these are local functions - which know what subparts they need. In
 % the future, namespacing or loading from a subfolder will be encouraged.
 s.game.trialFn = @RA_drawTrial;
-% s.game.preBlockFn = @someFn;
+s.game.preBlockFn = @RA_preBlock;
 % s.game.postBlockFn = @someFn;
 
 %% Changes

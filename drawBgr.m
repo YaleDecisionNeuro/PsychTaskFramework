@@ -1,4 +1,6 @@
 function [ Data ] = drawBgr(Data, settings, callback)
+% DRAWBGR Draws default background + items, *and* sets default drawing
+%   properties (e.g. fontName and fontSize)
 if ~isfield(settings.device, 'windowPtr')
   error('Device settings contain no designated draw screen');
 end
