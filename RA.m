@@ -61,7 +61,7 @@ perBlockITIs = settings.game.durations.ITIs;
 trials.ITIs = repmat(shuffle(perBlockITIs)', numTrials / length(perBlockITIs), 1);
 % TODO: Extract helper function to add a constant value in a table column
 
-settings.game.trials = trials(1:10, :);
+settings.game.trials = trials(1:3, :);
 
 %% Set up window
 % TODO: Conditional on provided `settings.device.screenDims`?
@@ -94,6 +94,9 @@ settings.lottery.stakes.format = '$%d';
 
 % TODO: `settings` should include a pre-trial and post-trial callback function (to e.g. display block number)
 Data = runBlock(Data, settings);
+% TODO: Should runBlock be expected to give Data back?
+
+Screen('CloseAll');
 end
 
 function arr = shuffle(arr)

@@ -41,6 +41,8 @@ function Data = runBlock(Data, blockSettings)
   %% 3. Save participant file after block
   % FIXME
   % save(Data.filename, 'Data');
+  Data = addBlock(Data, collectedData, blockSettings);
+  saveData(Data);
 
   %% 4. If settings say so, do something after block
   if isfield(blockSettings.game, 'postBlockFn')
