@@ -49,8 +49,17 @@ names = fieldnames(configStruct);
 for i = 1:numel(names)
   name = names{i};
   if strcmp(name, 'img')
-    if ischar(configStruct.(name))
-      filenames = [filenames; configStruct.(name)];
+    temp = configStruct.(name);
+    if ischar(temp)
+      % string to save
+      filenames = [filenames; temp];
+    elseif iscell(temp)
+      % cell array of possible filenames
+      for j = 1:length(temp)
+        if ischar(temp{j})
+          filenames = [filenames; temp{j}];
+        end
+      end
     else
       continue
     end
