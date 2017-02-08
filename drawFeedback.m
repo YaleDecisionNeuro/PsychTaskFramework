@@ -41,7 +41,7 @@ end
 % Local function with timing responsibility
 function trialData = timeFeedback(trialData, trialSettings, blockSettings)
   elapsedTime = etime(datevec(now), trialData.feedbackStartTime);
-  while elapsedTime < blockSettings.game.feedbackDur
+  while elapsedTime < blockSettings.game.durations.feedback
     elapsedTime = etime(datevec(now), trialData.feedbackStartTime);
   end
 end

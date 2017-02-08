@@ -94,24 +94,40 @@ s.objects.feedback.shape = 'Rect';
 s.objects.intertrial.color = [255 255 255];
 s.objects.intertrial.shape = 'Oval';
 s.objects.intertrial.dims = [40 40];
-%% Game-specific settings -- for all trials in the block
-% FIXME: should these be with
-s.game.responseWindowDur = 3.5; % 0 means indefinite
-s.game.feedbackDur = .5;
-s.game.choiceDisplayDur = 6;
 
+%% Non-display settings for the game
+% Same Wild-West rules apply -- the format can be whatever you end up using
+
+% (Maximum) durations of the various stages
 s.game.durations.choice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = [10, 4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
-% These have to be in each block, in some order -- in most fMRI block designs, the block has to be constant.
-% TODO: Move to s.game.levels?
+% These have to be in each block, in some order -- in most fMRI block designs,
+% the block has to be constant. Some designs might want to shuffle these in
+% particular ways, just like items in `s.game.levels`; other designs might want
+% to omit ITIs altogether.
 
-s.game.colorKey = {'blue', 'red'}; % Useful?
+s.game.colorKey = {'blue', 'red'};
+% Deprecated. This is remnant of the way the script used to be written -- it
+% might be useful for those who wish to (for example) automatically replace
+% `colors` value used in data collection with the actual color used.
 
-s.game.block.type = 'Gains';
+%% Block properties
+% Naming. Useful to quickly identify the properties used to run a trial -- it's
+% to your benefit to make sure that this uniquely identifies your setting for
+% the specific task and task block
+s.game.name = 'MonetaryRA';
+s.game.block.name = 'Gains';
+
+% Useful for generation purposes
 s.game.block.length = 31;
 s.game.block.repeatIndex = 1; % where will the test of stochastic dominance be
+% FIXME: The repeating row should be explicitly defined here?
+
+%% Available trial values
+% Up to you how you use these -- it's suggested that you pass them to a trial
+% generating function that will re-make them into an orderly shuffled table
 s.game.levels.stakes = [5, 6, 7, 8, 10, 12, 14, 16, 19, 23, 27, 31, 37, 44, 52, 61, 73, 86, 101, 120];
 s.game.levels.probs = [.25 .5 .75];
 s.game.levels.ambigs = [.24 .5 .74];
@@ -120,7 +136,14 @@ s.game.levels.reference = 5;
 s.game.levels.colors = [1 2];
 s.game.levels.repeats = 1;
 
-s.game.trialFn = @RA_drawTrial; % currently a local function - and it knows what subparts it needs?
+%% Paint functions
+% If you wish to re-use the standard monetary R&A task design, but with a
+% slightly different way of drawing things, write your own functions (modeled,
+% perhaps on `RA_drawTrial.m`), and supply the function handles here.
+%
+% Currently, these are local functions - which know what subparts they need. In
+% the future, namespacing or loading from a subfolder will be encouraged.
+s.game.trialFn = @RA_drawTrial;
 % s.game.preBlockFn = @someFn;
 % s.game.postBlockFn = @someFn;
 

@@ -21,7 +21,7 @@ end
 end
 
 function trialData = timeAndRecordResponse(trialData, trialSettings, blockSettings)
-  % TODO: If s.game.responseWindowDur == 0, there shouldn't be a while condition
+  % TODO: If s.game.durations.response == 0, there shouldn't be a while condition
   % TODO: Abstract into `waitForBackTick`-like function
   % TODO: `elapsedTime` - better name?
   elapsedTime = etime(datevec(now), trialData.respStartTime);

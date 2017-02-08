@@ -83,14 +83,6 @@ settings.game.block.kind = 'Gains';
 settings.game.trialFn = @RA_drawTrial;
 settings.objects.reference.format = '$%d';
 settings.objects.lottery.stakes.format = '$%d';
-% settings.game.stakes = [50 80 110];
-% settings.game.fails = 0; % but could be a 1xn matrix
-% settings.game.reference = 5; % but could be a 1xn matrix
-% settings.game.probs = [.6 .5 .30];
-% settings.game.ambigs = [0 .5 0];
-% settings.game.ITIs  = [2 4 2];
-% settings.game.colors = [1 2 1];
-% settings.game.numTrials = length(settings.game.stakes); % FIXME: Should be the longest of the above?
 
 % TODO: `settings` should include a pre-trial and post-trial callback function (to e.g. display block number)
 Data = runBlock(Data, settings);
