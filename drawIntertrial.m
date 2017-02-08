@@ -4,8 +4,8 @@ H = blockSettings.device.screenDims(4); % height
 windowPtr = blockSettings.device.windowPtr;
 
 center = [W / 2, H / 2];
-Screen('FillOval', windowPtr, blockSettings.intertrial.color, ...
-  centerRectDims(center, blockSettings.intertrial.dims));
+Screen('FillOval', windowPtr, blockSettings.objects.intertrial.color, ...
+  centerRectDims(center, blockSettings.objects.intertrial.dims));
 Screen('flip', windowPtr);
 trialData = timeIntertrial(trialData, trialSettings, blockSettings);
 if exist('callback', 'var') && isHandle(callback)

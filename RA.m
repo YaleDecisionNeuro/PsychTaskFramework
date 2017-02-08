@@ -81,8 +81,8 @@ settings.game.trials = trials(1:3, :);
 % 2. specify the kind of setting the trials have, to save
 settings.game.block.kind = 'Gains';
 settings.game.trialFn = @RA_drawTrial;
-settings.reference.format = '$%d';
-settings.lottery.stakes.format = '$%d';
+settings.objects.reference.format = '$%d';
+settings.objects.lottery.stakes.format = '$%d';
 % settings.game.stakes = [50 80 110];
 % settings.game.fails = 0; % but could be a 1xn matrix
 % settings.game.reference = 5; % but could be a 1xn matrix

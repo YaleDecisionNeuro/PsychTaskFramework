@@ -4,23 +4,23 @@ H = blockSettings.device.screenDims(4); % height
 center = [W / 2, H / 2];
 windowPtr = blockSettings.device.windowPtr;
 
-feedbackSize = blockSettings.feedback.dims;
+feedbackSize = blockSettings.objects.feedback.dims;
 pxOffCenter = [0.05 * W, 0];
 
 % NOTE: Use structs / element class?
 button1 = centerRectDims(center, feedbackSize, -pxOffCenter);
 button2 = centerRectDims(center, feedbackSize, pxOffCenter);
 
-button1_color = blockSettings.feedback.colorNoAnswer;
-button2_color = blockSettings.feedback.colorNoAnswer;
+button1_color = blockSettings.objects.feedback.colorNoAnswer;
+button2_color = blockSettings.objects.feedback.colorNoAnswer;
 
 %% Record choice & assign feedback color
 % TODO: If a function can translate choice + refSide into a lottery choice,
 % this could flag stochastic dominance violations as they happen
 if trialData.choice == 1
-    button1_color = blockSettings.feedback.colorAnswer;
+    button1_color = blockSettings.objects.feedback.colorAnswer;
 elseif trialData.choice == 2
-    button2_color = blockSettings.feedback.colorAnswer;
+    button2_color = blockSettings.objects.feedback.colorAnswer;
 end
 
 %% Display feedback (two squares)

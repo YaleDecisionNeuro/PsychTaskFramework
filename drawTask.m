@@ -15,7 +15,7 @@ blueProb = probOrder(2);
 W = blockSettings.device.screenDims(3); % width
 H = blockSettings.device.screenDims(4); % height
 
-boxHeight = blockSettings.lottery.figure.dims(2);
+boxHeight = blockSettings.objects.lottery.figure.dims(2);
 Y1 = (H - boxHeight) / 2; % Space over the lottery box (top coordinate of display)
 Y2 = Y1 + boxHeight * redProb; % Y coordinate of top probability's bottom
 Y3 = Y2 + boxHeight * blueProb; % Y coordinate of bottom probability's bottom
@@ -28,13 +28,13 @@ Y3occ = Y2occ + boxHeight * ambig; % bottom of occluder
 
 % Colors
 % NOTE: Order of colors remains constant
-colors = blockSettings.lottery.figure.colors.prob;
-color_ambig = blockSettings.lottery.figure.colors.ambig;
+colors = blockSettings.objects.lottery.figure.colors.prob;
+color_ambig = blockSettings.objects.lottery.figure.colors.ambig;
 color_bgr = blockSettings.background.color;
 
 % NOTE: The lottery is always displayed in the horizontal center of the screen
 screenCenter = W / 2;
-halfBox = blockSettings.lottery.figure.dims(1) / 2;
+halfBox = blockSettings.objects.lottery.figure.dims(1) / 2;
 
 % Paint the whole screen (default without coordinates)
 Screen('FillRect', windowPtr, color_bgr);
@@ -66,7 +66,7 @@ digitWidth = ones(1, 2);
 digitHeight = ones(1, 2);
 for i = 1:length(amtOrder)
   digit_field = sprintf('Digit%g', length(num2str(amtOrder(i))));
-  temp = blockSettings.lottery.stakes.misc.(digit_field);
+  temp = blockSettings.objects.lottery.stakes.misc.(digit_field);
   digitWidth(i) = temp(1);
   digitHeight(i) = temp(2);
 end
@@ -76,16 +76,16 @@ randomConstantAdjustment = 50; % FIXME: Random constant adjustment
 xCoords = [W/2 - digitWidth(1)/2, W/2 - digitWidth(2)/2];
 yCoords = [Y3, Y1 - digitHeight(1)] + randomConstantAdjustment;
 
-Screen(windowPtr, 'TextSize', blockSettings.lottery.stakes.fontSize);
-DrawFormattedText(windowPtr, sprintf(blockSettings.reference.format, amtOrder(1)), ...
-  xCoords(1), yCoords(1), blockSettings.lottery.stakes.fontColor);
-DrawFormattedText(windowPtr, sprintf(blockSettings.reference.format, amtOrder(2)), ...
-  xCoords(2), yCoords(2), blockSettings.lottery.stakes.fontColor);
+Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.stakes.fontSize);
+DrawFormattedText(windowPtr, sprintf(blockSettings.objects.reference.format, amtOrder(1)), ...
+  xCoords(1), yCoords(1), blockSettings.objects.lottery.stakes.fontColor);
+DrawFormattedText(windowPtr, sprintf(blockSettings.objects.reference.format, amtOrder(2)), ...
+  xCoords(2), yCoords(2), blockSettings.objects.lottery.stakes.fontColor);
 
 %% Draw probability numbers
 % Compute coordinates
 % This time, we assume all probabilities are double-digit
-textDim = blockSettings.lottery.probLabels.dims;
+textDim = blockSettings.objects.lottery.probLabels.dims;
 
 xCoord = W/2 - textDim(1)/2;
 yCoord = [Y1 + 0.5 * (Y2 - Y1) - textDim(2)/2, ...
@@ -98,11 +98,11 @@ yCoord = yCoord + [-ambigYAdjustment, ambigYAdjustment] + randomConstantAdjustme
 
 probNumbers = probOrder - ambig / 2; % Keeps the numbers same if no ambiguity
 
-Screen(windowPtr, 'TextSize', blockSettings.lottery.probLabels.fontSize);
+Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.probLabels.fontSize);
 DrawFormattedText(windowPtr, sprintf('%s', num2str(probNumbers(1)*100)), ...
-  xCoord, yCoord(1), blockSettings.lottery.probLabels.fontColor);
+  xCoord, yCoord(1), blockSettings.objects.lottery.probLabels.fontColor);
 DrawFormattedText(windowPtr, sprintf('%s', num2str(probNumbers(2)*100)), ...
-  xCoord, yCoord(2), blockSettings.lottery.probLabels.fontColor);
+  xCoord, yCoord(2), blockSettings.objects.lottery.probLabels.fontColor);
 
 Screen('flip', windowPtr);
 

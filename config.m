@@ -10,8 +10,6 @@ function s = config(windowPtr, changes)
 % (Or maybe load from `.json` and save into `.mat`, which gets deleted after
 % every user.)
 % TODO: Implement `changes` -- a recursive sweep through
-% TODO: Spec out windowPtr: obtains info via something like
-%   `function screenInfo = extract(windowPtr)`
 
 %%% Defaults
 % TODO: All the graphical settings should be a class enforcing fieldnames, etc.
@@ -19,11 +17,18 @@ function s = config(windowPtr, changes)
 % (Or at least, create a skeleton of a struct to provide guidance.)
 
 %% Machine settings
+% This is where you set properties important for PsychToolBox to function
+% properly. Consult PTB manual if these are unclear.
 s.device.KbName = 'KeyNamesWindows';
-s.device.screenId = 1; % 0 for current screen
-s.device.screenDims = [1280 1024]; % should get filled in with Screen('Open') if empty
-s.device.sleepIncrements = 0; % How often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
+s.device.screenId = 1; % 0 for current screen, 1 for a second screen
+s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
+s.device.screenDims = []; % Must get filled in with Screen('Open')
+s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
 
+%% Graphics defaults
+% To prevent yourself from having to change many settings in many places, use
+% `s.default.X` to define property `X` for a particular display feature. This
+% way, you'll only have to change it in one spot,
 s.default.fontName = 'Arial';
 s.default.fontColor = [255 255 255];
 s.default.fontSize = 42;
@@ -33,54 +38,62 @@ s.background.img = NaN;
 % background.img.src, dims, position
 % TODO: There has to be a better way to deal with images
 
-% TODO: This should be derived in the process
-s.reference.misc.Digit1 = [31 30];
-s.reference.misc.Digit2 = [42 30];
-s.reference.dims = [50 100];
-s.reference.pos = [];
-s.reference.fontSize = s.default.fontSize;
-s.reference.fontColor = s.default.fontColor;
-s.reference.format = '-$%d';
-% s.reference.img (src, dims, position)
-% inheriting font from default
+%% Features of objects that your task displays
+% This is the Wild West portion of property settings. s.(object) should contain
+% whatever properties your drawX script will require to properly draw them. By
+% current convention, this does not have to include specific coordinates, which
+% your display script might calculate on the basis of specific device
+% properties (like screen width & height). However, only the draw scripts you
+% write will rely on these values; the way you choose to encode them in the
+% settings is up to you. (This might change in future versions.)
 
-s.refProbabilities.fontSize = 10;
-s.refProbabilities.dims = [12 19];
+s.objects.reference.misc.Digit1 = [31 30];
+s.objects.reference.misc.Digit2 = [42 30];
+% TODO: Position stemming from text width should be derived in the process?
+s.objects.reference.dims = [50 100];
+s.objects.reference.pos = [];
+s.objects.reference.fontSize = s.default.fontSize;
+s.objects.reference.fontColor = s.default.fontColor;
+s.objects.reference.format = '-$%d';
+% s.objects.reference.img (src, dims, position)
 
-s.lottery.figure.dims = [150 300];
-s.lottery.figure.colors.prob = [255 0 0; 0 0 255];
-s.lottery.figure.colors.ambig = [127 127 127];
+s.objects.refProbabilities.fontSize = 10;
+s.objects.refProbabilities.dims = [12 19];
+
+s.objects.lottery.figure.dims = [150 300];
+s.objects.lottery.figure.colors.prob = [255 0 0; 0 0 255];
+s.objects.lottery.figure.colors.ambig = [127 127 127];
 
 % FIXME: This is really the sort of a thing that should be delegated to
 % display functions
-s.lottery.stakes.misc.Digit1 = [64 64];
-s.lottery.stakes.misc.Digit2 = [92 64];
-s.lottery.stakes.misc.Digit3 = [120 64];
-s.lottery.stakes.fontSize = s.default.fontSize;
-s.lottery.stakes.fontColor = s.default.fontColor;
-s.lottery.stakes.posTop = []; % to be computed later?
-s.lottery.stakes.posBottom = []; % to be computed later?
-s.lottery.stakes.format = '-$%d';
+s.objects.lottery.stakes.misc.Digit1 = [64 64];
+s.objects.lottery.stakes.misc.Digit2 = [92 64];
+s.objects.lottery.stakes.misc.Digit3 = [120 64];
+s.objects.lottery.stakes.fontSize = s.default.fontSize;
+s.objects.lottery.stakes.fontColor = s.default.fontColor;
+s.objects.lottery.stakes.posTop = []; % to be computed later?
+s.objects.lottery.stakes.posBottom = []; % to be computed later?
+s.objects.lottery.stakes.format = '-$%d';
 % TODO: Different format for zero and non-zero? -$0 looks odd
 
-s.lottery.probLabels.fontSize = 20;
-s.lottery.probLabels.fontColor = s.default.fontColor;
-s.lottery.probLabels.dims = [31 30];
+s.objects.lottery.probLabels.fontSize = 20;
+s.objects.lottery.probLabels.fontColor = s.default.fontColor;
+s.objects.lottery.probLabels.dims = [31 30];
 
-s.prompt.dims = [40 40];
-s.prompt.color = [0 255 0];
-s.prompt.pos = 'center'; % TODO: This should be a special value
-s.prompt.shape = 'Oval';
+s.objects.prompt.dims = [40 40];
+s.objects.prompt.color = [0 255 0];
+s.objects.prompt.pos = 'center'; % TODO: This should be a special value
+s.objects.prompt.shape = 'Oval';
 
-s.feedback.colorNoAnswer = [255 255 255];
-s.feedback.colorAnswer = [255 255 0];
-s.feedback.dims = [40 40];
-s.feedback.pos = []; % to be computed
-s.feedback.shape = 'Rect';
+s.objects.feedback.colorNoAnswer = [255 255 255];
+s.objects.feedback.colorAnswer = [255 255 0];
+s.objects.feedback.dims = [40 40];
+s.objects.feedback.pos = []; % to be computed
+s.objects.feedback.shape = 'Rect';
 
-s.intertrial.color = [255 255 255];
-s.intertrial.shape = 'Oval';
-s.intertrial.dims = [40 40];
+s.objects.intertrial.color = [255 255 255];
+s.objects.intertrial.shape = 'Oval';
+s.objects.intertrial.dims = [40 40];
 %% Game-specific settings -- for all trials in the block
 % FIXME: should these be with
 s.game.responseWindowDur = 3.5; % 0 means indefinite
@@ -92,6 +105,7 @@ s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = [10, 4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 % These have to be in each block, in some order -- in most fMRI block designs, the block has to be constant.
+% TODO: Move to s.game.levels?
 
 s.game.colorKey = {'blue', 'red'}; % Useful?
 
@@ -110,18 +124,6 @@ s.game.trialFn = @RA_drawTrial; % currently a local function - and it knows what
 % s.game.preBlockFn = @someFn;
 % s.game.postBlockFn = @someFn;
 
-% Keeping following  values for temporary backwards compatibility
-s.game.stakes = [5 16 19];
-s.game.fails = 0; % but could be a 1xn matrix
-s.game.reference = 5; % but could be a 1xn matrix
-s.game.probs = [.5 .5 .25];
-s.game.ambigs = [0 .24 0];
-s.game.ITIs  = [8 4 8];
-s.game.colors = [2 1 2];
-s.game.numTrials = length(s.game.stakes); % FIXME: Should be the longest of the above?
-% TODO: Should probably automatically `repmat` any shorter fields (and warn about that). Or, rather, should be handled in its own constructor. But this will do for now.
-
-% s.game.trials = table(s.game.stakes', s.game.probs', s.game.ambigs');
 %% Changes
 % FIXME: This fails with sub-subfields, or rather, replaces them wholesale
 % TODO: Make recursive

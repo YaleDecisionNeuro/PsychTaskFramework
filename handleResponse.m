@@ -6,8 +6,8 @@ center = [W / 2, H / 2];
 windowPtr = blockSettings.device.windowPtr;
 
 %% Response prompt
-Screen('FillOval', windowPtr, blockSettings.prompt.color, ...
-  centerRectDims(center, blockSettings.prompt.dims));
+Screen('FillOval', windowPtr, blockSettings.objects.prompt.color, ...
+  centerRectDims(center, blockSettings.objects.prompt.dims));
 
 % Note when the prompt appeared
 Screen('flip', windowPtr);
