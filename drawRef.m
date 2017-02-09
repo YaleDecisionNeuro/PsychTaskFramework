@@ -14,7 +14,7 @@ elseif referenceSide == 2
 end
 refDims.y = H/4;
 
-displayText = sprintf(settings.objects.reference.format, settings.game.levels.reference);
+displayText = dollarFormatter(settings.game.levels.reference);
 
 Screen('TextSize', settings.device.windowPtr, settings.objects.reference.fontSize);
 DrawFormattedText(settings.device.windowPtr, displayText, refDims.x, refDims.y, ...

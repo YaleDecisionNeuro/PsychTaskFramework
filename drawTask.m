@@ -30,7 +30,7 @@ Y3occ = Y2occ + boxHeight * ambig; % bottom of occluder
 % NOTE: Order of colors remains constant
 colors = blockSettings.objects.lottery.figure.colors.prob;
 color_ambig = blockSettings.objects.lottery.figure.colors.ambig;
-color_bgr = blockSettings.background.color;
+color_bgr = blockSettings.default.bgrColor;
 
 % NOTE: The lottery is always displayed in the horizontal center of the screen
 screenCenter = W / 2;
@@ -77,9 +77,9 @@ xCoords = [W/2 - digitWidth(1)/2, W/2 - digitWidth(2)/2];
 yCoords = [Y3, Y1 - digitHeight(1)] + randomConstantAdjustment;
 
 Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.stakes.fontSize);
-DrawFormattedText(windowPtr, sprintf(blockSettings.objects.reference.format, amtOrder(1)), ...
+DrawFormattedText(windowPtr, dollarFormatter(amtOrder(1)), ...
   xCoords(1), yCoords(1), blockSettings.objects.lottery.stakes.fontColor);
-DrawFormattedText(windowPtr, sprintf(blockSettings.objects.reference.format, amtOrder(2)), ...
+DrawFormattedText(windowPtr, dollarFormatter(amtOrder(2)), ...
   xCoords(2), yCoords(2), blockSettings.objects.lottery.stakes.fontColor);
 
 %% Draw probability numbers

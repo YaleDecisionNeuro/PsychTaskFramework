@@ -40,7 +40,7 @@ Data.colors = settings.game.colors;
 % TODO: Conditional on provided `settings.device.screenDims`?
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
-  settings.background.color);
+  settings.default.bgrColor);
 windowPtr = settings.device.windowPtr;
 
 % Paint background

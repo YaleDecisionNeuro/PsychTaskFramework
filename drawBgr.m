@@ -8,7 +8,7 @@ end
 windowPtr = settings.device.windowPtr;
 HideCursor(windowPtr);
 
-Screen('FillRect', windowPtr, settings.background.color);
+Screen('FillRect', windowPtr, settings.default.bgrColor);
 Screen('TextFont', windowPtr, settings.default.fontName);
 Screen('TextSize', windowPtr, settings.default.fontSize);
 

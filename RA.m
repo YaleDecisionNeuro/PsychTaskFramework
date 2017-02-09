@@ -67,7 +67,7 @@ settings.game.trials = trials(1:3, :);
 % TODO: Conditional on provided `settings.device.screenDims`?
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
-  settings.background.color);
+  settings.default.bgrColor);
 
 %% Display blocks
 % Option A: Iterate over blocks, passing to runBlock all it'll need in a loop
@@ -81,8 +81,6 @@ settings.game.trials = trials(1:3, :);
 % 2. specify the kind of setting the trials have, to save
 settings.game.block.kind = 'Gains';
 settings.game.trialFn = @RA_drawTrial;
-settings.objects.reference.format = '$%d';
-settings.objects.lottery.stakes.format = '$%d';
 
 % TODO: `settings` should include a pre-trial and post-trial callback function (to e.g. display block number)
 Data = runBlock(Data, settings);

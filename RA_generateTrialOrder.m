@@ -48,7 +48,9 @@ trialTbl = table(stakes, probs, ambigs, colors, randomOrder);
 trialTbl = sortrows(trialTbl, 'randomOrder');
 trialTbl(:, {'randomOrder'}) = []; % no need for the convenience column
 
-trialTbl = injectRowAtIndex(trialTbl, includeTrial, includeIndex);
+if exist('includeTrial', 'var') && exist('includeIndex', 'var')
+  trialTbl = injectRowAtIndex(trialTbl, includeTrial, includeIndex);
+end
 end
 
 % Helper function

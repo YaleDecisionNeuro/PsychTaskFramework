@@ -1,4 +1,4 @@
-function s = config(windowPtr, changes)
+function s = config(changes)
 % Return default settings for the block. If changes is provided
 % as a `struct` with same field names, the values are overwritten.
 %
@@ -22,7 +22,7 @@ function s = config(windowPtr, changes)
 s.device.KbName = 'KeyNamesWindows';
 s.device.screenId = 1; % 0 for current screen, 1 for a second screen
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
-s.device.screenDims = []; % Must get filled in with Screen('Open')
+s.device.screenDims = NaN; % Must get filled in with Screen('Open')
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
 
 %% Graphics defaults
@@ -32,11 +32,9 @@ s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboar
 s.default.fontName = 'Arial';
 s.default.fontColor = [255 255 255];
 s.default.fontSize = 42;
-
-s.background.color = [0 0 0];
-s.background.img = NaN;
-% background.img.src, dims, position
-% TODO: There has to be a better way to deal with images
+s.default.bgrColor = [0 0 0];
+% s.default.drawFn = @RA_drawBgr;
+% Function that will draw whatever is supposed to always be on the screen
 
 %% Features of objects that your task displays
 % This is the Wild West portion of property settings. s.(object) should contain
@@ -47,34 +45,23 @@ s.background.img = NaN;
 % write will rely on these values; the way you choose to encode them in the
 % settings is up to you. (This might change in future versions.)
 
+% FIXME: Deprecate in favor of getTextDims
 s.objects.reference.misc.Digit1 = [31 30];
 s.objects.reference.misc.Digit2 = [42 30];
-% TODO: Position stemming from text width should be derived in the process?
 s.objects.reference.dims = [50 100];
-s.objects.reference.pos = [];
 s.objects.reference.fontSize = s.default.fontSize;
 s.objects.reference.fontColor = s.default.fontColor;
-s.objects.reference.format = '-$%d';
-% s.objects.reference.img (src, dims, position)
-
-s.objects.refProbabilities.fontSize = 10;
-s.objects.refProbabilities.dims = [12 19];
 
 s.objects.lottery.figure.dims = [150 300];
 s.objects.lottery.figure.colors.prob = [255 0 0; 0 0 255];
 s.objects.lottery.figure.colors.ambig = [127 127 127];
 
-% FIXME: This is really the sort of a thing that should be delegated to
-% display functions
+% FIXME: Deprecate in favor of getTextDims
 s.objects.lottery.stakes.misc.Digit1 = [64 64];
 s.objects.lottery.stakes.misc.Digit2 = [92 64];
 s.objects.lottery.stakes.misc.Digit3 = [120 64];
 s.objects.lottery.stakes.fontSize = s.default.fontSize;
 s.objects.lottery.stakes.fontColor = s.default.fontColor;
-s.objects.lottery.stakes.posTop = []; % to be computed later?
-s.objects.lottery.stakes.posBottom = []; % to be computed later?
-s.objects.lottery.stakes.format = '-$%d';
-% TODO: Different format for zero and non-zero? -$0 looks odd
 
 s.objects.lottery.probLabels.fontSize = 20;
 s.objects.lottery.probLabels.fontColor = s.default.fontColor;
@@ -88,7 +75,6 @@ s.objects.prompt.shape = 'Oval';
 s.objects.feedback.colorNoAnswer = [255 255 255];
 s.objects.feedback.colorAnswer = [255 255 0];
 s.objects.feedback.dims = [40 40];
-s.objects.feedback.pos = []; % to be computed
 s.objects.feedback.shape = 'Rect';
 
 s.objects.intertrial.color = [255 255 255];
@@ -107,6 +93,9 @@ s.game.durations.ITIs = [10, 4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 % the block has to be constant. Some designs might want to shuffle these in
 % particular ways, just like items in `s.game.levels`; other designs might want
 % to omit ITIs altogether.
+%
+% However, current method of shuffling ITIs will work as long as their number
+% divides the number of trials within a block without remainder.
 
 s.game.colorKey = {'blue', 'red'};
 % Deprecated. This is remnant of the way the script used to be written -- it
@@ -119,9 +108,7 @@ s.game.colorKey = {'blue', 'red'};
 % the specific task and task block
 s.game.name = 'MonetaryRA';
 s.game.block.name = 'Gains';
-
-% Useful for generation purposes
-s.game.block.length = 31;
+s.game.block.length = 31; % Useful for generation purposes
 s.game.block.repeatIndex = 1; % where will the test of stochastic dominance be
 % FIXME: The repeating row should be explicitly defined here?
 

@@ -34,7 +34,7 @@ for i = 1:length(imgFiles)
 
     % 4. Write into textureMap
     textureMap(fname) = struct('textureId', textureId, ...
-      'width', width, 'height', height);
+      'dims', [width height]);
   end
 end
 
