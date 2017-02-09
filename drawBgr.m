@@ -12,5 +12,6 @@ Screen('FillRect', windowPtr, settings.default.bgrColor);
 Screen('TextFont', windowPtr, settings.default.fontName);
 Screen('TextSize', windowPtr, settings.default.fontSize);
 
-drawRef(settings, Data.refSide);
+% Uncomment if you want reference displayed at all times
+% drawRef(settings, settings.perUser.refSide);
 end
