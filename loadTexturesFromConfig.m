@@ -1,7 +1,7 @@
 function [ textureMap ] = loadTexturesFromConfig(configStruct, textureMap)
-% LOADTEXTURESFROMCONFIG Given a `configStruct`, it will extract all fields
+% LOADTEXTURESFROMCONFIG Given a `configStruct`, it will extract file paths
 %   named `.img` and return a container mapping valid image filenames to
-%   a struct containing their PTB `textureID`, as well as `width` and `height`.
+%   a struct containing PTB's `.textureId` and their dimentsions in `.dims`.
 %   If provided with a previously generated `textureMap`, it will avoid
 %   redundant loading of previously loaded images.
 

@@ -1,4 +1,8 @@
 function [ DataObject ] = addBlock(DataObject, blockData, blockSettings)
+% ADDBLOCK Appends `blockData` to the cell array `DataObject.recordedBlocks`.
+%   Stores records in `.records` and the settings used for the block in
+%   `.settings`.
+
   if ~isfield(DataObject, 'recordedBlocks')
     DataObject.recordedBlocks = cell(0);
     n = 1;

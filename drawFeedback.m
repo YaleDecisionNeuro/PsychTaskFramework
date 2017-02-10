@@ -1,4 +1,9 @@
 function [ trialData ] = drawFeedback(trialData, trialSettings, blockSettings, callback)
+% DRAWFEEDBACK Based on the value in `trialData.choice`, it draws the feedback
+%   that confirms to the player which option they chose (or whether they chose
+%   at all) and displays it for `blockSettings.game.durations.feedback`. Can be
+%   re-used for tasks that offer two options in a choice.
+
 W = blockSettings.device.screenDims(3); % width
 H = blockSettings.device.screenDims(4); % height
 center = [W / 2, H / 2];

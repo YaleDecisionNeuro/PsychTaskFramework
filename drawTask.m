@@ -1,4 +1,8 @@
 function [ trialData ] = drawTask(trialData, trialSettings, blockSettings, callback)
+% RA_DRAWTASK Executes the monetary R&A trial stage of showing the task choice
+%   to the participant. Choice values are derived from `trialSettings` and,
+%   if need be, `blockSettings`.
+
 windowPtr = blockSettings.device.windowPtr;
 
 % Determine probabilities to associate with colors

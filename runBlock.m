@@ -14,15 +14,14 @@ function Data = runBlock(Data, blockSettings)
   % If `Data.filename` does not exist, it will not know how to save the trial
   % choices (and will issue a warning).
 
-  %% 1. If settings say so, display block title (preblock callback?)
-  % Do I know how many-eth block this is?
+  %% 1. If settings say so, run pre-block callback (e.g. display title)
   if isfield(blockSettings.game, 'preBlockFn')
     blockSettings.game.preBlockFn(Data, blockSettings);
   end
 
   %% 2. Iterate through trials
   trials = blockSettings.game.trials;
-  numTrials = size(trials, 1); % equivalent to `height(trials)`
+  numTrials = size(trials, 1);
 
   drawTrial = blockSettings.game.trialFn;
   if ~isa(drawTrial, 'function_handle')
@@ -38,21 +37,21 @@ function Data = runBlock(Data, blockSettings)
     collectedData = appendRow(trialRecord, ...
       collectedData);
   end
+
   %% 3. Save participant file after block
-  % FIXME
-  % save(Data.filename, 'Data');
   Data = addBlock(Data, collectedData, blockSettings);
   saveData(Data);
 
-  %% 4. If settings say so, do something after block
+  %% 4. If settings say so, run post-block callback
   if isfield(blockSettings.game, 'postBlockFn')
     blockSettings.game.postBlockFn(Data, blockSettings);
   end
-  % ("Ready for next one? Press button...") - this is a natural break
 end
 
 % Helper function
 function [ tbl ] = appendRow(row, tbl)
+% APPENDROW If `tbl` is defined, append `row` and return it; otherwise, just
+%   make `row` the new contents of `tbl`.
   if isempty(tbl)
     tbl = row;
   else

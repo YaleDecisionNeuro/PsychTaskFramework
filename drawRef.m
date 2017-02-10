@@ -1,8 +1,8 @@
 function drawRef(settings, referenceSide)
-% Draws the stable reference value on screen *for this particular experiment*
+% DRAWREF Draws the stable reference value on screen for monetary R&A.
 %
-% For custom use, this function needs to be re-written accordingly (or a
-% function handle passed in its stead).
+% For use in other tasks, you'll likely need to write a custom function for
+% reference display (unless your reference is a monetary amount in dollars).
 
 H = settings.device.screenDims(3);
 W = settings.device.screenDims(4);

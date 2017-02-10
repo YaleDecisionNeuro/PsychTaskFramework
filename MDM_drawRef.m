@@ -1,16 +1,15 @@
-function drawRef(settings, referenceSide)
-% Draws the stable reference value on screen *for this particular experiment*
-%
-% For custom use, this function needs to be re-written accordingly (or a
-% function handle passed in its stead).
+function MDM_drawRef(settings, referenceSide)
+% MDM_DRAWREF Draws the stable reference value on screen for the MDM task.
 
 H = settings.device.screenDims(3);
 W = settings.device.screenDims(4);
 
 if referenceSide == 1
-    refDims.x = 0.25 * W;
+  refDims.x = 0.25 * W;
 elseif referenceSide == 2
-    refDims.x = 0.75 * W;
+  refDims.x = 0.75 * W;
+else
+  error('Illegal `referenceSide` argument, legal values are 1 or 2.');
 end
 refDims.y = H/4;
 

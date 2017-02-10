@@ -1,6 +1,7 @@
 function MDM(observer)
-% Modeled on (and largely copy-pasted from) RA.m, to test out image
-% implementation
+% MDM Runs a medical decision-making task and records its results for the
+%   participant whose subject number is passed in. Modeled on (and largely
+%   copy-pasted from) RA.m, to test out image implementation (#5).
 
 %% Load settings
 settings = config_MDM();

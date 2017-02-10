@@ -1,11 +1,25 @@
 function [ trialTbl ] = RA_generateTrialOrder(levelSettings, includeTrial, includeIndex)
 % RA_GENERATETRIALORDER Generates a random order of trials that contain all
-%   combinations of the `all*` variables (except `allColors`), `nRepeat` times.
-%   It will also add to the final trial table the row `includeTrial` at indices
-%   passed in `includeIndex`. It returns a randomly sorted table containing all
-%   changing elements of the monteray R&A trials.
-
-% TODO: does `trialRepeats` do what I think it does?
+%   combinations of selected variables (more specifically, struct subfields)
+%   from `levelSettings`.  If given further arguments, it will also add to the
+%   final trial table the row `includeTrial` at indices passed in
+%   `includeIndex`. It returns a randomly sorted table containing all changing
+%   elements of the monteray R&A trials.
+%
+% NOTE: The generator is specific to the monetary risk/ambiguity task. The
+% fields it extracts from `levelSettings` are hard-coded; whether it uses them
+% to provide a combination of all (`stakes`, `probs`, `ambigs`) or as a set of
+% possible choices (`colors`) is hard-coded as well. Generalizing the script is
+% a non-urgent TODO.
+%
+% Generally speaking: if your task only differs slightly from the monetary R&A
+% task, you should be able to use this script with minimum alteration. If your
+% task is substantially different, you might have to roll your own.
+%
+% This function is never triggered automatically -- the trial generation is
+% written into the main task script, so theoretically, you could just hard-code
+% your trials if you're just beginning to test your task. Making a generator
+% function work is probably in your best interest, though.
 
 allStakes = levelSettings.stakes;
 allProbs = levelSettings.probs;
@@ -20,6 +34,7 @@ end
 %% Generate all values for trials, so that they can be concatenated later
 [stakes_P, trialProbs] = ndgrid(allStakes, allProbs, 1:trialRepeats);
 [stakes_A, trialAmbigs] = ndgrid(allStakes, allAmbigs, 1:trialRepeats);
+% TODO: does `trialRepeats` do what I think it does?
 
 stakes = [stakes_P(:); stakes_A(:)];
 probs  = [trialProbs(:); 0.5 * ones(size(trialAmbigs(:)))];

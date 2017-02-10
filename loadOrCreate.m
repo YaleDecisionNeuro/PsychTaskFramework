@@ -1,8 +1,8 @@
 function [ Data, existed ] = loadOrCreate(participantId, fname)
 % LOADORCREATE Load a participant data file. If it does not exist, create it.
-% (Currently assumes that participant data is stored in a struct called Data.)
+% (Currently assumes that participant data is stored in a struct called Data,
+% and that the folders in the path to `fname` all exist.)
 
-% FIXME: Currently expects that the folder in which to save data exists
 existed = exist(fname, 'file');
 if existed
   temp = load(fname, 'Data');

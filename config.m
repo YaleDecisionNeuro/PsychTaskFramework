@@ -1,6 +1,11 @@
 function s = config(changes)
-% Return default settings for the block. If changes is provided
-% as a `struct` with same field names, the values are overwritten.
+% CONFIG Return default settings for the block. If changes is provided
+%   as a `struct` with same field names, the values are overwritten. (NOTE: This
+%   is not implemented yet -- if you need to alter values for a block, you'll
+%   need to directly alter the struct that this function returns! If you need to
+%   do this regularly, consider splitting this off to a separate `config`-like
+%   function that either (a) calls `config`, alters the values, then returns
+%   them, or less preferable (b) is a copy of this file.)
 %
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %

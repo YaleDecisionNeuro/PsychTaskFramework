@@ -1,4 +1,8 @@
 function [ trialData ] = MDM_drawTask(trialData, trialSettings, blockSettings, callback)
+% MDM_DRAWTASK Executes the MDM trial stage of showing the task choice to
+%   the participant. Choice values are derived from `trialSettings` and,
+%   if need be, `blockSettings`.
+
 windowPtr = blockSettings.device.windowPtr;
 
 % Determine probabilities to associate with colors

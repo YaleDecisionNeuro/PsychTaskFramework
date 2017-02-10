@@ -1,4 +1,7 @@
 function [ trialData ] = drawIntertrial(trialData, trialSettings, blockSettings, callback)
+% DRAWINTERTRIAL Displays the inactivity symbol in between trials. Its duration
+%   is based on the value in `trialSettings.ITIs`.
+
 W = blockSettings.device.screenDims(3); % width
 H = blockSettings.device.screenDims(4); % height
 windowPtr = blockSettings.device.windowPtr;

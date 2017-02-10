@@ -1,4 +1,8 @@
 function [ trialData ] = handleResponse(trialData, trialSettings, blockSettings, callback)
+% HANDLERESPONSE The draw script that handles the display of the response
+%   prompt and the eventual response or non-response. Takes standard draw
+%   script arguments.
+
 %% Helper values
 W = blockSettings.device.screenDims(3); % width
 H = blockSettings.device.screenDims(4); % height

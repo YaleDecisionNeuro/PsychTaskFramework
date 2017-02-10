@@ -1,4 +1,7 @@
 function report = choiceReport(trialData, trialSettings)
+% CHOICEREPORT Prints to stdout what the choice in `trialData` was and what
+%   the properties in `trialSettings` were.
+
   choice = trialData.choice;
   if choice == 0
     answer = 'Failed to answer ';
