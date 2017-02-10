@@ -9,7 +9,7 @@ addpath(genpath('./tasks/MDM'));
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Load settings
-settings = config_MDM();
+settings = MDM_config();
 
 %% Setup
 % Not setting up saving
@@ -39,13 +39,13 @@ trials.ITIs = repmat(perBlockITIs, numTrials / length(perBlockITIs), 1);
 % Open window
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
-  settings.background.color);
+  settings.default.bgrColor);
 
 %% Finalize settings
 settings.game.trials = trials(1:3, :);
-settings.game.trialFn = @MDM_drawTrial;
 settings.textures = loadTexturesFromConfig(settings);
-% NOTE: Can only load textures with an open window
+% NOTE: Can only load textures with an open window, this is why we're loading
+%   this late
 
 % Run
 Data = runBlock(Data, settings);

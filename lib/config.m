@@ -1,11 +1,14 @@
 function s = config(changes)
-% CONFIG Return default settings for the block. If changes is provided
+% CONFIG Return default settings *for the block*. If changes is provided
 %   as a `struct` with same field names, the values are overwritten. (NOTE: This
 %   is not implemented yet -- if you need to alter values for a block, you'll
 %   need to directly alter the struct that this function returns! If you need to
 %   do this regularly, consider splitting this off to a separate `config`-like
 %   function that either (a) calls `config`, alters the values, then returns
 %   them, or less preferable (b) is a copy of this file.)
+%
+% The default err on the side of catering to LevyLab's R&A paradigm. If you're
+% not using it, nuke s.objects from high orbit.
 %
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %
@@ -25,7 +28,7 @@ function s = config(changes)
 % This is where you set properties important for PsychToolBox to function
 % properly. Consult PTB manual if these are unclear.
 s.device.KbName = 'KeyNamesWindows';
-s.device.screenId = 1; % 0 for current screen, 1 for a second screen
+s.device.screenId = 0; % 0 for current screen, 1 for a second screen
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Must get filled in with Screen('Open')
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
@@ -38,7 +41,7 @@ s.default.fontName = 'Arial';
 s.default.fontColor = [255 255 255];
 s.default.fontSize = 42;
 s.default.bgrColor = [0 0 0];
-% s.default.drawFn = @RA_drawBgr;
+% s.default.drawFn = @X_drawDefault;
 % Function that will draw whatever is supposed to always be on the screen
 
 %% Features of objects that your task displays
@@ -111,16 +114,22 @@ s.game.colorKey = {'blue', 'red'};
 % Naming. Useful to quickly identify the properties used to run a trial -- it's
 % to your benefit to make sure that this uniquely identifies your setting for
 % the specific task and task block
-s.game.name = 'MonetaryRA';
-s.game.block.name = 'Gains';
-s.game.block.length = 31; % Useful for generation purposes
-s.game.block.repeatIndex = 1; % where will the test of stochastic dominance be
-% FIXME: The repeating row should be explicitly defined here?
+s.game.name = NaN;
+s.game.block.name = NaN;
+s.game.block.length = 1;
+
+% NOTE: If you have a trial you'd like to repeat in every trial in a particular
+%   place in the block, you'll define it in .repeatTrial and the in-block
+%   position(s) in .repeatIndex
+% s.game.block.repeatIndex = NaN;
+% s.game.block.repeatTrial = [];
 
 %% Available trial values
 % Up to you how you use these -- it's suggested that you pass them to a trial
 % generating function that will re-make them into an orderly shuffled table
-s.game.levels.stakes = [5, 6, 7, 8, 10, 12, 14, 16, 19, 23, 27, 31, 37, 44, 52, 61, 73, 86, 101, 120];
+%
+% The following values are just samples of what you can use.
+s.game.levels.stakes = [5, 6, 7, 8];
 s.game.levels.probs = [.25 .5 .75];
 s.game.levels.ambigs = [.24 .5 .74];
 s.game.levels.stakes_loss = 0;
@@ -129,15 +138,34 @@ s.game.levels.colors = [1 2];
 s.game.levels.repeats = 1;
 
 %% Paint functions
-% If you wish to re-use the standard monetary R&A task design, but with a
-% slightly different way of drawing things, write your own functions (modeled,
-% perhaps on `RA_drawTrial.m`), and supply the function handles here.
+% IMPORTANT: This is a *crucial* item to set, as it defines what trial script
+% each `runBlock` should use to conduct the trials.
 %
-% Currently, these are local functions - which know what subparts they need. In
-% the future, namespacing or loading from a subfolder will be encouraged.
-s.game.trialFn = @RA_drawTrial;
-s.game.preBlockFn = @RA_preBlock;
+% If you wish to re-use the standard R&A task designs, you might be able to
+% re-use @RA_drawTrial (with monetary amounts) or @MDM_drawTrial (with
+% pictograms and text). You might find it useful to write your own trial script
+% that is modeled on them, too -- if you do, here's where you supply that
+% function handle.  slightly different way of drawing things, write your own
+% functions and supply the function handles here.
+%
+% NOTE: It is important to ensure that whatever trial script you'll be using
+% will be on the MATLAB path, i.e. added with `addpath(script_location)`.
+s.game.trialFn = NaN;
+
+% Functions that are automatically executed before and after every block these
+% settings are applied to.
+
+% A helpful default in `lib/phase` - displays block number before every
+% block, waits for the press of '5%' button to start first trial
+% s.game.preBlockFn = @preBlock;
 % s.game.postBlockFn = @someFn;
+
+%% Lookup tables
+% If you're using any images or map your payoff values to a textual label,
+% you'd define the lookup tables here! For an example, see MDM_config. For an
+% explanation, see the README.
+
+% s.lookups.stakes.txt = {'destitution', 'status quo', 'unimaginable riches'}
 
 %% Changes
 % FIXME: This fails with sub-subfields, or rather, replaces them wholesale

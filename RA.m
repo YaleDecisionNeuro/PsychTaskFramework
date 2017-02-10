@@ -16,7 +16,7 @@ addpath(genpath('./tasks/RA'));
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
-settings = config();
+settings = RA_config();
 KbName(settings.device.KbName);
 
 % Set random generator
@@ -94,7 +94,6 @@ trials.ITIs = repmat(shuffle(perBlockITIs)', numTrials / length(perBlockITIs), 1
 % into a loss/gains config prior to that block.
 settings.game.trials = trials(1:3, :);
 settings.game.block.kind = 'Gains'; % For simple reconstruction later
-settings.game.trialFn = @RA_drawTrial; % For specific handling of task
 
 Data = runBlock(Data, settings);
 % TODO: Other blocks
