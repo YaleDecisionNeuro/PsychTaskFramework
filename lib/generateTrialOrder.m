@@ -1,4 +1,4 @@
-function [ trialTbl ] = RA_generateTrialOrder(levelSettings, includeTrial, includeIndex)
+function [ trialTbl ] = generateTrialOrder(levelSettings, includeTrial, includeIndex)
 % RA_GENERATETRIALORDER Generates a random order of trials that contain all
 %   combinations of selected variables (more specifically, struct subfields)
 %   from `levelSettings`.  If given further arguments, it will also add to the

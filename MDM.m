@@ -3,6 +3,11 @@ function MDM(observer)
 %   participant whose subject number is passed in. Modeled on (and largely
 %   copy-pasted from) RA.m, to test out image implementation (#5).
 
+%% Add subfolders we'll be using to path
+addpath(genpath('./lib'));
+addpath(genpath('./tasks/MDM'));
+% NOTE: genpath gets the directory and all its subdirectories
+
 %% Load settings
 settings = config_MDM();
 
@@ -21,7 +26,7 @@ else
 end
 
 %% Generate trials
-trials = RA_generateTrialOrder(settings.game.levels);
+trials = generateTrialOrder(settings.game.levels);
 numTrials = height(trials);
 
 trials.stakes_loss = repmat(settings.game.levels.stakes_loss, numTrials, 1);

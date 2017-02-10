@@ -10,6 +10,11 @@ function RA(observer)
 % the same call for both sessions -- it will just keep adding the new data to
 % `.recordedBlocks`).
 
+%% Add subfolders we'll be using to path
+addpath(genpath('./lib'));
+addpath(genpath('./tasks/RA'));
+% NOTE: genpath gets the directory and all its subdirectories
+
 %% Setup
 settings = config();
 KbName(settings.device.KbName);
@@ -64,7 +69,7 @@ repeatRow = table(4, 0.5, 0, randperm(2, 1), 'VariableNames', {'stakes', 'probs'
 repeatIndex = [1 32 63 94]; % TODO: Derive from block.length and repeatPosition
 % TODO: Extract the row injection into a separate function done after the fact,
 % so that it can be done without knowledge of the result
-trials = RA_generateTrialOrder(settings.game.levels, ...
+trials = generateTrialOrder(settings.game.levels, ...
   repeatRow, repeatIndex);
 numTrials = height(trials);
 trials.stakes_loss = repmat(settings.game.levels.stakes_loss, numTrials, 1);
