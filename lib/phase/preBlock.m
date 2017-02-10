@@ -1,9 +1,5 @@
-function [ Data, blockSettings ] = RA_preBlock(Data, blockSettings)
-  % RA_PREBLOCK Display "Block N: (Gains/Losses)" and wait for press of 5.
-  %
-  % NOTE: Technically, this also works for MDM, as it doesn't check block name
-  % or task name. It just displays whatever is in `settings.game.block.name`
-  % and whatever the length of `recordedBlocks` is.
+function [ Data, blockSettings ] = preBlock(Data, blockSettings)
+  % PREBLOCK Display "Block N: (Gains/Losses)" and wait for press of 5.
   %
   % TODO: Make it possible to explicitly set a block number.
 
