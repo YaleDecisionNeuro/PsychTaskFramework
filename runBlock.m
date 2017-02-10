@@ -48,7 +48,7 @@ function Data = runBlock(Data, blockSettings)
   end
 end
 
-% Helper function
+%% Helper functions
 function [ tbl ] = appendRow(row, tbl)
 % APPENDROW If `tbl` is defined, append `row` and return it; otherwise, just
 %   make `row` the new contents of `tbl`.
@@ -57,4 +57,20 @@ function [ tbl ] = appendRow(row, tbl)
   else
     tbl = [tbl; row]; % will scream if table and row have different columns
   end
+end
+
+function [ DataObject ] = addBlock(DataObject, blockData, blockSettings)
+% ADDBLOCK Appends `blockData` to the cell array `DataObject.recordedBlocks`.
+%   Stores records in `.records` and the settings used for the block in
+%   `.settings`.
+
+  if ~isfield(DataObject, 'recordedBlocks')
+    DataObject.recordedBlocks = cell(0);
+    n = 1;
+  else
+    n = length(DataObject.recordedBlocks) + 1;
+  end
+
+  DataObject.recordedBlocks{n}.records = blockData;
+  DataObject.recordedBlocks{n}.settings = blockSettings;
 end
