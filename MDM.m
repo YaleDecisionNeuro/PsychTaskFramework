@@ -12,17 +12,30 @@ addpath(genpath('./tasks/MDM'));
 settings = MDM_config();
 
 %% Setup
-% Not setting up saving
 KbName(settings.device.KbName);
 s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
 RandStream.setGlobalStream(s);
 
+% Find-or-create participant data file *in appropriate location*
+fname = [num2str(observer) '.mat'];
+folder = fullfile(pwd, 'data');
+fname = [folder filesep fname];
+[ Data, participantExisted ] = loadOrCreate(observer, fname);
+
+% TODO: Prompt experimenter if this is correct
+if participantExisted
+  disp('Participant file exists, reusing...')
+else
+  disp('Participant has no file, creating...')
+end
+
+% Save participant ID + date
 Data.observer = observer;
 Data.date = datestr(now, 'yyyymmddTHHMMSS'); % FIXME: This should be conditional
 if mod(observer, 2) == 0
-    settings.perUser.refSide = 1;
+    settings.perUser.refSide = 1; % left
 else
-    settings.perUser.refSide = 2;
+    settings.perUser.refSide = 2; % right
 end
 
 %% Generate trials
@@ -34,7 +47,6 @@ trials.reference = repmat(settings.game.levels.reference, numTrials, 1);
 
 perBlockITIs = settings.game.durations.ITIs;
 trials.ITIs = repmat(perBlockITIs, numTrials / length(perBlockITIs), 1);
-
 
 % Open window
 [settings.device.windowPtr, settings.device.screenDims] = ...
