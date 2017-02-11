@@ -11,7 +11,7 @@ Screen('FillOval', windowPtr, blockSettings.objects.intertrial.color, ...
   centerRectDims(center, blockSettings.objects.intertrial.dims));
 Screen('flip', windowPtr);
 trialData = timeIntertrial(trialData, trialSettings, blockSettings);
-if exist('callback', 'var') && isHandle(callback)
+if exist('callback', 'var') && isa(callback, 'function_handle')
   trialData = callback(trialData, trialSettings, blockSettings);
 end
 end

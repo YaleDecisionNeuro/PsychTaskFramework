@@ -114,7 +114,7 @@ Screen('flip', windowPtr);
 trialData = timeAndRecordTask(trialData, trialSettings, blockSettings);
 
 % Allow the execution of a callback if passed
-if exist('callback', 'var') && isHandle(callback)
+if exist('callback', 'var') && isa(callback, 'function_handle')
   trialData = callback(trialData, trialSettings, blockSettings);
 end
 end

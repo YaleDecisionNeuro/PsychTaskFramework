@@ -38,7 +38,7 @@ Screen('flip', windowPtr); % NOTE: This makes no sense. Why are we using it if w
 trialData.feedbackStartTime = datevec(now);
 trialData = timeFeedback(trialData, trialSettings, blockSettings);
 
-if exist('callback', 'var') && isHandle(callback)
+if exist('callback', 'var') && isa(callback, 'function_handle')
   trialData = callback(trialData, trialSettings, blockSettings);
 end
 end
