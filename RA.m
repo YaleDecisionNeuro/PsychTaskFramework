@@ -1,4 +1,4 @@
-function RA(observer)
+function [ Data ] = RA(observer)
 % RA Main task script for the monetary risk and ambiguity task. Loads settings,
 %   executes requisite blocks, and records data for the subject whose ID is
 %   passed as an argument.
@@ -26,29 +26,34 @@ RandStream.setGlobalStream(s);
 % TODO: If `observer` isn't passed, (1) don't load/save the file and (2) only
 % run one block each of gains and losses
 
-% Find-or-create participant data file *in appropriate location*
-fname = [num2str(observer) '.mat'];
-folder = fullfile(pwd, 'data');
-fname = [folder filesep fname];
-[ Data, participantExisted ] = loadOrCreate(observer, fname);
+if exist('observer', 'var') % Running actual trials -> record
+  % Find-or-create participant data file *in appropriate location*
+  fname = [num2str(observer) '.mat'];
+  folder = fullfile(pwd, 'data');
+  fname = [folder filesep fname];
+  [ Data, participantExisted ] = loadOrCreate(observer, fname);
 
-% TODO: Prompt experimenter if this is correct
-if participantExisted
-  disp('Participant file exists, reusing...')
-else
-  disp('Participant has no file, creating...')
-end
+  % TODO: Prompt experimenter if this is correct
+  if participantExisted
+    disp('Participant file exists, reusing...')
+  else
+    disp('Participant has no file, creating...')
+    Data.date = datestr(now, 'yyyymmddTHHMMSS');
+  end
 
-% Save participant ID + date
-% TODO: Prompt for correctness before launching PTB?
-Data.observer = observer;
-Data.date = datestr(now, 'yyyymmddTHHMMSS'); % FIXME: This should be conditional
-if mod(observer, 2) == 0
-    Data.refSide = 1; % left
-    settings.perUser.refSide = 1;
-else
-    Data.refSide = 2; % right
-    settings.perUser.refSide = 2;
+  % Save participant ID + date
+  % TODO: Prompt for correctness before launching PTB?
+  Data.observer = observer;
+  Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
+  if mod(observer, 2) == 0
+      settings.perUser.refSide = 1;
+  else
+      settings.perUser.refSide = 2;
+  end
+else % Running practice
+  Data.observer = 1;
+  settings.perUser.refSide = randi(2);
+  settings.device.saveAfterBlock = false;
 end
 
 %% Generate trials/blocks - or check whether it's been generated before?
@@ -92,11 +97,24 @@ trials.ITIs = repmat(shuffle(perBlockITIs)', numTrials / length(perBlockITIs), 1
 
 % TODO: Create a local function that will take default config and change it
 % into a loss/gains config prior to that block.
-settings.game.trials = trials(1:3, :);
-settings.game.block.kind = 'Gains'; % For simple reconstruction later
 
-Data = runBlock(Data, settings);
-% TODO: Other blocks
+if ~exist('observer', 'var') % Run practice
+  settings.game.trials = trials(randperm(numTrials, 3), :);
+  settings.game.trials.stakes(1:3) = -1 * settings.game.trials.stakes(1:3);
+  settings.game.trials.reference(1:3) = -1 * settings.game.trials.reference(1:3);
+  settings.game.block.name = 'Loss';
+  Data = runBlock(Data, settings);
+
+  settings.game.trials = trials(randperm(numTrials, 3), :);
+  settings.game.block.name = 'Gains';
+  Data = runBlock(Data, settings);
+else
+  settings.game.trials = trials(1:3, :);
+  settings.game.block.name = 'Gains';
+
+  Data = runBlock(Data, settings);
+  % TODO: Other blocks
+end
 
 Screen('CloseAll');
 end

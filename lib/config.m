@@ -32,6 +32,7 @@ s.device.screenId = 0; % 0 for current screen, 1 for a second screen
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Must get filled in with Screen('Open')
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
+s.device.saveAfterBlock = true; % Should runBlock automatically save?
 
 %% Graphics defaults
 % To prevent yourself from having to change many settings in many places, use

@@ -23,7 +23,9 @@ if exist('trialSettings', 'var')
         referenceSide = trialSettings.referenceSide;
     end
 
-    if isfield(trialSettings, 'reference')
+    % NOTE: trialSettings is, by convention, a table, so it doesn't respond to
+    % `isfield` - would have to convert to struct
+    if ismember('reference', trialSettings.Properties.VariableNames)
         referenceValue = trialSettings.reference;
     end
 end

@@ -41,7 +41,9 @@ function Data = runBlock(Data, blockSettings)
 
   %% 3. Save participant file after block
   Data = addBlock(Data, collectedData, blockSettings);
-  saveData(Data);
+  if blockSettings.device.saveAfterBlock
+    saveData(Data);
+  end
 
   %% 4. If settings say so, run post-block callback
   if isfield(blockSettings.game, 'postBlockFn') && ...

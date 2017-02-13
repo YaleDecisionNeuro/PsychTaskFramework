@@ -8,7 +8,8 @@ function report = choiceReport(trialData, trialSettings)
   else
     answer = sprintf('Answered %d ', choice);
   end
-  context = sprintf('with payoff %d, probability %.2f, ambiguity %.2f', ...
-      trialSettings.stakes, trialSettings.probs, trialSettings.ambigs);
+  context = sprintf(['with payoff %d, reference %d, probability %.2f, ' ...
+    'ambiguity %.2f'], trialSettings.stakes, trialSettings.reference, ...
+    trialSettings.probs, trialSettings.ambigs);
   report = [answer context];
 end

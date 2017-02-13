@@ -69,6 +69,12 @@ Screen('FillRect', windowPtr, color_ambig, lottoAmbigDims);
 digitWidth = ones(1, 2);
 digitHeight = ones(1, 2);
 for i = 1:length(amtOrder)
+  % Quickfix to issues with negative numbers
+  digitCount = num2str(amtOrder(i));
+  if amtOrder(i) < 0
+    digitCount = digitCount - 1;
+  end
+
   digit_field = sprintf('Digit%g', length(num2str(amtOrder(i))));
   temp = blockSettings.objects.lottery.stakes.misc.(digit_field);
   digitWidth(i) = temp(1);
