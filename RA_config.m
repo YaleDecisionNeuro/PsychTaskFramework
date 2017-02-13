@@ -18,6 +18,7 @@ s.game.block.repeatIndex = 1; % where will the test of stochastic dominance be
 % FIXME: The repeating row should be explicitly defined here?
 
 s.game.trialFn = @RA_drawTrial;
+s.game.referenceDrawFn = @RA_drawRef;
 s.game.preBlockFn = @preBlock;
 
 %% Available trial values

@@ -43,7 +43,7 @@ halfBox = blockSettings.objects.lottery.figure.dims(1) / 2;
 % Paint the whole screen (default without coordinates)
 Screen('FillRect', windowPtr, color_bgr);
 
-drawRef(blockSettings, blockSettings.perUser.refSide)
+RA_drawRef(blockSettings, trialSettings)
 
 lottoDims = [screenCenter - halfBox, Y1, screenCenter + halfBox, Y2];
 Screen('FillRect', windowPtr, colors(1, :), lottoDims);
