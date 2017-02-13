@@ -1,13 +1,14 @@
 function s = MDM_config()
 % MDM_CONFIG Return general block settings for the medical decision-making
 %   task by modifying the default ones from `config`.
-Factor out phase scripts
 
 % Load defaults
 s = config();
 
 %% Machine settings
 s.device.screenId = 1; % 0 for current screen, 1 for a second screen
+s.device.taskPath = ['tasks' filesep 'MDM'];
+s.device.imgPath = [s.device.taskPath filesep 'img'];
 
 %% Features of objects that your task displays
 % Inheriting all objects from `config`
@@ -45,7 +46,15 @@ s.game.levels.repeats = 1;
 s.lookups.stakes.txt = {'no effect'; ...
   'slight improvement'; 'moderate improvement'; 'major improvement'; ...
   'recovery'};
-s.lookups.stakes.img = {'symbol/no effect.jpg'; ...
-  'symbol/slight improvement.jpg'; 'symbol/moderate improvement.jpg'; ...
-  'symbol/major improvement.jpg'; 'symbol/recovery.jpg'};
+s.lookups.stakes.img = {'no effect.jpg'; 'slight improvement.jpg'; ...
+  'moderate improvement.jpg'; 'major improvement.jpg'; 'recovery.jpg'};
+% Fix images to path
+s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.device.imgPath);
+end
+
+function fullpaths = prependPath(filenames, path)
+  if ~strcmp(path(end), '/') && ~strcmp(path(end), '\')
+    path = [path filesep];
+  end
+  fullpaths = cellfun(@(x) [path x], filenames, 'UniformOutput', 0);
 end
