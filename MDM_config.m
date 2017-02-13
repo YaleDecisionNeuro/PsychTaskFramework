@@ -1,6 +1,7 @@
-function s = config_MDM()
+function s = MDM_config()
 % MDM_CONFIG Return general block settings for the medical decision-making
 %   task by modifying the default ones from `config`.
+Factor out phase scripts
 
 % Load defaults
 s = config();
@@ -22,7 +23,8 @@ s.game.durations.ITIs = 2;
 %% Block properties
 s.game.name = 'MDM';
 s.game.block.name = 'Medical';
-s.game.trialFn = @MDM_drawTrial;
+s.game.optionsPhaseFn = @MDM_drawTask;
+s.game.referenceDrawFn = @MDM_drawRef;
 s.game.preBlockFn = @preBlock;
 
 % Useful for generation purposes

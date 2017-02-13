@@ -28,10 +28,10 @@ In re-making our old task into this tool, I paid a lot of attention to re-usabil
 
 What do I mean with **composition**? Let's say that you're writing task **XYZ**. How is it different from the standard LevyLab monetary R&A task? Well, it uses a different choice, because you want participants to choose between two brands of candy. But you want to use the same response prompt, feedback, and intertrial period marker as the standard LevyLab R&A task.
 
-Composability means that you'll be able to just write the `XYZ_drawTask.m` and in `XYZ_drawTrial.m`, you'll be able to just drop it in, without needing to copy and alter the code of the other "standard" features:
+Composability means that you'll be able to just write the `XYZ_drawTask.m` and in `XYZ_runTrial.m`, you'll be able to just drop it in, without needing to copy and alter the code of the other "standard" features:
 
 ```matlab
-function trialData = XYZ_drawTrial(trialSettings, blockSettings)
+function trialData = XYZ_runTrial(trialSettings, blockSettings)
 trialData.trialStartTime = datevec(now);
 trialData = XYZ_drawTask(trialData, trialSettings, blockSettings);
 trialData = handleResponse(trialData, trialSettings, blockSettings);
@@ -42,12 +42,12 @@ trialData.trialEndTime = datevec(now);
 end
 ```
 
-In fact, if you replace `XYZ` with `MDM`, that's exactly what `MDM_drawTrial.m` looks like! It re-uses literally everything else from the standard library.
+In fact, if you replace `XYZ` with `MDM`, that would be exactly what `MDM_runTrial.m` could look like, as it re-uses everything other phase from the standard library. (This will be the case for many tasks.)
 
-But you'll have to re-write the block and task scripts to make this work, right? Yes, but not very much, thanks to the magic of **drop-in functions**. Basically, all I have to do to make the task script display MDM trials instead of R&A trials is to set
+But you'll have to re-write the block and task scripts to make this work, right? Thanks to the magic of **drop-in functions**, you might avoid this. Basically, all I have to do to make the task script show my participant choices in MDM rather than R&A monetary gambles is to set
 
 ```matlab
-settings.game.trialFn = @MDM_drawTrial;
+settings.game.optionsDisplayFn = @MDM_drawTask;
 ```
 
 The `@` sign refers to a function without running it. (If you didn't use the `@` sign, this line would try to run a trial.) We'll talk about configuration below, but: if you pass a configuration struct with such a line to `runBlock`, it will do all you need it to do.
@@ -58,9 +58,9 @@ You'll probably touch the top-level task script (your equivalent of `RA.m`) and,
 
 You'll almost never need to touch the block script `runBlock.m`, or make your own version of it -- almost anything you'd like to do in a block, you can configure in the task script.
 
-You might have to write your own trial script `XYZ_drawTrial.m`, even if it is to just change the one line. This might change in the future.
+You might have to write your own trial script `XYZ_runTrial.m` only if you're changing the order of standard phases (display choice, prompt for response, show feedback, and display intertrial period). You'll be able to set drop-in functions for each of these in `settings.game.*PhaseFn`.
 
-You might have to write some of your own draw scripts, but you might be able to re-use quite a few. (Currently, if you want something to appear elsewhere, you'll need to copy that draw script, change the things, and call the new one from your trial script. I'm working on removing that need.)
+You might have to write some of your own draw scripts, but you might be able to re-use quite a few. (Currently, if you want an element to appear in a different position, you'll need to copy that draw script, change the things, and call the new one from your trial script. I'm working on removing that need.)
 
 ### Maintaining layer responsibilities
 Technically, you're not constrained by anything when you write your own scripts -- they can do whatever, take whatever inputs and return whatever outputs suit you best. The current best practice, however, is to maintain a separation of responsibilities and have a common interface for all functions in the same layer.
@@ -69,7 +69,7 @@ Technically, you're not constrained by anything when you write your own scripts 
 
 * Task scripts load the settings; populate it with session values; load or create the participant data file; if needed, generate trials for the participant; open PTB screen; run whatever blocks necessary, with whatever settings necessary; and close the screen. Typical call to the block is `Data = runBlock(Data, settings);`.
 * Block script receives the participant data and the settings specific to it. It iterates through the trials that it's been set to display, providing the trial script trial-specific settings and storing each trial's data. After all trials are finished, it appends the collected data and the settings used to `Data.recordedBlocks`.
-* Trial scripts determine what order the trial phases should be displayed in; it passes to them, and receives from them, the gradual collection of data in the trial. It returns this data to the block script. Typical call to the trial script is `trialData = drawTrial(trialSettings, blockSettings);`.
+* Trial scripts determine what order the trial phases should be displayed in; it passes to them, and receives from them, the gradual collection of data in the trial. It returns this data to the block script. Typical call to the trial script is `trialData = runTrial(trialSettings, blockSettings);`.
 * Task scripts determine what to display and for how long. They collect data and turn it back over to the trial script. The typical call is `trialData = handleResponse(trialData, trialSettings, blockSettings);`.
 
 ----

@@ -15,7 +15,8 @@ function Data = runBlock(Data, blockSettings)
   % choices (and will issue a warning).
 
   %% 1. If settings say so, run pre-block callback (e.g. display title)
-  if isfield(blockSettings.game, 'preBlockFn')
+  if isfield(blockSettings.game, 'preBlockFn') && ...
+     isa(blockSettings.game.preBlockFn, 'function_handle')
     blockSettings.game.preBlockFn(Data, blockSettings);
   end
 
@@ -23,8 +24,8 @@ function Data = runBlock(Data, blockSettings)
   trials = blockSettings.game.trials;
   numTrials = size(trials, 1);
 
-  drawTrial = blockSettings.game.trialFn;
-  if ~isa(drawTrial, 'function_handle')
+  runTrial = blockSettings.game.trialFn;
+  if ~isa(runTrial, 'function_handle')
     error(['Function to draw trials not supplied! Make sure that you''ve set' ...
       ' settings.game.trialFn = @your_function_to_draw_trials']);
   end
@@ -32,7 +33,7 @@ function Data = runBlock(Data, blockSettings)
   collectedData = [];
   for i = 1:numTrials
     trialSettings = trials(i, :);
-    trialData = drawTrial(trialSettings, blockSettings);
+    trialData = runTrial(trialSettings, blockSettings);
     trialRecord = [trialSettings struct2table(trialData)];
     collectedData = appendRow(trialRecord, ...
       collectedData);
@@ -43,7 +44,8 @@ function Data = runBlock(Data, blockSettings)
   saveData(Data);
 
   %% 4. If settings say so, run post-block callback
-  if isfield(blockSettings.game, 'postBlockFn')
+  if isfield(blockSettings.game, 'postBlockFn') && ...
+     isa(blockSettings.game.postBlockFn, 'function_handle')
     blockSettings.game.postBlockFn(Data, blockSettings);
   end
 end

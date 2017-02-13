@@ -41,8 +41,6 @@ s.default.fontName = 'Arial';
 s.default.fontColor = [255 255 255];
 s.default.fontSize = 42;
 s.default.bgrColor = [0 0 0];
-% s.default.drawFn = @X_drawDefault;
-% Function that will draw whatever is supposed to always be on the screen
 
 %% Features of objects that your task displays
 % This is the Wild West portion of property settings. s.(object) should contain
@@ -138,27 +136,77 @@ s.game.levels.colors = [1 2];
 s.game.levels.repeats = 1;
 
 %% Paint functions
-% IMPORTANT: This is a *crucial* item to set, as it defines what trial script
-% each `runBlock` should use to conduct the trials.
+% To re-use the infrastructure this framework provides, you can supply only the
+% change that you need for your own task. You can do this by providing a
+% "function handle" - a reference to a function you wrote preceded by the @
+% sign. (For the monetary decision-making task, this would be @RA_drawTask. You
+% can learn more about function handles at
+% https://www.mathworks.com/help/matlab/matlab_prog/creating-a-function-handle.html.)
 %
-% If you wish to re-use the standard R&A task designs, you might be able to
-% re-use @RA_drawTrial (with monetary amounts) or @MDM_drawTrial (with
-% pictograms and text). You might find it useful to write your own trial script
-% that is modeled on them, too -- if you do, here's where you supply that
-% function handle.  slightly different way of drawing things, write your own
-% functions and supply the function handles here.
+% IMPORTANT: These are *crucial* items to set, as they define what components
+% your task will be using.
 %
 % NOTE: It is important to ensure that whatever trial script you'll be using
 % will be on the MATLAB path, i.e. added with `addpath(script_location)`.
-s.game.trialFn = NaN;
 
+% %% Trial scripts: trialFn
+% trialFn defines what trial script each `runBlock` should use to conduct the
+% trials. The trial script is responsible for the order in which task phases
+% are invoked.
+%
+% If you wish to re-use the standard R&A task designs, you'll want to keep this
+% set to @runTrial (which you can find in lib/phase).
+
+s.game.trialFn = @runTrial;
+
+% %% Phase scripts
+% If you're only changing an element of the task, but you're happy with the
+% standard order of phases (i.e. choice display, response prompt, feedback,
+% intertrial), you can substitute a function here. It should take, and return,
+% the same arguments that the phase function in lib/phase does. (In general,
+% this is `sampleFn(trialData, trialSettings, blockSettings, callback)`.)
+%
+% By design, optionsPhaseFn is left blank. `runTrial` will complain if it is
+% not set, or if any of the phase function handles below are unset. While you
+% might avoid setting it by writing your own trial script, it is recommended
+% that you still leverage these settings; it will make your task easier to
+% maintain and understand for your collaborators.
+%
+% (You might be able to re-use the functions written specifically for monetary
+% or medical choices, which you can find in tasks/[folder].)
+
+s.game.optionsPhaseFn = NaN;
+s.game.responsePhaseFn = @handleResponse;
+s.game.feedbackPhaseFn = @drawFeedback;
+s.game.intertrialPhaseFn = @drawIntertrial;
+
+% %% Reference draw script
+% Reference draw script defines how the "reference" (value alternative to the
+% gamble) will be drawn. It is specific to the kind of choices you present. Its
+% default arguments are drawRef(blockSettings, trialSettings).
+
+s.game.referenceDrawFn = NaN;
+
+% %% Background draw script
+% The default background draw script is called between the phases to set
+% background and font properties back to default. You might wish to alter it
+% to, e.g., to make sure that the reference is drawn at all times.
+%
+% By convention, the background draw script only takes block settings and a
+% potential callback function as an argument, and does not access nor modify
+% collected data.
+
+s.game.bgrDrawFn = @drawBgr;
+
+%% Event functions
 % Functions that are automatically executed before and after every block these
 % settings are applied to.
 
-% A helpful default in `lib/phase` - displays block number before every
-% block, waits for the press of '5%' button to start first trial
-% s.game.preBlockFn = @preBlock;
-% s.game.postBlockFn = @someFn;
+% @preBlock is a helpful default in `lib/phase` - displays block number before
+% every block, waits for the press of '5%' button to start first trial.
+
+s.game.preBlockFn = @preBlock;
+s.game.postBlockFn = NaN;
 
 %% Lookup tables
 % If you're using any images or map your payoff values to a textual label,
