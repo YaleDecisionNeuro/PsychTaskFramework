@@ -16,29 +16,38 @@ KbName(settings.device.KbName);
 s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
 RandStream.setGlobalStream(s);
 
-% Find-or-create participant data file *in appropriate location*
-fname = [num2str(observer) '.mat'];
-folder = fullfile(pwd, 'data');
-fname = [folder filesep fname];
-[ Data, participantExisted ] = loadOrCreate(observer, fname);
+if exist('observer', 'var') % Running actual trials -> record
+  % Find-or-create participant data file *in appropriate location*
+  fname = [num2str(observer) '.mat'];
+  folder = fullfile(pwd, 'data');
+  fname = [folder filesep fname];
+  [ Data, participantExisted ] = loadOrCreate(observer, fname);
 
-% TODO: Prompt experimenter if this is correct
-if participantExisted
-  disp('Participant file exists, reusing...')
-else
-  disp('Participant has no file, creating...')
-end
+  % TODO: Prompt experimenter if this is correct
+  if participantExisted
+    disp('Participant file exists, reusing...')
+  else
+    disp('Participant has no file, creating...')
+    Data.date = datestr(now, 'yyyymmddTHHMMSS');
+  end
 
-% Save participant ID + date
-Data.observer = observer;
-Data.date = datestr(now, 'yyyymmddTHHMMSS'); % FIXME: This should be conditional
-if mod(observer, 2) == 0
-    settings.perUser.refSide = 1; % left
-else
-    settings.perUser.refSide = 2; % right
+  % Save participant ID + date
+  % TODO: Prompt for correctness before launching PTB?
+  Data.observer = observer;
+  Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
+  if mod(observer, 2) == 0
+      settings.perUser.refSide = 1;
+  else
+      settings.perUser.refSide = 2;
+  end
+else % Running practice
+  Data.observer = 1;
+  settings.perUser.refSide = randi(2);
+  settings.device.saveAfterBlock = false;
 end
 
 %% Generate trials
+% TODO: Also generate monetary block
 trials = generateTrialOrder(settings.game.levels);
 numTrials = height(trials);
 
@@ -60,7 +69,13 @@ settings.textures = loadTexturesFromConfig(settings);
 %   this late
 
 % Run
-Data = runBlock(Data, settings);
+if ~exist('observer', 'var') % Run practice
+  settings.game.trials = trials(randperm(numTrials, 3), :);
+  Data = runBlock(Data, settings);
+else
+  settings.game.trials = trials(1:3, :);
+  Data = runBlock(Data, settings);
+end
 
 % Close window
 Screen('CloseAll');
