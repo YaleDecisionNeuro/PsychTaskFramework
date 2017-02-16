@@ -6,7 +6,6 @@ function SODM(observer)
 
 %% Add subfolders we'll be using to path
 addpath(genpath('./lib'));
-addpath(genpath('./tasks/MDM'));
 addpath(genpath('./tasks/SODM'));
 % NOTE: genpath gets the directory and all its subdirectories
 
@@ -21,7 +20,7 @@ RandStream.setGlobalStream(s);
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
   fname = [num2str(observer) '.mat'];
-  folder = fullfile(pwd, 'data');
+  folder = fullfile(settings.device.taskPath, 'data');
   fname = [folder filesep fname];
   [ Data, participantExisted ] = loadOrCreate(observer, fname);
 
@@ -48,35 +47,55 @@ else % Running practice
   settings.device.saveAfterBlock = false;
 end
 
-%% Generate trials
-% TODO: Also generate monetary block
-trials = generateTrialOrder(settings.game.levels);
-numTrials = height(trials);
-
-trials.stakes_loss = repmat(settings.game.levels.stakes_loss, numTrials, 1);
-trials.reference = repmat(settings.game.levels.reference, numTrials, 1);
-
-perBlockITIs = settings.game.durations.ITIs;
-trials.ITIs = repmat(perBlockITIs, numTrials / length(perBlockITIs), 1);
-
 % Open window
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
   settings.default.bgrColor);
 
-%% Finalize settings
-settings.game.trials = trials(1:3, :);
-settings.textures = loadTexturesFromConfig(settings);
-% NOTE: Can only load textures with an open window, this is why we're loading
-%   this late
+%% Generate trials
+% 1. Monetary blocks
+medSettings = SODM_config_medical(settings)
+medTrials = generateTrialOrder(medSettings.game.levels);
+numMedTrials = height(medTrials);
+
+medTrials.stakes_loss = repmat(medSettings.game.levels.stakes_loss, numMedTrials, 1);
+medTrials.reference = repmat(medSettings.game.levels.reference, numMedTrials, 1);
+
+perBlockITIs = medSettings.game.durations.ITIs;
+medTrials.ITIs = repmat(perBlockITIs, numMedTrials / length(perBlockITIs), 1);
+
+medSettings.textures = loadTexturesFromConfig(medSettings);
+
+clear perBlockITIs;
+
+% 2. Monetary blocks
+moneySettings = SODM_config_monetary(settings);
+moneyTrials = generateTrialOrder(moneySettings.game.levels);
+numMoneyTrials = height(moneyTrials);
+
+moneyTrials.stakes_loss = repmat(moneySettings.game.levels.stakes_loss, numMoneyTrials, 1);
+moneyTrials.reference = repmat(moneySettings.game.levels.reference, numMoneyTrials, 1);
+
+perBlockITIs = moneySettings.game.durations.ITIs;
+moneyTrials.ITIs = repmat(perBlockITIs, numMoneyTrials / length(perBlockITIs), 1);
+
+moneySettings.textures = loadTexturesFromConfig(moneySettings);
+
+% NOTE: Just for testing, limiting block length
+moneySettings.game.trials = moneyTrials(1:3, :);
+medSettings.game.trials = medTrials(1:3, :);
 
 % Run
 if ~exist('observer', 'var') % Run practice
-  settings.game.trials = trials(randperm(numTrials, 3), :);
-  Data = runBlock(Data, settings);
+  medSettings.game.trials = medTrials(randperm(numMoneyTrials, 3), :);
+  Data = runBlock(Data, medSettings);
+  moneySettings.game.trials = moneyTrials(randperm(numMoneyTrials, 3), :);
+  Data = runBlock(Data, moneySettings);
 else
-  settings.game.trials = trials(1:3, :);
-  Data = runBlock(Data, settings);
+  medSettings.game.trials = medTrials(1, :);
+  Data = runBlock(Data, medSettings);
+  moneySettings.game.trials = moneyTrials(randperm(numMoneyTrials, 1), :);
+  Data = runBlock(Data, moneySettings);
 end
 
 % Close window

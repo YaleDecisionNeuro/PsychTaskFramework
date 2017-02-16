@@ -12,6 +12,8 @@ function s = SODM_config_monetary(initial_config)
 
   s.game.block.name = 'Monetary';
   s.game.optionsPhaseFn = @RA_drawTask;
+  s.game.responsePhaseFn = @handleResponse;
+  s.game.durations.response = 3;
   s.game.referenceDrawFn = @RA_drawRef;
   s.game.bgrDrawFn = @drawBgr;
 

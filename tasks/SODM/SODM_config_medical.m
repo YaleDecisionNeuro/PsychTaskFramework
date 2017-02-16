@@ -12,7 +12,7 @@ function s = SODM_config_medical(initial_config)
   s.game.bgrDrawFn = @SODM_drawBgr;
   % FIXME: Is this the best way of showing the context? Why not SODM_drawTask?
 
-  s.game.levels.stakes = 1:5; % Levels are translated via lookup table
+  s.game.levels.stakes = 2:5; % Levels are translated via lookup table
   s.game.levels.stakes_loss = 1;
   s.game.levels.reference = 2;
 
