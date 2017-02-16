@@ -23,9 +23,6 @@ KbName(settings.device.KbName);
 s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
 RandStream.setGlobalStream(s);
 
-% TODO: If `observer` isn't passed, (1) don't load/save the file and (2) only
-% run one block each of gains and losses
-
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
   fname = [num2str(observer) '.mat'];
@@ -68,7 +65,7 @@ end
 % 5. Mix around ITI order
 % 6. Pass row subsets to runBlock
 %
-% TODO: Mix in with losses right here? How?
+% TODO: Do the same for losses
 
 repeatRow = table(4, 0.5, 0, randperm(2, 1), 'VariableNames', {'stakes', 'probs', 'ambigs', 'colors'});
 repeatIndex = [1 32 63 94]; % TODO: Derive from block.length and repeatPosition

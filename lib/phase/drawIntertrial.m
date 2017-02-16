@@ -20,13 +20,23 @@ end
 function trialData = timeIntertrial(trialData, trialSettings, blockSettings)
 trialData.ITIStartTime = datevec(now);
 
-elapsedTime = etime(datevec(now), trialData.trialStartTime);
+% Do we need the entire trial to last a constant amount of time? If so:
+% (1) the `elapsedTime` initial reference point is `trialStartTime` rather than
+%     `.ITIStartTime`
+% (2) the endtime is the sum of `s.game.durations` rather than `.durations.ITIs`
+if blockSettings.game.constantTrialDuration
+  startReference = trialData.trialStartTime;
+  endReference = blockSettings.game.durations.choice + ...
+    blockSettings.game.durations.response + ...
+    blockSettings.game.durations.feedback + ...
+    trialSettings.ITIs;
+else
+  startReference = trialData.ITIStartTime;
+  endReference = trialSettings.ITIs;
+end
 
-totalTrialTime = blockSettings.game.durations.choice + ...
-  blockSettings.game.durations.response + ...
-  blockSettings.game.durations.feedback + ...
-  trialSettings.ITIs;
-while elapsedTime < totalTrialTime
-    elapsedTime = etime(datevec(now), trialData.trialStartTime);
+elapsedTime = etime(datevec(now), startReference);
+while elapsedTime < endReference
+  elapsedTime = etime(datevec(now), startReference);
 end
 end

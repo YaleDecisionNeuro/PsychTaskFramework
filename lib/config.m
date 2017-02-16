@@ -92,6 +92,7 @@ s.objects.intertrial.dims = [40 40];
 % Same Wild-West rules apply -- the format can be whatever you end up using
 
 % (Maximum) durations of the various stages
+s.game.constantTrialDuration = false;
 s.game.durations.choice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;

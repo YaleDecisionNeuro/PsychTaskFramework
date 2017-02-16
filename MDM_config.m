@@ -15,6 +15,7 @@ s.device.imgPath = [s.device.taskPath filesep 'img'];
 
 %% Non-display settings for the game
 % (Maximum) durations of the various stages, in seconds
+s.game.constantTrialDuration = true;
 s.game.durations.choice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
