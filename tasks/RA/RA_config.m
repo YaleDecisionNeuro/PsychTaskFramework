@@ -9,6 +9,7 @@ s = config();
 
 %% Machine settings
 s.device.screenId = 1; % 0 for current screen, 1 for a second screen
+s.device.taskPath = ['tasks' filesep 'RA'];
 s.game.constantTrialDuration = true; % This is fMRI, so intertrial compensates for any fast responses in order to make each trial last a constant amount of time
 
 %% Game settings

@@ -26,7 +26,7 @@ RandStream.setGlobalStream(s);
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
   fname = [num2str(observer) '.mat'];
-  folder = fullfile(pwd, 'data');
+  folder = fullfile(settings.device.taskPath, 'data');
   fname = [folder filesep fname];
   [ Data, participantExisted ] = loadOrCreate(observer, fname);
 
@@ -66,14 +66,13 @@ lossSettings = RA_Loss_config(gainSettings);
 %% Generate trials/blocks - if they haven't been generated before
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   % Gains
-  gainBlocks = generateBlocks(settings, settings.game.block.repeatRow, ...
-    settings.game.block.repeatIndex);
+  gainBlocks = generateBlocks(gainSettings, gainSettings.game.block.repeatRow, ...
+    gainSettings.game.block.repeatIndex);
 
   % Losses
   lossBlocks = generateBlocks(lossSettings, lossSettings.game.block.repeatRow, ...
     lossSettings.game.block.repeatIndex);
 
-  % TODO: Set up order of blocks and assign
   lastDigit = mod(Data.observer, 10);
   gainsFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
   gainsIdx = [1 1 0 0 0 0 1 1];

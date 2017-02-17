@@ -8,10 +8,8 @@ addpath(genpath('./lib'));
 addpath(genpath('./tasks/MDM'));
 % NOTE: genpath gets the directory and all its subdirectories
 
-%% Load settings
-settings = MDM_config();
-
 %% Setup
+settings = MDM_config();
 KbName(settings.device.KbName);
 s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
 RandStream.setGlobalStream(s);
@@ -19,6 +17,7 @@ RandStream.setGlobalStream(s);
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
   fname = [num2str(observer) '.mat'];
+  folder = fullfile(settings.device.taskPath, 'data');
   folder = fullfile(pwd, 'data');
   fname = [folder filesep fname];
   [ Data, participantExisted ] = loadOrCreate(observer, fname);
@@ -46,35 +45,72 @@ else % Running practice
   settings.device.saveAfterBlock = false;
 end
 
-%% Generate trials
-% TODO: Also generate monetary block
-trials = generateTrialOrder(settings.game.levels);
-numTrials = height(trials);
-
-trials.stakes_loss = repmat(settings.game.levels.stakes_loss, numTrials, 1);
-trials.reference = repmat(settings.game.levels.reference, numTrials, 1);
-
-perBlockITIs = settings.game.durations.ITIs;
-trials.ITIs = repmat(perBlockITIs, numTrials / length(perBlockITIs), 1);
-
-% Open window
+% Set up window
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
   settings.default.bgrColor);
 
-%% Finalize settings
-settings.game.trials = trials(1:3, :);
-settings.textures = loadTexturesFromConfig(settings);
-% NOTE: Can only load textures with an open window, this is why we're loading
-%   this late
+% Disambiguate settings here
+monSettings = MDM_config_monetary(settings);
+medSettings = MDM_config_med(settings);
+medSettings.textures = loadTexturesFromConfig(medSettings);
 
-% Run
-if ~exist('observer', 'var') % Run practice
-  settings.game.trials = trials(randperm(numTrials, 3), :);
-  Data = runBlock(Data, settings);
+%% Generate trials if not generated already
+if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
+  medBlocks = generateBlocks(medSettings);
+  monBlocks = generateBlocks(monSettings);
+
+  lastDigit = mod(Data.observer, 10);
+  medFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
+  medIdx = [1 1 0 0];
+  if ~medFirst
+    medIdx = 1 - medIdx; % flip
+  end
+
+  numBlocks = length(medIdx);
+  Data.blocks.planned = cell(numBlocks, 1);
+  Data.blocks.recorded = cell(0);
+  Data.blocks.numRecorded = 0;
+  for blockIdx = 1:numBlocks
+    blockKind = medIdx(blockIdx);
+    withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
+    if blockKind == 1
+      Data.blocks.planned{blockIdx} = struct('trials', ...
+        medBlocks{withinKindIdx}, 'blockKind', blockKind);
+    else
+      Data.blocks.planned{blockIdx} = struct('trials', ...
+        monBlocks{withinKindIdx}, 'blockKind', blockKind);
+    end
+  end
+end
+
+% Display blocks
+firstBlockIdx = Data.blocks.numRecorded + 1;
+lastBlockIdx = 4; % FIXME: Derive from settings
+
+if exist('observer', 'var')
+  for blockIdx = firstBlockIdx:lastBlockIdx
+    if Data.blocks.planned{blockIdx}.blockKind == 0
+      blockSettings = monSettings;
+    else
+      blockSettings = medSettings;
+    end
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(1:3, :);
+    Data = runBlock(Data, blockSettings);
+  end
 else
-  settings.game.trials = trials(1:3, :);
-  Data = runBlock(Data, settings);
+  % Run practice -- only first n trials of first two blocks?
+  numSelect = 1;
+  for blockIdx = 2:3 % Known to be two different blocks
+    if Data.blocks.planned{blockIdx}.blockKind == 0
+      blockSettings = monSettings;
+    else
+      blockSettings = medSettings;
+    end
+    randomIdx = randperm(blockSettings.game.block.length, numSelect);
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+    Data = runBlock(Data, blockSettings);
+  end
 end
 
 % Close window

@@ -24,38 +24,7 @@ s.game.durations.ITIs = 2;
 
 %% Block properties
 s.game.name = 'MDM';
-s.game.block.name = 'Medical';
-s.game.optionsPhaseFn = @MDM_drawTask;
-s.game.referenceDrawFn = @MDM_drawRef;
 s.game.preBlockFn = @preBlock;
 
 % Useful for generation purposes
-s.game.block.length = 10;
-% s.game.block.repeatIndex = NaN;
-% s.game.block.repeatTrial = NaN;
-
-%% Available trial values
-s.game.levels.stakes = 1:5; % Levels are translated via lookup table
-s.game.levels.probs = [.25 .5 .75];
-s.game.levels.ambigs = [.24 .5 .74];
-s.game.levels.stakes_loss = 1;
-s.game.levels.reference = 2;
-s.game.levels.colors = [1 2];
-s.game.levels.repeats = 1;
-
-%% Lookup tables
-s.lookups.stakes.txt = {'no effect'; ...
-  'slight improvement'; 'moderate improvement'; 'major improvement'; ...
-  'recovery'};
-s.lookups.stakes.img = {'no effect.jpg'; 'slight improvement.jpg'; ...
-  'moderate improvement.jpg'; 'major improvement.jpg'; 'recovery.jpg'};
-% Fix images to path
-s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.device.imgPath);
-end
-
-function fullpaths = prependPath(filenames, path)
-  if ~strcmp(path(end), '/') && ~strcmp(path(end), '\')
-    path = [path filesep];
-  end
-  fullpaths = cellfun(@(x) [path x], filenames, 'UniformOutput', 0);
 end
