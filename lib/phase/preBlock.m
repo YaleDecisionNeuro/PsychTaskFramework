@@ -4,8 +4,8 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
   % TODO: Make it possible to explicitly set a block number.
 
   % Check if there are any recorded blocks yet
-  if isfield(Data, 'recordedBlocks')
-    block_num = length(Data.recordedBlocks) + 1;
+  if isfield(Data, 'blocks') && isfield(Data.blocks, 'numRecorded')
+    block_num = Data.blocks.numRecorded + 1;
   else
     block_num = 1;
   end

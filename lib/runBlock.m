@@ -68,13 +68,17 @@ function [ DataObject ] = addBlock(DataObject, blockData, blockSettings)
 %   Stores records in `.records` and the settings used for the block in
 %   `.settings`.
 
-  if ~isfield(DataObject, 'recordedBlocks')
-    DataObject.recordedBlocks = cell(0);
-    n = 1;
-  else
-    n = length(DataObject.recordedBlocks) + 1;
-  end
+% Increment recorded count
+if ~isfield(DataObject.blocks, 'numRecorded')
+  DataObject.blocks.numRecorded = 0;
+end
+DataObject.blocks.numRecorded = DataObject.blocks.numRecorded + 1;
+n = DataObject.blocks.numRecorded;
 
-  DataObject.recordedBlocks{n}.records = blockData;
-  DataObject.recordedBlocks{n}.settings = blockSettings;
+% Record the block
+if ~isfield(DataObject.blocks, 'recorded')
+  DataObject.blocks.recorded = cell(0);
+end
+DataObject.blocks.recorded{n}.records = blockData;
+DataObject.blocks.recorded{n}.settings = blockSettings;
 end

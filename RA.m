@@ -53,72 +53,88 @@ else % Running practice
   settings.device.saveAfterBlock = false;
 end
 
-%% Generate trials/blocks - or check whether it's been generated before?
-% Generate order of trials in a single table, then iterate n at a time?
-% Generate a number of separate blocks, then iterate through them?
-% Just run trials with ad-hoc intermissions? (This was the old way, sort of)
-
-% 1. Bring in levels from `settings`
-% 2. Define the repeat row
-% 3. Bring in RA_generateTrialOrder to create `trials`
-% 4. Add the constant columns (stakes_loss, reference_value, trial_type)
-% 5. Mix around ITI order
-% 6. Pass row subsets to runBlock
-%
-% TODO: Do the same for losses
-
-repeatRow = table(4, 0.5, 0, randperm(2, 1), 'VariableNames', {'stakes', 'probs', 'ambigs', 'colors'});
-repeatIndex = [1 32 63 94]; % TODO: Derive from block.length and repeatPosition
-% TODO: Extract the row injection into a separate function done after the fact,
-% so that it can be done without knowledge of the result
-trials = generateTrialOrder(settings.game.levels, ...
-  repeatRow, repeatIndex);
-numTrials = height(trials);
-trials.stakes_loss = repmat(settings.game.levels.stakes_loss, numTrials, 1);
-trials.reference = repmat(settings.game.levels.reference, numTrials, 1);
-
-perBlockITIs = settings.game.durations.ITIs;
-trials.ITIs = repmat(shuffle(perBlockITIs)', numTrials / length(perBlockITIs), 1);
-% TODO: Extract helper function to add a constant value in a table column
-
 %% Set up window
 % TODO: Conditional on provided `settings.device.screenDims`?
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
   settings.default.bgrColor);
 
+% Disambiguate settings here
+gainSettings = settings;
+lossSettings = RA_Loss_config(gainSettings);
+
+%% Generate trials/blocks - if they haven't been generated before
+if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
+  % Gains
+  gainBlocks = generateBlocks(settings, settings.game.block.repeatRow, ...
+    settings.game.block.repeatIndex);
+
+  % Losses
+  lossBlocks = generateBlocks(lossSettings, lossSettings.game.block.repeatRow, ...
+    lossSettings.game.block.repeatIndex);
+
+  % TODO: Set up order of blocks and assign
+  lastDigit = mod(Data.observer, 10);
+  gainsFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
+  gainsIdx = [1 1 0 0 0 0 1 1];
+  if ~gainsFirst
+    gainsIdx = 1 - gainsIdx; % flip
+  end
+
+  numBlocks = 8;
+  Data.blocks.planned = cell(numBlocks, 1);
+  Data.blocks.recorded = cell(0);
+  Data.blocks.numRecorded = 0;
+  for blockIdx = 1:numBlocks
+    blockKind = gainsIdx(blockIdx);
+    withinKindIdx = sum(gainsIdx(1 : blockIdx) == blockKind);
+    if blockKind == 1
+      Data.blocks.planned{blockIdx} = struct('trials', ...
+        gainBlocks{withinKindIdx}, 'blockKind', blockKind);
+    else
+      Data.blocks.planned{blockIdx} = struct('trials', ...
+        lossBlocks{withinKindIdx}, 'blockKind', blockKind);
+    end
+  end
+end
+
 %% Display blocks
 % Strategy: Run each block with separate settings; define its trials by
 % subsetting them; handle any prompts / continuations here, or pass different
 % callbacks
-
-% TODO: Create a local function that will take default config and change it
-% into a loss/gains config prior to that block.
-
-if ~exist('observer', 'var') % Run practice
-  settings.game.trials = trials(randperm(numTrials, 3), :);
-  settings.game.trials.stakes(1:3) = -1 * settings.game.trials.stakes(1:3);
-  settings.game.trials.reference(1:3) = -1 * settings.game.trials.reference(1:3);
-  settings.game.block.name = 'Loss';
-  Data = runBlock(Data, settings);
-
-  settings.game.trials = trials(randperm(numTrials, 3), :);
-  settings.game.block.name = 'Gains';
-  Data = runBlock(Data, settings);
+firstBlockIdx = Data.blocks.numRecorded + 1;
+if firstBlockIdx > 4
+  lastBlockIdx = 8;
 else
-  settings.game.trials = trials(1:3, :);
-  settings.game.block.name = 'Gains';
+  lastBlockIdx = 4;
+end
+% NOTE: Incidentally, this takes care of an attempt to run more than 8 blocks -
+%   9:8 is empty, so the for loop will not run if firstBlockIdx > lastBlockIdx
 
-  Data = runBlock(Data, settings);
-  % TODO: Other blocks
+if exist('observer', 'var')
+  for blockIdx = firstBlockIdx:lastBlockIdx
+    if Data.blocks.planned{blockIdx}.blockKind == 0
+      blockSettings = lossSettings;
+    else
+      blockSettings = gainSettings;
+    end
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(1:3, :);
+    Data = runBlock(Data, blockSettings);
+  end
+else
+  % Run practice -- only first n trials of first two blocks?
+  numSelect = 1;
+  for blockIdx = 6:7 % Known to be two different blocks
+    if Data.blocks.planned{blockIdx}.blockKind == 0
+      blockSettings = lossSettings;
+    else
+      blockSettings = gainSettings;
+    end
+    randomIdx = randperm(blockSettings.game.block.length, numSelect);
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+    Data = runBlock(Data, blockSettings);
+  end
 end
 
 Screen('CloseAll');
-end
-
-function arr = shuffle(arr)
-% SHUFFLE Helper function that randomly shuffles a one-deimsional object
-%   (by design, a matrix).
-  newOrder = randperm(length(arr));
-  arr = arr(newOrder);
 end

@@ -96,7 +96,7 @@ s.game.constantTrialDuration = false;
 s.game.durations.choice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
-s.game.durations.ITIs = [10, 4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
+s.game.durations.ITIs = [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 % These have to be in each block, in some order -- in most fMRI block designs,
 % the block has to be constant. Some designs might want to shuffle these in
 % particular ways, just like items in `s.game.levels`; other designs might want

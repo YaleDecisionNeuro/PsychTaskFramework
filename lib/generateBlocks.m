@@ -75,6 +75,7 @@ function tbl = injectRowAtIndex(tbl, row, rowIndex)
   for idx = 1:length(rowIndex)
     tbl_pre = tbl(1:(rowIndex(idx) - 1), :);
     tbl_post = tbl(rowIndex(idx):end, :);
+    % FIXME: Use join in case `row` orders the same variables differently
     tbl = [tbl_pre; row; tbl_post];
   end
 end
