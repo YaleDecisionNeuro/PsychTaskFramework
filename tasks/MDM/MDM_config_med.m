@@ -9,14 +9,14 @@ s = initial_config;
 s.game.block.name = 'Medical';
 s.game.optionsPhaseFn = @MDM_drawTask;
 s.game.referenceDrawFn = @MDM_drawRef;
-s.game.block.length = 15;
+s.game.block.length = 12;
 
 % Useful for generation purposes
 % s.game.block.repeatIndex = NaN;
 % s.game.block.repeatTrial = NaN;
 
 %% Available trial values
-s.game.levels.stakes = 1:5; % Levels are translated via lookup table
+s.game.levels.stakes = 2:5; % Levels are translated via lookup table
 s.game.levels.probs = [.25 .5 .75];
 s.game.levels.ambigs = [.24 .5 .74];
 s.game.levels.stakes_loss = 1;
