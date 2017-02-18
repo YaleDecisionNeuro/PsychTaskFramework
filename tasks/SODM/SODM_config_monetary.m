@@ -11,13 +11,12 @@ function s = SODM_config_monetary(initial_config)
   addpath('./tasks/RA'); % borrowing RA functions for now
 
   s.game.block.name = 'Monetary';
-  s.game.optionsPhaseFn = @RA_drawTask;
-  s.game.responsePhaseFn = @handleResponse;
-  s.game.durations.response = 3;
+  s.game.optionsPhaseFn = @SODM_drawMonTask;
   s.game.referenceDrawFn = @RA_drawRef;
-  s.game.bgrDrawFn = @drawBgr;
 
   s.game.levels.stakes = [5 8 12 25];
   s.game.levels.stakes_loss = 0;
   s.game.levels.reference = 5;
+
+  s.game.block.length = 12;
 end

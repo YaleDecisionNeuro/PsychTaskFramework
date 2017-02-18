@@ -25,7 +25,8 @@ s.game.constantTrialDuration = false; % Early choice won't add to ITI
 %% Block properties
 s.game.name = 'SODM';
 s.game.responsePhaseFn = NaN;
-s.game.preBlockFn = @preBlock;
+s.game.preBlockFn = @SODM_preBlock;
+s.game.bgrDrawFn = @SODM_drawBgr;
 
 % Useful for generation purposes
 s.game.block.length = 10; % FIXME: How many trials in each block?

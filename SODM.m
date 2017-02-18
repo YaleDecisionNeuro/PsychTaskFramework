@@ -1,4 +1,4 @@
-function SODM(observer)
+function [ Data ] = SODM(observer)
 % SODM Runs a self-other monetary and medical decision-making task and records
 %   its results for the participant whose subject number is passed in. Modeled
 %   on (and largely copy-pasted from) RA.m, to test out image implementation
@@ -51,51 +51,110 @@ end
 [settings.device.windowPtr, settings.device.screenDims] = ...
   Screen('OpenWindow', settings.device.screenId, ...
   settings.default.bgrColor);
-
-%% Generate trials
-% 1. Monetary blocks
-medSettings = SODM_config_medical(settings)
-medTrials = generateTrialOrder(medSettings.game.levels);
-numMedTrials = height(medTrials);
-
-medTrials.stakes_loss = repmat(medSettings.game.levels.stakes_loss, numMedTrials, 1);
-medTrials.reference = repmat(medSettings.game.levels.reference, numMedTrials, 1);
-
-perBlockITIs = medSettings.game.durations.ITIs;
-medTrials.ITIs = repmat(perBlockITIs, numMedTrials / length(perBlockITIs), 1);
-
+% Disambiguate settings here
+monSettings = SODM_config_monetary(settings);
+medSettings = SODM_config_medical(settings);
 medSettings.textures = loadTexturesFromConfig(medSettings);
 
-clear perBlockITIs;
+%% Generate trials if not generated already
+if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
+  medBlocks = generateBlocks(medSettings);
+  monBlocks = generateBlocks(monSettings);
 
-% 2. Monetary blocks
-moneySettings = SODM_config_monetary(settings);
-moneyTrials = generateTrialOrder(moneySettings.game.levels);
-numMoneyTrials = height(moneyTrials);
+  sortOrder = mod(Data.observer, 4);
+  selfIdx = [1 0 1 0];
+  medIdx = [1 1 0 0];
 
-moneyTrials.stakes_loss = repmat(moneySettings.game.levels.stakes_loss, numMoneyTrials, 1);
-moneyTrials.reference = repmat(moneySettings.game.levels.reference, numMoneyTrials, 1);
+  switch sortOrder
+    case 0
+      % Keep order
+    case 1
+      selfIdx = 1 - selfIdx;
+    case 2
+      medIdx = 1 - medIdx;
+    case 3
+      selfIdx = 1 - selfIdx;
+      medIdx = 1 - medIdx;
+  end
 
-perBlockITIs = moneySettings.game.durations.ITIs;
-moneyTrials.ITIs = repmat(perBlockITIs, numMoneyTrials / length(perBlockITIs), 1);
+  % Logic: Do two mon/med block(s) first, pass self/other to them depending on selfIdx
+  numBlocks = 4; % FIXME: There will be repeats
+  Data.blocks.planned = cell(numBlocks, 1);
+  Data.blocks.recorded = cell(0);
+  Data.blocks.numRecorded = 0;
+  for blockIdx = 1:numBlocks
+    blockKind = medIdx(blockIdx);
+    beneficiaryKind = selfIdx(blockIdx);
+    withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
+    % withinBenefIdx = sum(selfIdx(1 : blockIdx) == beneficiaryKind);
+    % NOTE: Unnecessary, because we're not generating blocks specifically for
+    %   the self/other distinction, just adding it after the fact
 
-moneySettings.textures = loadTexturesFromConfig(moneySettings);
+    if blockKind == 1
+      Data.blocks.planned{blockIdx} = struct('trials', ...
+        medBlocks{withinKindIdx}, 'blockKind', blockKind, ...
+        'beneficiaryKind', beneficiaryKind);
+    else
+      Data.blocks.planned{blockIdx} = struct('trials', ...
+        monBlocks{withinKindIdx}, 'blockKind', blockKind, ...
+        'beneficiaryKind', beneficiaryKind);
+    end
+  end
+end
 
-% NOTE: Just for testing, limiting block length
-moneySettings.game.trials = moneyTrials(1:3, :);
-medSettings.game.trials = medTrials(1:3, :);
+% Display blocks
+firstBlockIdx = Data.blocks.numRecorded + 1;
+lastBlockIdx = 4; % FIXME: Derive from settings
 
-% Run
-if ~exist('observer', 'var') % Run practice
-  medSettings.game.trials = medTrials(randperm(numMoneyTrials, 3), :);
-  Data = runBlock(Data, medSettings);
-  moneySettings.game.trials = moneyTrials(randperm(numMoneyTrials, 3), :);
-  Data = runBlock(Data, moneySettings);
+if exist('observer', 'var')
+  for blockIdx = firstBlockIdx:lastBlockIdx
+    % Determine monetary or medical
+    if Data.blocks.planned{blockIdx}.blockKind == 0
+      blockSettings = monSettings;
+    else
+      blockSettings = medSettings;
+    end
+
+    % Determine self or other
+    if Data.blocks.planned{blockIdx}.beneficiaryKind == 0
+      blockSettings.game.block.beneficiaryKind = 0;
+      blockSettings.game.block.beneficiaryText = 'Friend';
+    else
+      blockSettings.game.block.beneficiaryKind = 1;
+      blockSettings.game.block.beneficiaryText = 'Myself';
+    end
+    blockSettings.game.block.name = [blockSettings.game.block.name ' / ' ...
+      blockSettings.game.block.beneficiaryText];
+
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(1:3, :);
+    Data = runBlock(Data, blockSettings);
+  end
 else
-  medSettings.game.trials = medTrials(1, :);
-  Data = runBlock(Data, medSettings);
-  moneySettings.game.trials = moneyTrials(randperm(numMoneyTrials, 1), :);
-  Data = runBlock(Data, moneySettings);
+  % Run practice -- only first n trials of first two blocks?
+  numSelect = 1;
+  for blockIdx = 2:3 % Known to be two different blocks
+    % Determine medical or monetary
+    if Data.blocks.planned{blockIdx}.blockKind == 0
+      blockSettings = monSettings;
+    else
+      blockSettings = medSettings;
+    end
+
+    % Determine self or other
+    if Data.blocks.planned{blockIdx}.beneficiaryKind == 0
+      blockSettings.game.block.beneficiaryKind = 0;
+      blockSettings.game.block.beneficiaryText = 'Friend';
+    else
+      blockSettings.game.block.beneficiaryKind = 1;
+      blockSettings.game.block.beneficiaryText = 'Myself';
+    end
+    blockSettings.game.block.name = [blockSettings.game.block.name ' / ' ...
+      blockSettings.game.block.beneficiaryText];
+
+    randomIdx = randperm(blockSettings.game.block.length, numSelect);
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+    Data = runBlock(Data, blockSettings);
+  end
 end
 
 % Close window

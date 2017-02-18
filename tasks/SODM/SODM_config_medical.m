@@ -7,6 +7,7 @@ function s = SODM_config_medical(initial_config)
   end
 
   s.game.block.name = 'Medical';
+  s.game.block.length = 12;
   s.game.optionsPhaseFn = @SODM_drawTask;
   s.game.referenceDrawFn = @SODM_drawRef;
   s.game.bgrDrawFn = @SODM_drawBgr;
