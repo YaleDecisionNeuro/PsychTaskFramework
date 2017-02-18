@@ -1,4 +1,4 @@
-function MDM(observer)
+function [ Data ] = MDM(observer)
 % MDM Runs a medical decision-making task and records its results for the
 %   participant whose subject number is passed in. Modeled on (and largely
 %   copy-pasted from) RA.m, to test out image implementation (#5).
@@ -18,7 +18,6 @@ if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
   fname = [num2str(observer) '.mat'];
   folder = fullfile(settings.device.taskPath, 'data');
-  folder = fullfile(pwd, 'data');
   fname = [folder filesep fname];
   [ Data, participantExisted ] = loadOrCreate(observer, fname);
 
