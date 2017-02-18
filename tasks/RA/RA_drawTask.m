@@ -42,6 +42,10 @@ halfBox = blockSettings.objects.lottery.figure.dims(1) / 2;
 
 % Paint the whole screen (default without coordinates)
 Screen('FillRect', windowPtr, color_bgr);
+if isfield(blockSettings.game, 'bgrDrawFn') && ...
+    isa(blockSettings.game.bgrDrawFn, 'function_handle')
+  blockSettings.game.bgrDrawFn(blockSettings);
+end
 
 RA_drawRef(blockSettings, trialSettings)
 
