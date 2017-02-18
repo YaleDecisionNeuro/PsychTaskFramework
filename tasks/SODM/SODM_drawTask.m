@@ -154,4 +154,6 @@ function trialData = timeAndRecordTask(trialData, trialSettings, blockSettings)
       trialData.choice = 0;
       trialData.rt = NaN;
   end
+  trialData.choseLottery = keyToChoice(trialData.choice, ...
+    blockSettings.perUser.refSide);
 end

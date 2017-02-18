@@ -7,6 +7,7 @@ function [ Data ] = SODM(observer)
 %% Add subfolders we'll be using to path
 addpath(genpath('./lib'));
 addpath(genpath('./tasks/SODM'));
+addpath('./tasks/MDM');
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Load settings

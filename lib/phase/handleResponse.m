@@ -43,10 +43,6 @@ function trialData = timeAndRecordResponse(trialData, trialSettings, blockSettin
   trialData.rt_ci = deltaSecs;
 
   %% Record choice & assign feedback color
-  % TODO: If a function can translate choice + refSide into a lottery choice,
-  % this could flag stochastic dominance violations as they happen
-  % (or at least make it clearer whether the participant opted for lottery
-  % both for evaluation and later analysis)
   if keyisdown && keycode(KbName('1!'))
       trialData.choice = 1;
   elseif keyisdown && keycode(KbName('2@'))
@@ -55,4 +51,6 @@ function trialData = timeAndRecordResponse(trialData, trialSettings, blockSettin
       trialData.choice = 0;
       trialData.rt = NaN;
   end
+  trialData.choseLottery = keyToChoice(trialData.choice, ...
+    blockSettings.perUser.refSide);
 end
