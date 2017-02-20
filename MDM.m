@@ -57,9 +57,40 @@ monSettings.textures = loadTexturesFromConfig(monSettings);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
-  medBlocks = generateBlocks(medSettings);
-  monBlocks = generateBlocks(monSettings);
+  % MDM uses a particular set of trials, so we have to generate some trials
+  % manually. Luckily, these can be shared across both kinds of blocks two
+  % tasks, as their value range is equal. If that were not the case, they would
+  % need to be disambiguated.
 
+  % 1. Generate 1 repeat of reference level trials, all possible P/A values
+  tempLevels = medSettings.game.levels;
+  tempLevels.stakes = tempLevels.reference;
+  tempLevels.repeats = 1;
+  fillTrials = generateTrials(tempLevels);
+  % fillTrials = fillTrials(randperm(height(fillTrials), 4), :)
+
+  % 2. Generate 2 additional trials with reference payoff
+  tempLevels = medSettings.game.levels;
+  tempLevels.stakes = tempLevels.reference;
+  tempLevels.probs = 0.25;
+  tempLevels.ambigs = 0.5;
+  tempLevels.repeats = 1;
+  fillTrials = [fillTrials; generateTrials(tempLevels)];
+  % fillTrials = fillTrials(randperm(height(fillTrials), 2), :)
+
+  % 3. Have generateBlocks create the standard number of repeats with
+  %    non-reference values
+  tempMedSettings = medSettings;
+  tempMedSettings.game.levels.stakes = medSettings.game.levels.stakes(2:end);
+  medBlocks = generateBlocks(tempMedSettings, medSettings.game.block.repeatRow, ...
+    medSettings.game.block.repeatIndex, fillTrials);
+
+  tempMonSettings = monSettings;
+  tempMonSettings.game.levels.stakes = monSettings.game.levels.stakes(2:end);
+  monBlocks = generateBlocks(tempMonSettings, monSettings.game.block.repeatRow, ...
+    monSettings.game.block.repeatIndex, fillTrials);
+
+  % 4. Determine and save the order of blocks
   lastDigit = mod(Data.observer, 10);
   medFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
   medIdx = [1 1 0 0];

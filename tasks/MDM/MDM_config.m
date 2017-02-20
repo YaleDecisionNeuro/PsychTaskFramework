@@ -19,10 +19,28 @@ s.game.constantTrialDuration = true;
 s.game.durations.choice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
-s.game.durations.ITIs = 2;
-% All ITI durations will be 2 -- see default for variable length ITIs
+s.game.durations.ITIs = [4 * ones(1, 6), 5 * ones(1, 8), 6 * ones(1, 6)];
 
-%% Block properties
+%% Common block properties
 s.game.name = 'MDM';
 s.game.preBlockFn = @preBlock;
+
+s.game.optionsPhaseFn = @MDM_drawTask;
+s.game.referenceDrawFn = @MDM_drawRef;
+s.game.block.length = 21;
+
+%% Available trial values - are shared across med & monetary tasks!
+s.game.levels.stakes = 2:5; % Levels are translated via lookup table
+s.game.levels.probs = [.25 .5 .75];
+s.game.levels.ambigs = [.24 .5 .74];
+s.game.levels.stakes_loss = 1;
+s.game.levels.reference = 2;
+s.game.levels.colors = [1 2];
+s.game.levels.repeats = 4;
+
+% Useful for generation purposes
+s.game.block.repeatIndex = 1;
+s.game.block.repeatRow = table(2, NaN, 0, 1, 2, NaN, 5, ...
+  'VariableNames', {'stakes', 'probs', 'ambigs', 'stakes_loss', 'reference', ...
+  'colors', 'ITIs'});
 end

@@ -7,29 +7,12 @@ s = initial_config;
 
 %% Block properties
 s.game.block.name = 'Medical';
-s.game.optionsPhaseFn = @MDM_drawTask;
-s.game.referenceDrawFn = @MDM_drawRef;
-s.game.block.length = 12;
 
-% Useful for generation purposes
-% s.game.block.repeatIndex = NaN;
-% s.game.block.repeatTrial = NaN;
+%% Font size of payoff text
 s.objects.lottery.stakes.fontSize = 24;
 s.objects.reference.fontSize = s.objects.lottery.stakes.fontSize;
 
-%% Available trial values
-s.game.levels.stakes = 2:5; % Levels are translated via lookup table
-s.game.levels.probs = [.25 .5 .75];
-s.game.levels.ambigs = [.24 .5 .74];
-s.game.levels.stakes_loss = 1;
-s.game.levels.reference = 2;
-s.game.levels.colors = [1 2];
-s.game.levels.repeats = 1;
-
 %% Lookup tables
-% s.lookups.stakes.txt = {'no effect'; ...
-%   ['slight' newline 'improvement']; ['moderate' newline 'improvement']; ...
-%   ['major' newline 'improvement']; 'recovery'};
 s.lookups.stakes.txt = {'no effect'; ...
   'slight improvement'; 'moderate improvement'; ...
   'major improvement'; 'recovery'};

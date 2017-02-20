@@ -26,6 +26,16 @@ trialRepeats = levelSettings.repeats;
 %   matrix for each argument that has size > 1, all the values are extracted
 %   with `var(:)`, rendering dimensionality moot.
 
+% NOTE: Setting an empty matrix as either `stakes`, `probs` or `ambigs` will
+% result in `ndgrid` generating an empty matrix. In such case, issue a warning
+% and return control to the calling function.
+if isempty(trialProbs) || isempty(trialAmbigs)
+  warning(['One of the key fields in settings.game.levels has been set to '
+  'an empty matrix. This might be an intentional way of bypassing automatic '
+  'trial generation. If it is not, check your settings.']);
+  return;
+end
+
 stakes = [stakes_P(:); stakes_A(:)];
 probs  = [trialProbs(:); 0.5 * ones(size(trialAmbigs(:)))];
 ambigs = [zeros(size(trialProbs(:))); trialAmbigs(:)];
