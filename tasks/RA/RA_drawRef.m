@@ -41,8 +41,8 @@ if ~exist('referenceValue', 'var')
 end
 
 %% 3. Calculate position
-H = blockSettings.device.screenDims(3);
-W = blockSettings.device.screenDims(4);
+W = blockSettings.device.screenDims(3);
+H = blockSettings.device.screenDims(4);
 
 if referenceSide == 1
     refDims.x = 0.25 * W;

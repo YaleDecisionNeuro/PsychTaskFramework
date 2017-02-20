@@ -25,6 +25,4 @@ s.game.durations.ITIs = 2;
 %% Block properties
 s.game.name = 'MDM';
 s.game.preBlockFn = @preBlock;
-
-% Useful for generation purposes
 end

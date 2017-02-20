@@ -17,7 +17,7 @@ if ~exist('bagMap', 'var')
 end
 
 if ~exist('blockId', 'var') || ~exist('trialId', 'var')
-  error('You must provide blockId and trialId');
+  error('You must provide blockId and trialId!');
 end
 
 block = Data.blocks.recorded{blockId};
@@ -34,7 +34,7 @@ if sum(mask) > 1 % If the color actually makes a difference
 end
 bag = bagMap.bagNumber(mask);
 
-if ismember('choseLottery', trial.Properties.VariableNames);
+if ismember('choseLottery', trial.Properties.VariableNames)
   choseLottery = trial.choseLottery;
 else
   choseLottery = keyToChoice(trial.choice, block.settings.perUser.refSide);

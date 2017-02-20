@@ -6,6 +6,7 @@ function [ Data ] = MDM(observer)
 %% Add subfolders we'll be using to path
 addpath(genpath('./lib'));
 addpath(genpath('./tasks/MDM'));
+addpath('./tasks/RA');
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup

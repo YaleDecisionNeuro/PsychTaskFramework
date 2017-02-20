@@ -14,6 +14,8 @@ s.game.block.length = 12;
 % Useful for generation purposes
 % s.game.block.repeatIndex = NaN;
 % s.game.block.repeatTrial = NaN;
+s.objects.lottery.stakes.fontSize = 24;
+s.objects.reference.fontSize = s.objects.lottery.stakes.fontSize;
 
 %% Available trial values
 s.game.levels.stakes = 2:5; % Levels are translated via lookup table
@@ -25,9 +27,12 @@ s.game.levels.colors = [1 2];
 s.game.levels.repeats = 1;
 
 %% Lookup tables
+% s.lookups.stakes.txt = {'no effect'; ...
+%   ['slight' newline 'improvement']; ['moderate' newline 'improvement']; ...
+%   ['major' newline 'improvement']; 'recovery'};
 s.lookups.stakes.txt = {'no effect'; ...
-  'slight improvement'; 'moderate improvement'; 'major improvement'; ...
-  'recovery'};
+  'slight improvement'; 'moderate improvement'; ...
+  'major improvement'; 'recovery'};
 s.lookups.stakes.img = {'no effect.jpg'; 'slight improvement.jpg'; ...
   'moderate improvement.jpg'; 'major improvement.jpg'; 'recovery.jpg'};
 % Fix images to path
