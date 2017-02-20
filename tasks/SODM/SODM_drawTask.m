@@ -7,15 +7,11 @@ windowPtr = blockSettings.device.windowPtr;
 
 % Determine probabilities to associate with colors
 [probOrder, amtOrder] = orderLotto(trialSettings);
-% FIXME: How does this work when we have a color?
 
 % FIXME: Semantic naming
 redProb = probOrder(1);
 blueProb = probOrder(2);
 
-% FIXME: This, technically, is only the bottom-right coordinate. If `rect`
-% passed to Screen('OpenWindow', rect) began with two non-zero values, that's
-% how far from the top-left of the screen PTB would start drawing.
 W = blockSettings.device.screenDims(3); % width
 H = blockSettings.device.screenDims(4); % height
 
@@ -31,7 +27,8 @@ Y2occ = Y1 + boxHeight * (nonAmbigPart / 2); % top of occluder
 Y3occ = Y2occ + boxHeight * ambig; % bottom of occluder
 
 % Colors
-% NOTE: Order of colors remains constant
+% NOTE: Order of colors remains constant: one is always on top, the other
+% always on bottom
 colors = blockSettings.objects.lottery.figure.colors.prob;
 color_ambig = blockSettings.objects.lottery.figure.colors.ambig;
 color_bgr = blockSettings.default.bgrColor;
@@ -44,15 +41,15 @@ halfBox = blockSettings.objects.lottery.figure.dims(1) / 2;
 Screen('FillRect', windowPtr, color_bgr);
 blockSettings.game.bgrDrawFn(blockSettings);
 
-MDM_drawRef(blockSettings, trialSettings);
+% Draw reference
+blockSettings.game.referenceDrawFn(blockSettings, trialSettings);
 
+% Draw the lottery box
 lottoDims = [screenCenter - halfBox, Y1, screenCenter + halfBox, Y2];
 Screen('FillRect', windowPtr, colors(1, :), lottoDims);
 
 lottoDims = [screenCenter - halfBox, Y2, screenCenter + halfBox, Y3];
 Screen('FillRect', windowPtr, colors(2, :), lottoDims);
-
-clear lottoDims;
 
 % Occluder is painted over
 lottoAmbigDims = [screenCenter - halfBox, Y2occ, screenCenter + halfBox, Y3occ];
@@ -61,53 +58,76 @@ Screen('FillRect', windowPtr, color_ambig, lottoAmbigDims);
 %% Draw the stakes
 % Retrieve the dimensions (due to different length) of the amount labels
 % Value to be looked up is stored in amtOrder
-Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.stakes.fontSize);
 
-% Draw text
+% NOTE: txtDims will not be correct if there's a linebreak in the text - why?
+% NOTE: PTB will break line when \n is encountered, but neither MATLAB nor it
+%   will treat \n in the string as a newline. You might need to use the MATLAB
+%   function `newline` to deal with this.
+
+% 1. Draw text of stakes
+Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.stakes.fontSize);
 [ txt1, txtDims1 ] = textLookup(amtOrder(1), blockSettings.lookups.stakes.txt, ...
   windowPtr);
 [ txt2, txtDims2 ] = textLookup(amtOrder(2), blockSettings.lookups.stakes.txt, ...
   windowPtr);
 
-randomConstantAdjustment = 50; % FIXME: Random constant adjustment
-xCoords = [W/2 - txtDims1(1)/2, W/2 - txtDims2(1)/2];
-yCoords = [Y3, Y1 - txtDims1(2)] + randomConstantAdjustment;
+topTxtCoords = [W/2 - txtDims1(1)/2, Y1 - txtDims1(2)/2];
+bottomTxtCoords = [W/2 - txtDims2(1)/2, Y3 + txtDims2(2)];
+% NOTE: y-coordinates are baselines for DrawFormattedText, hence the difference
+%   -- the top text doesn't need to dodge as much as the bottom text does
 
 DrawFormattedText(windowPtr, txt1, ...
-  xCoords(1), yCoords(1), blockSettings.objects.lottery.stakes.fontColor);
+  topTxtCoords(1), topTxtCoords(2), blockSettings.objects.lottery.stakes.fontColor);
 DrawFormattedText(windowPtr, txt2, ...
-  xCoords(2), yCoords(2), blockSettings.objects.lottery.stakes.fontColor);
+  bottomTxtCoords(1), bottomTxtCoords(2), blockSettings.objects.lottery.stakes.fontColor);
 
-% Draw images
-[ texture1, textureDims1 ] = imgLookup(amtOrder(1), blockSettings.lookups.stakes.img, ...
-  blockSettings.textures);
-[ texture2, textureDims2 ] = imgLookup(amtOrder(2), blockSettings.lookups.stakes.img, ...
-  blockSettings.textures);
+% 2. Draw images of stakes
+[ texture1, textureDims1 ] = imgLookup(amtOrder(1), ...
+  blockSettings.lookups.stakes.img, blockSettings.textures);
+[ texture2, textureDims2 ] = imgLookup(amtOrder(2), ...
+  blockSettings.lookups.stakes.img, blockSettings.textures);
 
-Screen('DrawTexture', windowPtr, texture1, [], [xCoords(1) yCoords(1) xCoords(1) + textureDims1(1) yCoords(1) + textureDims1(2)]);
-Screen('DrawTexture', windowPtr, texture2, [], [xCoords(2) yCoords(2) xCoords(2) + textureDims2(1) yCoords(2) + textureDims2(2)]);
+padding = 10; % Space to leave between precise boundaries
+bottomXY = [screenCenter - textureDims1(1)/2, Y3 + txtDims1(2) + padding];
+bottomCoords = xyAndDimsToRect(bottomXY, textureDims1);
+
+% y-dim: Dodge the image from both lottery and the text, and leave some space
+topXY = [screenCenter - textureDims2(1)/2, ...
+  Y1 - textureDims2(2) - txtDims2(2) - padding];
+topCoords = xyAndDimsToRect(topXY, textureDims2);
+
+Screen('DrawTexture', windowPtr, texture1, [], topCoords);
+Screen('DrawTexture', windowPtr, texture2, [], bottomCoords);
 
 %% Draw probability numbers
-% Compute coordinates
-% This time, we assume all probabilities are double-digit
-textDim = blockSettings.objects.lottery.probLabels.dims;
+% 1. Compute probability numbers to display & convert to text
+probNumbers = probOrder - ambig / 2; % Keeps the numbers same if no ambiguity
+probTxt1 = num2str(probNumbers(1) * 100);
+probTxt2 = num2str(probNumbers(2) * 100);
 
-xCoord = W/2 - textDim(1)/2;
-yCoord = [Y1 + 0.5 * (Y2 - Y1) - textDim(2)/2, ...
-  Y2 + 0.5 * (Y3 - Y2) - textDim(2)/2];
+% 2. Compute dimensions
+Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.probLabels.fontSize);
+textDim = zeros(2, 2); % top row is the top probability, bottom row the bottom
+textDim(1, :) = getTextDims(windowPtr, probTxt1);
+textDim(2, :) = getTextDims(windowPtr, probTxt2);
 
-% Logic of `/4`: only half the ambiguity diminishes either side of the
+% 3. Compute coordinates
+xCoord = W/2 - textDim(1, 1)/2;
+
+% DrawFormattedText's y coordinate is not the *top*, it's the *baseline*
+adjustToBaseline = textDim(:, 2)' / 3;
+yCoord = [Y1 + 0.5 * (Y2 - Y1), Y2 + 0.5 * (Y3 - Y2)] + adjustToBaseline;
+
+% Logic of `ambig / 4`: only half the ambiguity diminishes either side of the
 % probability, and it cuts the position of text in another half
 ambigYAdjustment = boxHeight * ambig / 4;
-yCoord = yCoord + [-ambigYAdjustment, ambigYAdjustment] + randomConstantAdjustment / 2;
+yCoord = yCoord + [-ambigYAdjustment, ambigYAdjustment];
 
-probNumbers = probOrder - ambig / 2; % Keeps the numbers same if no ambiguity
-
-Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.probLabels.fontSize);
-DrawFormattedText(windowPtr, sprintf('%s', num2str(probNumbers(1)*100)), ...
-  xCoord, yCoord(1), blockSettings.objects.lottery.probLabels.fontColor);
-DrawFormattedText(windowPtr, sprintf('%s', num2str(probNumbers(2)*100)), ...
-  xCoord, yCoord(2), blockSettings.objects.lottery.probLabels.fontColor);
+% 4. Draw the text
+DrawFormattedText(windowPtr, sprintf('%s', probTxt1), xCoord, yCoord(1), ...
+  blockSettings.objects.lottery.probLabels.fontColor);
+DrawFormattedText(windowPtr, sprintf('%s', probTxt2), xCoord, yCoord(2), ...
+  blockSettings.objects.lottery.probLabels.fontColor);
 
 Screen('flip', windowPtr);
 trialData.choiceStartTime = datevec(now);
