@@ -6,7 +6,6 @@ function [ Data ] = MDM(observer)
 %% Add subfolders we'll be using to path
 addpath(genpath('./lib'));
 addpath(genpath('./tasks/MDM'));
-addpath('./tasks/RA');
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
@@ -54,6 +53,7 @@ end
 monSettings = MDM_config_monetary(settings);
 medSettings = MDM_config_med(settings);
 medSettings.textures = loadTexturesFromConfig(medSettings);
+monSettings.textures = loadTexturesFromConfig(monSettings);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')

@@ -56,6 +56,7 @@ end
 monSettings = SODM_config_monetary(settings);
 medSettings = SODM_config_medical(settings);
 medSettings.textures = loadTexturesFromConfig(medSettings);
+monSettings.textures = loadTexturesFromConfig(monSettings);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
