@@ -1,11 +1,12 @@
-function [ Summary ] = experimentSummary(Data, bagMap)
-% EXPERIMENTSUMMARY Iterates over Data.blocks.recorded and stores information
-%   necessary for lottery realization in a block-by-trial struct. If `bagMap`
-%   is supplied, it will use it instead of the default lookup map.
+function [ Summary ] = experimentSummary(Data, blockId, trialId, bagMap)
+% EXPERIMENTSUMMARY Selects block and trial from Data.blocks.recorded and
+%   returns information necessary for lottery realization in a per-trial
+%   struct. If `bagMap` is supplied, it will use it instead of the default
+%   lookup map. NOTE: This is different from the original behavior of
+%   `experimentSummary`, which returned a human-readable struct array that
+%   encompassed *all* trials.
 %
-% NOTE: You might want to load the bagMap from a CSV/XLS file.
-%
-% FIXME: Currently, this is just snippets of logic -- it doesn't actually work!
+% NOTE: You might want to load the bagMap via `readtable` from a CSV/XLS file.
 
 if ~exist('bagMap', 'var')
   probs = [.5 .5 .5 .5 .25 .25 .75 .75]';
@@ -15,24 +16,44 @@ if ~exist('bagMap', 'var')
   bagMap = table(probs, ambigs, colors, bagNumber);
 end
 
-% Loop through blocks
-blockFld = DataObject.blocks;
-numBlocks = blockFld.numRecorded;
-for k = 1:numBlocks
-  blockInfo = blockFld.recorded{k};
-  blockConfig = blockInfo.settings;
-  % TODO: Extract color key information from blockFld.recorded{k}.
-  blockTrials = blockInfo.records;
+if ~exist('blockId', 'var') || ~exist('trialId', 'var')
+  error('You must provide blockId and trialId');
+end
 
-  for l = 1:height(blockTrials)
-    % Save info to a, p, c
-    mask = bagMap.probs == p & bagMap.ambigs == a;
-    if sum(mask) > 1
-      mask = bagMap.probs == p & bagMap.ambigs == a & bagMap.colors == c;
-    end
-    bag = bagMap.bagNumber(mask);
-    % Save info to Summary
-  end
+block = Data.blocks.recorded{blockId};
+trial = block.records(trialId, :);
+
+% Save info to a, p, c for easy comparison to bag lookup table
+a = trial.ambigs;
+p = trial.probs;
+c = trial.colors;
+
+mask = (bagMap.probs == p & bagMap.ambigs == a);
+if sum(mask) > 1 % If the color actually makes a difference
+  mask = (bagMap.probs == p & bagMap.ambigs == a & bagMap.colors == c);
+end
+bag = bagMap.bagNumber(mask);
+
+if ismember('choseLottery', trial.Properties.VariableNames);
+  choseLottery = trial.choseLottery;
+else
+  choseLottery = keyToChoice(trial.choice, block.settings.perUser.refSide);
+end
+
+w = trial.stakes;
+l = trial.stakes_loss;
+
+Summary.bagNumber = bag;
+Summary.winningColor = block.settings.game.colorKey{c};
+Summary.win = w; % TODO: Might want to use dollarFormatter or textLookup?
+Summary.loss = l;
+switch choseLottery
+  case 0
+    Summary.choice = 'Reference';
+  case 1
+    Summary.choice = 'Lottery';
+  otherwise % because NaN never equals any value, even NaN
+    Summary.choice = 'None';
 end
 
 end
