@@ -27,13 +27,26 @@ s.game.name = 'SODM';
 s.game.responsePhaseFn = NaN;
 s.game.preBlockFn = @SODM_preBlock;
 s.game.bgrDrawFn = @SODM_drawBgr;
+s.game.optionsPhaseFn = @SODM_drawTask;
+s.game.referenceDrawFn = @MDM_drawRef;
+s.game.bgrDrawFn = @SODM_drawBgr;
+% FIXME: Is this the best way of showing the context? Why not SODM_drawTask?
 
 % Useful for generation purposes
-s.game.block.length = 10; % FIXME: How many trials in each block?
+s.game.block.length = 19;
 
 %% Available trial values
 s.game.levels.probs = [.25 .5 .75];
 s.game.levels.ambigs = [.24 .5 .74];
 s.game.levels.colors = [1 2];
-s.game.levels.repeats = 1;
+s.game.levels.repeats = 2;
+s.game.levels.stakes = 3:5;
+% Actually 2:5, but 3:5 is used for automated trial generation
+s.game.levels.stakes_loss = 1;
+s.game.levels.reference = 2;
+
+s.game.block.repeatIndex = 1;
+s.game.block.catchTrial = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
+  'stakes_loss', 1, 'reference', 2, 'colors', NaN, 'ITIs', 5);
+s.game.block.repeatRow = generateTrials(s.game.block.catchTrial);
 end

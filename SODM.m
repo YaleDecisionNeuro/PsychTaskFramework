@@ -60,12 +60,23 @@ monSettings.textures = loadTexturesFromConfig(monSettings);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
-  medBlocks = generateBlocks(medSettings);
-  monBlocks = generateBlocks(monSettings);
+  % NOTE: Generating each one separately with two repeats, so that there isn't
+  % a cluster of high values in self vs. other
+  medSelfBlocks = generateBlocks(medSettings, medSettings.game.block.repeatRow, ...
+    medSettings.game.block.repeatIndex);
+  medOtherBlocks = generateBlocks(medSettings, medSettings.game.block.repeatRow, ...
+    medSettings.game.block.repeatIndex);
+  monSelfBlocks = generateBlocks(monSettings, monSettings.game.block.repeatRow, ...
+    monSettings.game.block.repeatIndex);
+  monOtherBlocks = generateBlocks(monSettings, monSettings.game.block.repeatRow, ...
+    monSettings.game.block.repeatIndex);
+
+  medBlocks = [medSelfBlocks; medOtherBlocks];
+  monBlocks = [monSelfBlocks; monOtherBlocks];
 
   sortOrder = mod(Data.observer, 4);
-  selfIdx = [1 0 1 0];
-  medIdx = [1 1 0 0];
+  selfIdx = [1 0 1 0]; % 0 is friend, 1 is self
+  medIdx = [1 1 0 0];  % 0 is monetary, 1 is medical
 
   switch sortOrder
     case 0
@@ -78,9 +89,12 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
       selfIdx = 1 - selfIdx;
       medIdx = 1 - medIdx;
   end
+  % Repeat the order for the second round
+  selfIdx = repmat(selfIdx, 1, 2);
+  medIdx = repmat(medIdx, 1, 2);
 
-  % Logic: Do two mon/med block(s) first, pass self/other to them depending on selfIdx
-  numBlocks = 4; % FIXME: There will be repeats
+  % Logic: Do mon/med blocks first, pass self/other to them depending on selfIdx
+  numBlocks = 8; % TODO: Derive from settings?
   Data.blocks.planned = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.blocks.numRecorded = 0;
@@ -88,9 +102,6 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
     blockKind = medIdx(blockIdx);
     beneficiaryKind = selfIdx(blockIdx);
     withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
-    % withinBenefIdx = sum(selfIdx(1 : blockIdx) == beneficiaryKind);
-    % NOTE: Unnecessary, because we're not generating blocks specifically for
-    %   the self/other distinction, just adding it after the fact
 
     if blockKind == 1
       Data.blocks.planned{blockIdx} = struct('trials', ...
@@ -106,7 +117,7 @@ end
 
 % Display blocks
 firstBlockIdx = Data.blocks.numRecorded + 1;
-lastBlockIdx = 4; % FIXME: Derive from settings
+lastBlockIdx = numBlocks; % FIXME: Derive from settings
 
 if exist('observer', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx

@@ -11,15 +11,6 @@ function s = SODM_config_monetary(initial_config)
   addpath('./tasks/RA'); % borrowing RA functions for now
 
   s.game.block.name = 'Monetary';
-  s.game.optionsPhaseFn = @SODM_drawTask;
-  s.game.referenceDrawFn = @MDM_drawRef;
-  s.game.bgrDrawFn = @SODM_drawBgr;
-
-  s.game.block.length = 12;
-
-  s.game.levels.stakes = 2:5; % Levels are translated via lookup table
-  s.game.levels.stakes_loss = 1;
-  s.game.levels.reference = 2;
 
   %% Lookup tables
   s.lookups.stakes.txt = {'$0'; '$5'; '$8'; '$12'; '$25'};

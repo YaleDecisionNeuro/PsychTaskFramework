@@ -7,17 +7,9 @@ function s = SODM_config_medical(initial_config)
   end
 
   s.game.block.name = 'Medical';
-  s.game.block.length = 12;
-  s.game.optionsPhaseFn = @SODM_drawTask;
-  s.game.referenceDrawFn = @MDM_drawRef;
-  s.game.bgrDrawFn = @SODM_drawBgr;
+
   s.objects.lottery.stakes.fontSize = 24;
   s.objects.reference.fontSize = s.objects.lottery.stakes.fontSize;
-  % FIXME: Is this the best way of showing the context? Why not SODM_drawTask?
-
-  s.game.levels.stakes = 2:5; % Levels are translated via lookup table
-  s.game.levels.stakes_loss = 1;
-  s.game.levels.reference = 2;
 
   %% Lookup tables
   s.lookups.stakes.txt = {'no effect'; ...

@@ -127,7 +127,7 @@ function arr = cutArrayToSize(arr, n)
     arr = arr(1:n);
   elseif l < n
     warning('Extending `arr` from %d to %d...', l, n);
-    arr = repmat(arr(:), floor(blockLen / numarr), 1);
+    arr = repmat(arr(:), floor(n / l), 1);
     remainder = rem(n, l);
     if remainder > 0
       arr = [arr; arr(1 : remainder)];
