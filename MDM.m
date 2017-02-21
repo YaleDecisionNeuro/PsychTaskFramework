@@ -126,12 +126,12 @@ if exist('observer', 'var')
     else
       blockSettings = medSettings;
     end
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(1:3, :);
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials;
     Data = runBlock(Data, blockSettings);
   end
 else
   % Run practice -- only first n trials of first two blocks?
-  numSelect = 1;
+  numSelect = 3;
   for blockIdx = 2:3 % Known to be two different blocks
     if Data.blocks.planned{blockIdx}.blockKind == 0
       blockSettings = monSettings;

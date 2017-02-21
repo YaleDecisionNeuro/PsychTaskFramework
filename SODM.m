@@ -117,7 +117,7 @@ end
 
 % Display blocks
 firstBlockIdx = Data.blocks.numRecorded + 1;
-lastBlockIdx = numBlocks; % FIXME: Derive from settings
+lastBlockIdx = 8; % FIXME: Derive from settings
 
 if exist('observer', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
@@ -139,13 +139,13 @@ if exist('observer', 'var')
     blockSettings.game.block.name = [blockSettings.game.block.name ' / ' ...
       blockSettings.game.block.beneficiaryText];
 
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(1:3, :);
+    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials;
     Data = runBlock(Data, blockSettings);
   end
 else
   % Run practice -- only first n trials of first two blocks?
-  numSelect = 1;
-  for blockIdx = 2:3 % Known to be two different blocks
+  numSelect = 3;
+  for blockIdx = 1:4
     % Determine medical or monetary
     if Data.blocks.planned{blockIdx}.blockKind == 0
       blockSettings = monSettings;
