@@ -61,6 +61,7 @@ for k = 1:numel(getFields)
   varVals = varVals(:); % get rid of dimensionality
 
   % Extend the field to length of numTrials
+  % FIXME: Use cutArrayToSize
   l = length(varVals);
   if l > numTrials
     warning('Field %s is longer than the trial list (length %d, numTrials %d)', ...
