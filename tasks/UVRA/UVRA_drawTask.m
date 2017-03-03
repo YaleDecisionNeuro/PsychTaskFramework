@@ -144,7 +144,7 @@ function trialData = timeAndRecordTask(trialData, trialSettings, blockSettings)
     % Add sleep(0.05) to not fry the computer?
     [keyisdown, secs, keycode, deltaSecs] = KbCheck;
     % breakKeys = [KbName('2@'), KbName('1!')]
-    if keyisdown && (keycode(KbName('2@')) || keycode(KbName('1!')))
+    if keyisdown && (keycode(KbName('UpArrow')) || keycode(KbName('DownArrow')))
       elapsedTime = etime(datevec(now), displayStart);
       break
     end
@@ -154,9 +154,9 @@ function trialData = timeAndRecordTask(trialData, trialSettings, blockSettings)
   trialData.rt_ci = deltaSecs;
 
   %% Record choice & assign feedback color
-  if keyisdown && keycode(KbName('1!'))
+  if keyisdown && keycode(KbName('UpArrow'))
       trialData.choice = 1;
-  elseif keyisdown && keycode(KbName('2@'))
+  elseif keyisdown && keycode(KbName('DownArrow'))
       trialData.choice = 2;
   else % non-press
       trialData.choice = 0;
