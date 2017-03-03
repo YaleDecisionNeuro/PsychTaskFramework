@@ -25,5 +25,5 @@ function [ Data, blockSettings ] = SODM_preBlock(Data, blockSettings)
   DrawFormattedText(windowPtr, blockText, ...
     'center', 'center', blockSettings.default.fontColor);
   Screen('flip', windowPtr); % NOTE: Necessary to display screen
-  waitForBackTick;
+  waitForBackTick();
 end

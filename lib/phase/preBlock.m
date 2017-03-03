@@ -27,5 +27,5 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
   DrawFormattedText(windowPtr, block_text, ...
     'center', 'center', blockSettings.default.fontColor);
   Screen('flip', windowPtr); % NOTE: Necessary to display screen
-  waitForBackTick;
+  waitForBackTick();
 end
