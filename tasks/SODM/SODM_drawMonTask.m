@@ -133,25 +133,9 @@ end
 
 % Local function with timing responsibility
 function trialData = timeAndRecordTask(trialData, trialSettings, blockSettings)
-  % Extract to local variables now because struct field access costs time
-  displayStart = trialData.choiceStartTime;
-  displayDur = blockSettings.game.durations.choice;
-
-  elapsedTime = etime(datevec(now), displayStart);
-  while elapsedTime < displayDur
-    % Add sleep(0.05) to not fry the computer?
-    [keyisdown, secs, keycode, deltaSecs] = KbCheck;
-    % breakKeys = [KbName('2@'), KbName('1!')]
-    if keyisdown && (keycode(KbName('2@')) || keycode(KbName('1!')))
-      elapsedTime = etime(datevec(now), displayStart);
-      break
-    end
-    elapsedTime = etime(datevec(now), displayStart);
-  end
-  trialData.rt = elapsedTime;
-  trialData.rt_ci = deltaSecs;
-
   %% Record choice & assign feedback color
+  [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
+    waitForKey({'1!', '2@'}, blockSettings.game.durations.choice);
   if keyisdown && keycode(KbName('1!'))
       trialData.choice = 1;
   elseif keyisdown && keycode(KbName('2@'))

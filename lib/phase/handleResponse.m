@@ -28,19 +28,9 @@ function trialData = timeAndRecordResponse(trialData, trialSettings, blockSettin
   % TODO: If s.game.durations.response == 0, there shouldn't be a while condition
   % TODO: Abstract into `waitForBackTick`-like function
   % TODO: `elapsedTime` - better name?
-  elapsedTime = etime(datevec(now), trialData.respStartTime);
-  while elapsedTime < blockSettings.game.durations.response
-    % Add sleep(0.05) to not fry the computer?
-    [keyisdown, secs, keycode, deltaSecs] = KbCheck;
-    % breakKeys = [KbName('2@'), KbName('1!')]
-    if keyisdown && (keycode(KbName('2@')) || keycode(KbName('1!')))
-      elapsedTime = etime(datevec(now), trialData.respStartTime);
-      break
-    end
-    elapsedTime = etime(datevec(now), trialData.respStartTime);
-  end
-  trialData.rt = elapsedTime;
-  trialData.rt_ci = deltaSecs;
+
+  [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
+    waitForKey({'1!', '2@'}, blockSettings.game.durations.response);
 
   %% Record choice & assign feedback color
   if keyisdown && keycode(KbName('1!'))
