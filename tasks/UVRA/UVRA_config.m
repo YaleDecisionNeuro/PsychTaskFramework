@@ -10,6 +10,11 @@ function s = UVRA_config(initial_config)
   s.device.taskPath = ['tasks' filesep 'UVRA'];
   s.game.constantTrialDuration = false;
 
+  s.game.levels.stakes = [5, 8, 12, 17, 25];
+  s.game.levels.repeats = 4;
+  s.game.block.length = 20;
+  s.game.block.numBlocks = 6;
+
   s.game.optionsPhaseFn = @UVRA_drawTask;
   s.game.referenceDrawFn = @UVRA_drawRef;
   s.game.responsePhaseFn = NaN;
@@ -17,9 +22,4 @@ function s = UVRA_config(initial_config)
 
   s.game.durations.choice = Inf;
   s.game.durations.ITIs = 1;
-
-  s.game.block.repeatIndex = 1; % where will the test of stochastic dominance be
-  s.game.block.repeatRow = table(4, 0.5, 0, 0, 5, randperm(2, 1), 1, ...
-    'VariableNames', {'stakes', 'probs', 'ambigs', 'stakes_loss', 'reference', ...
-    'colors', 'ITIs'});
 end

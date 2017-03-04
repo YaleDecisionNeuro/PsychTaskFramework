@@ -55,43 +55,17 @@ end
   Screen('OpenWindow', settings.device.screenId, ...
   settings.default.bgrColor);
 
-% Disambiguate settings here
-gainSettings = settings;
-lossSettings = RA_Loss_config(gainSettings); % Edits only to values
-
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, this section will require
 %   a manual rewrite.
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
-  % Gains
-  gainBlocks = generateBlocks(gainSettings, gainSettings.game.block.repeatRow, ...
-    gainSettings.game.block.repeatIndex);
-
-  % Losses
-  lossBlocks = generateBlocks(lossSettings, lossSettings.game.block.repeatRow, ...
-    lossSettings.game.block.repeatIndex);
-
-  lastDigit = mod(Data.observer, 10);
-  gainsFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
-  gainsIdx = [1 1 0 0 0 0 1 1];
-  if ~gainsFirst
-    gainsIdx = 1 - gainsIdx; % flip
-  end
-
-  numBlocks = 8;
+  blocks = generateBlocks(settings);
+  numBlocks = settings.game.block.numBlocks;
   Data.blocks.planned = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.blocks.numRecorded = 0;
   for blockIdx = 1:numBlocks
-    blockKind = gainsIdx(blockIdx);
-    withinKindIdx = sum(gainsIdx(1 : blockIdx) == blockKind);
-    if blockKind == 1
-      Data.blocks.planned{blockIdx} = struct('trials', ...
-        gainBlocks{withinKindIdx}, 'blockKind', blockKind);
-    else
-      Data.blocks.planned{blockIdx} = struct('trials', ...
-        lossBlocks{withinKindIdx}, 'blockKind', blockKind);
-    end
+    Data.blocks.planned{blockIdx} = struct('trials', blocks{blockIdx});
   end
 end
 
@@ -102,37 +76,24 @@ end
 %
 % TODO: Is this the right block division for this task?
 firstBlockIdx = Data.blocks.numRecorded + 1;
-if firstBlockIdx > 4
-  lastBlockIdx = 8;
+if firstBlockIdx > 3
+  lastBlockIdx = 6;
 else
-  lastBlockIdx = 4;
+  lastBlockIdx = 3;
 end
-% NOTE: Incidentally, this takes care of an attempt to run more than 8 blocks -
-%   9:8 is empty, so the for loop will not run if firstBlockIdx > lastBlockIdx
 
 if exist('observer', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    if Data.blocks.planned{blockIdx}.blockKind == 0
-      blockSettings = lossSettings;
-    else
-      blockSettings = gainSettings;
-    end
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials;
-    Data = runBlock(Data, blockSettings);
+    settings.game.trials = Data.blocks.planned{blockIdx}.trials;
+    Data = runBlock(Data, settings);
   end
 else
-  % Run practice -- only first n trials of first two blocks?
+  % Run practice -- random `numSelect` trials of a random block
   numSelect = 3;
-  for blockIdx = 6:7 % Known to be two different blocks
-    if Data.blocks.planned{blockIdx}.blockKind == 0
-      blockSettings = lossSettings;
-    else
-      blockSettings = gainSettings;
-    end
-    randomIdx = randperm(blockSettings.game.block.length, numSelect);
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
-    Data = runBlock(Data, blockSettings);
-  end
+  blockIdx = randi(settings.game.block.numBlocks);
+  randomIdx = randperm(settings.game.block.length, numSelect);
+  settings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+  Data = runBlock(Data, settings);
 end
 
 Screen('CloseAll');
