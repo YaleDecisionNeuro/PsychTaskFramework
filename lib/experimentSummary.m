@@ -40,13 +40,23 @@ else
   choseLottery = keyToChoice(trial.choice, block.settings.perUser.refSide);
 end
 
-w = trial.stakes;
-l = trial.stakes_loss;
+% Is there a look-up table for stakes? If so, use it!
+settings = block.settings;
+if isfield(settings, 'lookups')
+  lookupTable = settings.lookups.stakes.txt;
+  w = textLookup(trial.stakes, lookupTable);
+  l = textLookup(trial.stakes_loss, lookupTable);
+  r = textLookup(trial.reference, lookupTable);
+else
+  w = dollarFormatter(trial.stakes);
+  l = dollarFormatter(trial.stakes_loss);
+  r = dollarFormatter(trial.reference);
+end
 
 Summary.bagNumber = bag;
 Summary.winningColor = block.settings.game.colorKey{c};
-Summary.win = w; % TODO: Might want to use dollarFormatter or textLookup?
-Summary.loss = l;
+Summary.lotteryWin = w;
+Summary.lotteryLoss = l;
 switch choseLottery
   case 0
     Summary.choice = 'Reference';
@@ -55,5 +65,5 @@ switch choseLottery
   otherwise % because NaN never equals any value, even NaN
     Summary.choice = 'None';
 end
-
+Summary.referenceValue = r;
 end
