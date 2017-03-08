@@ -22,7 +22,7 @@ copyfile('data', fullfile('backup', sprintf('data-%s', datetime)));
 
 % What order should the blocks be run in?
 lastDigit = mod(observer, 10);
-lossStartDigits = [1 2 4 6 9];
+lossStartDigits = [1 2 5 6 9];
 startLoss = ismember(lastDigit, lossStartDigits);
 
 % runFunctions{i}(observer) will run the function at i-th position with `observer` as arg
