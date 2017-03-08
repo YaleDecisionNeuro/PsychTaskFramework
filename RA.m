@@ -1,4 +1,4 @@
-function [ Data ] = RA(observer)
+function RA(observer)
 % RA Runs the requisite scripts (Day 1 or Day 2, order by condition) for VA_RA_PTB.
 %
 % Does the work of "what script to run" behind the screens.
@@ -27,9 +27,9 @@ startLoss = ismember(lastDigit, lossStartDigits);
 
 % runFunctions{i}(observer) will run the function at i-th position with `observer` as arg
 if startLoss
-  runFunctions = {@RA_Loss1_v6, @RA_Gains1_v6, @RA_Gains2_v6, @RA_Loss2_v6};
+  runFunctions = {@RA_Loss1_v7, @RA_Gains1_v7, @RA_Gains2_v7, @RA_Loss2_v7};
 else
-  runFunctions = {@RA_Gains1_v6, @RA_Loss1_v6, @RA_Loss2_v6, @RA_Gains2_v6};
+  runFunctions = {@RA_Gains1_v7, @RA_Loss1_v7, @RA_Loss2_v7, @RA_Gains2_v7};
 end
 
 % Cases: no records, half-Day-1 records, Day 1 records, half-Day-2 records, Day 2 records
@@ -46,9 +46,9 @@ elseif gainsBlocksRecorded + lossBlocksRecorded < 4
     'session (two blocks). This will run the other two blocks from Day 1. Continue? (y/[n])'], observer), 's');
   if strcmp(response, 'y')
     if gainsBlocksRecorded < 2
-      RA_Gains1_v6(observer);
+      RA_Gains1_v7(observer);
     else
-      RA_Loss1_v6(observer);
+      RA_Loss1_v7(observer);
     end
   end
 elseif gainsBlocksRecorded + lossBlocksRecorded == 4
@@ -65,9 +65,9 @@ elseif gainsBlocksRecorded + lossBlocksRecorded < 8
     'This will run the other two blocks. Continue? (y/[n])'], observer), 's');
   if strcmp(response, 'y')
     if gainsBlocksRecorded < 4
-      RA_Gains2_v6(observer);
+      RA_Gains2_v7(observer);
     else
-      RA_Loss2_v6(observer);
+      RA_Loss2_v7(observer);
     end
   end
 else
