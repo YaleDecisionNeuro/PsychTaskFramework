@@ -5,13 +5,11 @@ function RA(observer)
 %   what the scripts it runs contain.
 %
 % NOTE: v7 scripts save after every trial, which is the right impulse, but
-%   there's currently no way to jump to n-th trial or even second block of
-%   the two-block script. If this script is run, the experimenter presumably
-%   wants to collect the data anew -- but since there might have been a reason
-%   to save the choices thus far, this script refuses to go on if there's more
-%   than half a block recorded.
-% FIXME: The correct way to handle this is to copy the data file & clearly name
-%   it, then purge the items that have to be clobbered and go on.
+%   there's currently no way to jump to n-th trial or even second block of the
+%   two-block script. If this script is run, the experimenter presumably wants
+%   to collect the data anew -- but since there might have been a reason to
+%   save the choices thus far, this script backs up the data folder before
+%   clobbering the recorded-but-incomplete block.
 
 %% 1. Get records from data files, if available
 dataFolder = fullfile('data', num2str(observer));
@@ -26,30 +24,46 @@ if ~isnan(dateBegun)
     dataFolder, dateBegun);
 end
 
-% Check that the script can handle this
-knownN = [0 2 4];
-if ~ismember(gainsBlockCount, knownN) || ~ismember(lossBlockCount, knownN)
-  error(['Ineligible number of recorded blocks: %d gains & %d loss blocks.', ...
-    ' This should not happen.'], gainsBlockCount, lossBlockCount);
-end
-
-%% 2. Back up data folder
+%% 2. Back up data folder (with all participant records)
 if ~exist('backup', 'dir')
   mkdir('backup');
 end
 copyfile('data', fullfile('backup', sprintf('data-%s', datetime)));
 
-%% 3. What order should the blocks be run in?
+%% 3. Handle the incomplete-blocks case
+uninterruptedN = [0 2 4];
+if ~ismember(gainsBlockCount, uninterruptedN) || ...
+   ~ismember(lossBlockCount, uninterruptedN)
+  contCheck = input(sprintf(['Participant %d has %.2f gains blocks and ', ...
+    '%.2f loss blocks. Continuing will overwrite some recorded choices. ', ...
+    'Do you wish to back up the data folder at this point and continue? ', ...
+    ' [y/[n]]'], observer, gainsBlockCount, lossBlockCount), 's');
+  if strcmp(contCheck, 'y')
+    copyfile(dataFolder, sprintf('%s-partial-%.1fG-%.1fL', dataFolder, ...
+      gainsBlockCount, lossBlockCount));
+  else
+    error('You chose to abort the script.');
+  end
+end
+
+%% 4. What order should the blocks be run in?
+% Define functions (as their versions change)
+gains1 = @RA_Gains1_v7;
+gains2 = @RA_Gains2_v7;
+loss1 = @RA_Loss1_v7;
+loss2 = @RA_Loss2_v7;
+
+% Order their run
 lastDigit = mod(observer, 10);
 lossStartDigits = [1 2 5 6 9];
 if ismember(lastDigit, lossStartDigits)
-  runFunctions = {@RA_Loss1_v7, @RA_Gains1_v7, @RA_Gains2_v7, @RA_Loss2_v7};
+  runFunctions = {loss1, gains1, gains2, loss2};
 else
-  runFunctions = {@RA_Gains1_v7, @RA_Loss1_v7, @RA_Loss2_v7, @RA_Gains2_v7};
+  runFunctions = {gains1, loss1, loss2, gains2};
 end
 % runFunctions{i}(observer) will run the script at i-th position
 
-%% 4. If the case is covered, run the requisite scripts
+%% 5. If the case is covered, run the requisite scripts
 % Case for aborting: all records already collected
 if gainsBlockCount == 4 && lossBlockCount == 4
   % Everything recorded
@@ -57,48 +71,49 @@ if gainsBlockCount == 4 && lossBlockCount == 4
 end
 
 % Runnable cases. Check with experimenter first!
-if gainsBlockCount + lossBlockCount == 0
-  % No records yet
+% NOTE: Using `xor` means that no weird edge cases slip through. Even if someone
+%   e.g. had all gains blocks and no loss blocks recorded, this should force
+%   them to record the loss blocks.
+if gainsBlockCount < 2 && lossBlockCount < 2
+  % No records yet -> run Day 1
   response = input(sprintf('Participant %d is new. Continue? (y/[n])', ...
     observer), 's');
   if strcmp(response, 'y')
     runFunctions{1}(observer);
     runFunctions{2}(observer);
   end
-elseif gainsBlockCount + lossBlockCount == 2
-  % Only half of Day 1
+elseif xor(gainsBlockCount < 2, lossBlockCount < 2)
+  % Only one domain of Day 1 -> run the other domain
   response = input(sprintf(['Participant %d has an incomplete Day 1 ', ...
     'session (two blocks). Collect the rest? (y/[n])'], observer), 's');
   if strcmp(response, 'y')
     if gainsBlockCount < 2
-      RA_Gains1_v7(observer);
+      gains1(observer);
     else
-      RA_Loss1_v7(observer);
+      loss1(observer);
     end
   end
-elseif gainsBlockCount + lossBlockCount == 4
-  % All of Day 1, none of Day 2
+elseif gainsBlockCount < 4 && lossBlockCount < 4
+  % All of Day 1, none of Day 2 -> run Day 2
   response = input(sprintf(['Participant %d appears to have done Session 1. ', ...
     'Continue with Session 2? (y/[n])'], observer), 's');
   if strcmp(response, 'y')
     runFunctions{3}(observer);
     runFunctions{4}(observer);
   end
-elseif gainsBlockCount + lossBlockCount == 6
+elseif xor(gainsBlockCount < 4, lossBlockCount < 4)
   % Some of Day 2, but not all
   response = input(sprintf(['Participant %d has an incomplete Day 2. ', ...
     'Collect the rest? (y/[n])'], observer), 's');
   if strcmp(response, 'y')
     if gainsBlockCount < 4
-      RA_Gains2_v7(observer);
+      gains2(observer);
     else
-      RA_Loss2_v7(observer);
+      loss2(observer);
     end
   end
 else
-  % Something odd happened?
-  error(['The sum of recorded blocks is uneven. Manual investigation ', ...
-    'of data collection status required.']);
+  error('Something odd happened. Run individual block scripts instead.');
 end
 
 if ~strcmp(response, 'y')
@@ -146,10 +161,5 @@ function [ numBlocks ] = numTrialsToBlocks(choiceData, trialsPerBlock)
 if ~exist('trialsPerBlock', 'var')
   trialsPerBlock = 31;
 end
-numBlocksPartial = length(choiceData) / trialsPerBlock;
-numBlocks = round(numBlocksPartial);
-if numBlocks ~= numBlocksPartial
-  warning('Careful: %d trials in a block, but %d choices recorded.', ...
-    trialsPerBlock, length(choiceData));
-end
+numBlocks = length(choiceData) / trialsPerBlock;
 end
