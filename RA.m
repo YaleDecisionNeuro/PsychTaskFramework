@@ -1,5 +1,6 @@
 function RA(observer)
 % RA Runs the right scripts (Day 1 or Day 2, order by condition) for VA_RA_PTB.
+%    If passed no argument, runs practice.
 %
 % Does the work of "what script to run" behind the screens. Is agnostic as to
 %   what the scripts it runs contain.
@@ -10,6 +11,12 @@ function RA(observer)
 %   to collect the data anew -- but since there might have been a reason to
 %   save the choices thus far, this script backs up the data folder before
 %   clobbering the recorded-but-incomplete block.
+
+%% 0. If no argument is used, run practice and abort
+if ~exist('observer', 'var')
+  RA_Practice_v3(randi(100));
+  return;
+end
 
 %% 1. Get records from data files, if available
 dataFolder = fullfile('data', num2str(observer));
@@ -80,6 +87,8 @@ if gainsBlockCount < 2 && lossBlockCount < 2
     observer), 's');
   if strcmp(response, 'y')
     runFunctions{1}(observer);
+    disp('Pausing for three seconds before running the next block...');
+    pause(3);
     runFunctions{2}(observer);
   end
 elseif xor(gainsBlockCount < 2, lossBlockCount < 2)
@@ -99,6 +108,8 @@ elseif gainsBlockCount < 4 && lossBlockCount < 4
     'Continue with Session 2? (y/[n])'], observer), 's');
   if strcmp(response, 'y')
     runFunctions{3}(observer);
+    disp('Pausing for three seconds before running the next block...');
+    pause(3);
     runFunctions{4}(observer);
   end
 elseif xor(gainsBlockCount < 4, lossBlockCount < 4)
