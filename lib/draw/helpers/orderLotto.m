@@ -13,6 +13,7 @@ function [probOrder, amtOrder] = orderLotto(trialSettings)
   amtOrder = [winAmt, lossAmt];
 
   % NOTE: We could just go to Data.colors(trial) and compute reminder, & involve colors later
+  % FIXME: This seems like it should return colors wrong?
   if trialSettings.colors == 1
     probOrder = fliplr(probOrder);
     amtOrder = fliplr(amtOrder);

@@ -35,20 +35,22 @@ color_bgr = blockSettings.default.bgrColor;
 
 % Trial
 ambig = trialSettings.ambigs;
+% Color 1 is on top, color 2 is on the bottom. If trialSettings.color == 1,
+%   the winning number should be on top (and with default colors, red.) It
+%   should be at the bottom & blue otherwise.
 [probs, payoffs] = orderLotto(trialSettings);
 % If occluder exists, it lessens displayed prob numbers
 displayProbNumbers = probs - ambig / 2;
 
 %% 2. Compute positions
 % Basic box
-Y1 = (H - boxHeight) / 2; % Space over the lottery box (top coordinate of display)
-Y2 = Y1 + boxHeight * probs(1); % Y coordinate of top probability's bottom
-Y3 = Y2 + boxHeight * probs(2); % Y coordinate of bottom probability's bottom
+Y1 = (H - boxHeight) / 2; % Top Y coordinate of the box's top
+Y2 = Y1 + boxHeight * probs(1); % Y coordinate where top & bottom parts meet
+Y3 = Y2 + boxHeight * probs(2); % Y coordinate of the box's bottom
 
-% Occluder
-nonAmbigPart = 1 - ambig; % how much of the prob box is definite?
-Y2occ = Y1 + boxHeight * (nonAmbigPart / 2); % top of occluder
-Y3occ = Y2occ + boxHeight * ambig; % bottom of occluder
+% Occluder (hides equal amounts of probability from both top and bottom)
+Y2occ = Y2 - boxHeight * ambig / 2; % Top of occluder
+Y3occ = Y2 + boxHeight * ambig / 2; % Bottom of occluder
 
 %% 3. Draw the lottery box
 % Draw the background
@@ -68,9 +70,9 @@ Screen('FillRect', windowPtr, color_ambig, occluderDims);
 %% 4. Draw the probabilities
 % Determine the dimensions
 Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.probLabels.fontSize);
-topProbString = sprintf('%d', displayProbNumbers(1) * 100);
+topProbString = sprintf('%.f', displayProbNumbers(1) * 100);
 topProbTextDims = getTextDims(windowPtr, topProbString);
-bottomProbString = sprintf('%d', displayProbNumbers(2) * 100);
+bottomProbString = sprintf('%.f', displayProbNumbers(2) * 100);
 bottomProbTextDims = getTextDims(windowPtr, bottomProbString);
 
 % Determine the position
