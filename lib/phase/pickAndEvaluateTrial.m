@@ -1,5 +1,5 @@
 function pickAndEvaluateTrial(DataObject, settings)
-% ConductLottery Picks a recorded trial at random and evaluates it.
+% PickAndEvaluateTrial Picks a recorded trial at random and evaluates it.
 %
 % Three parts to this logic:
 % 0. Pick a trial at random
@@ -16,32 +16,81 @@ function pickAndEvaluateTrial(DataObject, settings)
 blockIdx = randi(DataObject.blocks.numRecorded);
 block = DataObject.blocks.recorded{blockIdx};
 trialIdx = randi(height(block.records));
-trial = block.records(randi(trialIdx), :);
+trial = block.records(trialIdx, :);
 
 %% 2. Evaluate the trial
 % summary = experimentSummary(DataObject, blockIdx, trialIdx);
-[ outcomeKind, outcomeLevel, trueProb, randDraw ] = evaluateTrial(trial);
+[ outcomeKind, outcomeLevel, outcomeColorIdx, trueProb, randDraw ] = evaluateTrial(trial);
 
 %% 3. Draw the trial
-% Steps:
-%  1. Factor out code from XYZ_drawTask so that it can be re-used here
+%  0. Open PTB window if it isn't yet opened (`isempty(Screen('Windows'))`)
+if isempty(Screen('Windows'))
+  KbName(settings.device.KbName);
+  [settings.device.windowPtr, settings.device.screenDims] = ...
+    Screen('OpenWindow', settings.device.screenId, ...
+    settings.default.bgrColor);
+end
+%  1. Use drawLotto and drawRef to show the lotto
+drawLotto(trial, settings);
+settings.game.referenceDrawFn(settings, trial);
+Screen(settings.device.windowPtr, 'Flip');
 %  2. Disappear the non-picked choice
-%  (3. Re-paint lottery with true probability layout
-%  4. Draw a line through the chosen random number)
-%  5. Highlight the winning amount
+WaitSecs(5);
+switch trial.choseLottery
+  case 0
+    settings.game.referenceDrawFn(settings, trial);
+    msg = 'You have chosen the alternative to the gamble.';
+  case 1
+    % Determine message to display
+    msg = 'You chose the gamble. Random draw got you a ';
+    msg = [msg settings.game.colorKey{outcomeColorIdx} ' marble.']
+    %  (3. Re-paint lottery with true probability layout
+
+    if trial.ambigs > 0
+      trial.ambigs = 0;
+      trial.probs = trueProb;
+    end
+    drawLotto(trial, settings);
+    %  4. Draw a line through the chosen random number
+    %  5. Highlight the winning amount)
+  otherwise
+    msg = 'No choice made in this trial.';
+end
+Screen(settings.device.windowPtr, 'Flip');
+
+% 6. Display the final outcome
+WaitSecs(1);
+if trial.choseLottery == 0
+  settings.game.referenceDrawFn(settings, trial);
+elseif trial.choseLottery == 1
+  drawLotto(trial, settings);
+end
+txtDims = getTextDims(settings.device.windowPtr, msg);
+xDim = settings.device.screenDims(3)/2 - txtDims(1)/2;
+yDim = settings.device.screenDims(4) - 20;
+DrawFormattedText(settings.device.windowPtr, msg, xDim, yDim, [200 200 200]);
+Screen(settings.device.windowPtr, 'Flip');
+disp(randDraw);
+
+% 7. Wait for keypress
+waitForKey({'5%', 'Space'});
+Screen('CloseAll'); % FIXME: Not necessarily - this doesn't have to be the last display of the game
 end
 
-function [ outcomeKind, outcomeLevel, trueLotteryProb, randomDraw ] = evaluateTrial(trial)
+function [ outcomeKind, outcomeLevel, outcomeColorIdx, trueLotteryProb, randomDraw ] = evaluateTrial(trial)
 % EvaluateTrial Given a trial row, evaluates it.
 if trial.choseLottery == 0
   outcomeKind = 'Reference';
   outcomeLevel = trial.reference;
+  trueLotteryProb = NaN;
+  randomDraw = NaN;
+  outcomeColorIdx = [];
 else
   % Conduct lottery
   ambig = trial.ambigs;
   if ambig > 0
     minProb = (1 - ambig) / 2;
-    trueLotteryProb = minProb + ambig * rand;
+    trueLotteryProb = round(minProb + ambig * rand, 2);
   else
     trueLotteryProb = trial.probs;
   end
@@ -50,9 +99,12 @@ else
   if randomDraw <= trueLotteryProb
     outcomeKind = 'Win';
     outcomeLevel = trial.stakes;
+    outcomeColorIdx = trial.colors;
   else
     outcomeKind = 'Loss';
     outcomeLevel = trial.stakes_loss;
+    outcomeColorIdx = 2 - (trial.colors - 1); % FIXME: Ugly hack, assumes only two colors indexed 1 and 2
   end
+  randomDraw = round(randomDraw, 2);
 end
 end
