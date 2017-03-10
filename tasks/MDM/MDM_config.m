@@ -6,7 +6,6 @@ function s = MDM_config()
 s = config();
 
 %% Machine settings
-s.device.screenId = 1; % 0 for current screen, 1 for a second screen
 s.device.taskPath = ['tasks' filesep 'MDM'];
 s.device.imgPath = [s.device.taskPath filesep 'img'];
 

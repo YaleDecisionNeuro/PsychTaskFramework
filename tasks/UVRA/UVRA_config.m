@@ -6,7 +6,6 @@ function s = UVRA_config(initial_config)
     s = initial_config;
   end
 
-  s.device.screenId = 0;
   s.device.taskPath = ['tasks' filesep 'UVRA'];
   s.game.constantTrialDuration = false;
 

@@ -12,11 +12,6 @@ function s = config(changes)
 %
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %
-% TODO: Persistence - in a `.mat` file, or `.json`? Or instruct people to edit
-% *this*? Either way, there should be a loud complaint if there's `changes`,
-% and possibly a question as to whether `changes` should persist.
-% (Or maybe load from `.json` and save into `.mat`, which gets deleted after
-% every user.)
 % TODO: Implement `changes` -- a recursive sweep through
 
 %%% Defaults
@@ -28,7 +23,7 @@ function s = config(changes)
 % This is where you set properties important for PsychToolBox to function
 % properly. Consult PTB manual if these are unclear.
 s.device.KbName = 'KeyNamesWindows';
-s.device.screenId = 0; % 0 for current screen, 1 for a second screen
+s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Must get filled in with Screen('Open')
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
