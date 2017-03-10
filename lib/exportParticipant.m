@@ -4,11 +4,17 @@ function [ exportTable ] = exportParticipant(DataObject, fname)
 %
 % The file format has to be any that `writetable` can handle; consult its docs.
 
-src = DataObject.blocks;
+subjId = DataObject.observer;
 exportTable = table();
+if ~isfield(DataObject, 'blocks')
+  warning('DataObject for %d contains no planned or recorded blocks.', subjId)
+  return;
+end
+
+src = DataObject.blocks;
 if src.numRecorded == 0
   % FIXME: This is not a sufficient test.
-  warning('DataObject contains no recorded blocks.');
+  warning('DataObject for %d contains no recorded blocks.', subjId);
   return;
 end
 
@@ -29,13 +35,14 @@ for blockId = 1:n
   finalRecords = addConstantColumnToTable(finalRecords, 'taskName', taskName);
   finalRecords = addConstantColumnToTable(finalRecords, 'blockName', blockName);
   finalRecords = addConstantColumnToTable(finalRecords, 'blockId', blockId);
+  finalRecords = addConstantColumnToTable(finalRecords, 'subjectId', subjId);
 
   % FIXME: What if one of the blocks is different from the others? Should the
   %   export be "by block kind", or should the table that's being built be a
   %   "big-tent table" that adds columns as needed?
   exportTable = [exportTable; finalRecords];
 end
-if ~exist('fname', 'var')
+if exist('fname', 'var')
   writetable(exportTable, fname);
 end
 end
