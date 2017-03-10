@@ -19,6 +19,11 @@ function s = config(changes)
 % TODO: (That way, they can actually inherit from default.)
 % (Or at least, create a skeleton of a struct to provide guidance.)
 
+%% Debugging
+% This will cause PsychDebugWindowConfiguration to be run unless overruled in
+% a downstream config.
+s.debug = true; % Turn off when your task script is ready
+
 %% Machine settings
 % This is where you set properties important for PsychToolBox to function
 % properly. Consult PTB manual if these are unclear.
