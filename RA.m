@@ -35,7 +35,8 @@ end
 if ~exist('backup', 'dir')
   mkdir('backup');
 end
-copyfile('data', fullfile('backup', sprintf('data-%s', datetime)));
+dateMark = datestr(datetime, 'YYYYmmDD_hhMM');
+copyfile('data', fullfile('backup', sprintf('%s', dateMark)));
 
 %% 3. Handle the incomplete-blocks case
 uninterruptedN = [0 2 4];
@@ -135,9 +136,8 @@ end
 %% Helper functions
 function [ gainsBlockCount, lossBlockCount, dateBegun ] = getInfoFromDataFiles(observer)
 % getInfoFromDataFiles Loads available data files and counts recorded blocks.
-folder = fullfile('data', num2str(observer), 'RA_%s_%d.mat');
-lossFile = sprintf(folder, 'LOSS', observer);
-gainsFile = sprintf(folder, 'GAINS', observer);
+lossFile = getFileForSubjectInDomain(observer, 'LOSS');
+gainsFile = getFileForSubjectInDomain(observer, 'GAINS');
 
 dateFormat = 'yyyymmddThhMMss';
 if exist(lossFile, 'file')
@@ -173,4 +173,15 @@ if ~exist('trialsPerBlock', 'var')
   trialsPerBlock = 31;
 end
 numBlocks = length(choiceData) / trialsPerBlock;
+end
+
+function [ fullPath ] = getFileForSubjectInDomain(observer, domain, rootPath)
+% GetFileForSubjectInDomain provides the data file path for given parameters.
+%
+% If `rootPath` is not provided, it defaults to 'data'.
+fname = sprintf('RA_%s_%d.mat', domain, observer);
+if ~exist('rootPath', 'var')
+  rootPath = 'data';
+end
+fullPath = fullfile(rootPath, num2str(observer), fname);
 end
