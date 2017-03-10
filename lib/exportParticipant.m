@@ -1,5 +1,6 @@
-function [ exportTable ] = export(DataObject, fname)
-% EXPORT Given a DataObject, it extracts all recorded blocks to a file.
+function [ exportTable ] = exportParticipant(DataObject, fname)
+% ExportParticipant Given a DataObject, it unites all records in one table.
+%   If given fname, it will also write the table into a file.
 %
 % The file format has to be any that `writetable` can handle; consult its docs.
 
@@ -34,7 +35,9 @@ for blockId = 1:n
   %   "big-tent table" that adds columns as needed?
   exportTable = [exportTable; finalRecords];
 end
-writetable(exportTable, fname);
+if ~exist('fname', 'var')
+  writetable(exportTable, fname);
+end
 end
 
 function [ tbl ] = addConstantColumnToTable(tbl, colName, constVal)
