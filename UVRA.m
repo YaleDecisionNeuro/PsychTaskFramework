@@ -26,7 +26,6 @@ if exist('observer', 'var') % Running actual trials -> record
   fname = [folder filesep fname];
   [ Data, participantExisted ] = loadOrCreate(observer, fname);
 
-  % TODO: Prompt experimenter if this is correct
   if participantExisted
     disp('Participant file exists, reusing...')
   else
@@ -56,8 +55,8 @@ end
   settings.default.bgrColor);
 
 %% Generate trials/blocks - if they haven't been generated before
-% NOTE: If the number of generated trials changes, this section will require
-%   a manual rewrite.
+% NOTE: If the number of generated trials changes, settings.game.block.numBlocks
+%   will need to be changed to an integer that divides the generated trial count.
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   blocks = generateBlocks(settings);
   numBlocks = settings.game.block.numBlocks;
@@ -73,8 +72,6 @@ end
 % Strategy: Run each block with separate settings; define its trials by
 % subsetting them; handle any prompts / continuations here, or pass different
 % callbacks
-%
-% TODO: Is this the right block division for this task?
 firstBlockIdx = Data.blocks.numRecorded + 1;
 if firstBlockIdx > 3
   lastBlockIdx = 6;
