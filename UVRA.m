@@ -13,11 +13,7 @@ addpath(genpath('./tasks/UVRA'));
 
 %% Setup
 settings = UVRA_config();
-KbName(settings.device.KbName);
-
-% Set random generator
-s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
-RandStream.setGlobalStream(s);
+settings = loadPTB(settings);
 
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
@@ -47,12 +43,6 @@ else % Running practice
   settings.perUser.refSide = randi(2);
   settings.device.saveAfterBlock = false;
 end
-
-%% Set up window
-% TODO: Conditional on provided `settings.device.screenDims`?
-[settings.device.windowPtr, settings.device.screenDims] = ...
-  Screen('OpenWindow', settings.device.screenId, ...
-  settings.default.bgrColor);
 
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, settings.game.block.numBlocks
@@ -93,5 +83,5 @@ else
   Data = runBlock(Data, settings);
 end
 
-Screen('CloseAll');
+unloadPTB(settings);
 end

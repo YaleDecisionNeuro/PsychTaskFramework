@@ -12,11 +12,7 @@ addpath('./tasks/MDM');
 
 %% Load settings
 settings = SODM_config();
-
-%% Setup
-KbName(settings.device.KbName);
-s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
-RandStream.setGlobalStream(s);
+settings = loadPTB(settings);
 
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
@@ -48,10 +44,6 @@ else % Running practice
   settings.device.saveAfterBlock = false;
 end
 
-% Open window
-[settings.device.windowPtr, settings.device.screenDims] = ...
-  Screen('OpenWindow', settings.device.screenId, ...
-  settings.default.bgrColor);
 % Disambiguate settings here
 monSettings = SODM_config_monetary(settings);
 medSettings = SODM_config_medical(settings);
@@ -171,5 +163,5 @@ else
 end
 
 % Close window
-Screen('CloseAll');
+unloadPTB(monSettings, medSettings);
 end

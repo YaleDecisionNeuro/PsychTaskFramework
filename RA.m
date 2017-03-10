@@ -17,11 +17,7 @@ addpath(genpath('./tasks/RA'));
 
 %% Setup
 settings = RA_config();
-KbName(settings.device.KbName);
-
-% Set random generator
-s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
-RandStream.setGlobalStream(s);
+settings = loadPTB(settings);
 
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
@@ -52,12 +48,6 @@ else % Running practice
   settings.perUser.refSide = randi(2);
   settings.device.saveAfterBlock = false;
 end
-
-%% Set up window
-% TODO: Conditional on provided `settings.device.screenDims`?
-[settings.device.windowPtr, settings.device.screenDims] = ...
-  Screen('OpenWindow', settings.device.screenId, ...
-  settings.default.bgrColor);
 
 % Disambiguate settings here
 gainSettings = settings;
@@ -135,5 +125,7 @@ else
   end
 end
 
-Screen('CloseAll');
+unloadPTB(lossSettings, gainSettings);
+% NOTE: could also just use settings, because neither windowPtr nor textures
+%   were opened by the configs separately
 end

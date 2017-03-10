@@ -10,9 +10,7 @@ addpath(genpath('./tasks/MDM'));
 
 %% Setup
 settings = MDM_config();
-KbName(settings.device.KbName);
-s = RandStream.create('mt19937ar', 'seed', sum(100*clock));
-RandStream.setGlobalStream(s);
+settings = loadPTB(settings);
 
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
@@ -43,11 +41,6 @@ else % Running practice
   settings.perUser.refSide = randi(2);
   settings.device.saveAfterBlock = false;
 end
-
-% Set up window
-[settings.device.windowPtr, settings.device.screenDims] = ...
-  Screen('OpenWindow', settings.device.screenId, ...
-  settings.default.bgrColor);
 
 % Disambiguate settings here
 monSettings = MDM_config_monetary(settings);
