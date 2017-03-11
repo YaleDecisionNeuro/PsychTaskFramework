@@ -17,7 +17,7 @@ s.game.block.name = 'Gains';
 s.game.block.length = 31; % Useful for generation purposes
 
 s.game.optionsPhaseFn = @phase_showChoice;
-s.game.referenceDrawFn = @RA_drawRef;
+s.game.referenceDrawFn = @drawRef;
 s.game.preBlockFn = @preBlock;
 
 %% Available trial values to be used for trial generation

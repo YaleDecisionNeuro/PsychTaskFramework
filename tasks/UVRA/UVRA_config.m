@@ -32,10 +32,12 @@ function s = UVRA_config()
   % What phase and draw functions should runTrial use?
   s.game.preBlockFn = @preBlock;
   s.game.optionsPhaseFn = @UVRA_drawTask;
-  s.game.referenceDrawFn = @UVRA_drawRef;
+  s.game.referenceDrawFn = @drawRef;
   s.game.responsePhaseFn = NaN;
   s.game.feedbackPhaseFn = @UVRA_feedback;
 
   % Graphical adjustments
   s.objects.lottery.offCenterByPx = [0 200]; % refSide switches this around
+  s.objects.lottery.verticalLayout = true;
+  % s.objects.reference.offCenterByPx = [0 -200];
 end
