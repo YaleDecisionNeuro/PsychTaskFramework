@@ -25,7 +25,7 @@ s.game.name = 'MDM';
 s.game.preBlockFn = @preBlock;
 
 s.game.optionsPhaseFn = @phase_showChoice;
-s.game.referenceDrawFn = @MDM_drawRef;
+s.game.referenceDrawFn = @drawRef;
 s.game.block.length = 21;
 
 %% Available trial values - are shared across med & monetary tasks!

@@ -7,6 +7,7 @@ function drawRef(blockSettings, trialSettings)
 %% 2. Calculate position
 W = blockSettings.device.windowWidth;
 H = blockSettings.device.windowHeight;
+windowPtr = blockSettings.device.windowPtr;
 
 %% 3. Display textual reference
 % FIXME: This could use refactoring & matrix algebra
@@ -29,16 +30,29 @@ else
   refDims.y = H/4;
 end
 
-Screen('TextSize', blockSettings.device.windowPtr, ...
-  blockSettings.objects.reference.fontSize);
+Screen('TextSize', windowPtr, blockSettings.objects.reference.fontSize);
 
-displayText = dollarFormatter(referenceValue);
-textDims = getTextDims(blockSettings.device.windowPtr, displayText);
-refDims.x = refDims.x - textDims(1)/2;
-refDims.y = refDims.y - textDims(2)/2;
+if ~isfield(blockSettings, 'lookups')
+  % 1, Prepare text (and nothing else)
+  displayText = dollarFormatter(referenceValue);
+  textDims = getTextDims(windowPtr, displayText);
+else
+  % 1. Prepare text
+  lookupTbl = blockSettings.lookups.stakes.txt;
+  [ displayText, textDims ] = textLookup(referenceValue, lookupTbl, windowPtr);
 
-DrawFormattedText(blockSettings.device.windowPtr, displayText, refDims.x, ...
-  refDims.y, blockSettings.default.fontColor);
+  % 2. Draw the reference image underneath
+  imgLookupTbl = blockSettings.lookups.stakes.img;
+  textureBank = blockSettings.textures;
+  [ img, imgDims ] = imgLookup(referenceValue, imgLookupTbl, textureBank);
+  Screen('DrawTexture', windowPtr, img, [], ...
+    xyAndDimsToRect([refDims.x - imgDims(1)/2, refDims.y], imgDims));
+end
+
+% 3. Draw text
+textPos = [refDims.x - textDims(1)/2, refDims.y - textDims(2)/2];
+DrawFormattedText(windowPtr, displayText, textPos(1), ...
+  textPos(2), blockSettings.default.fontColor);
 end
 
 %% Helper function

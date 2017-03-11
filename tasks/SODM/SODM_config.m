@@ -27,8 +27,7 @@ s.game.responsePhaseFn = NaN;
 s.game.preBlockFn = @SODM_preBlock;
 s.game.bgrDrawFn = @SODM_drawBgr;
 s.game.optionsPhaseFn = @SODM_drawTask;
-s.game.referenceDrawFn = @MDM_drawRef;
-s.game.bgrDrawFn = @SODM_drawBgr;
+s.game.referenceDrawFn = @drawRef;
 % FIXME: Is this the best way of showing the context? Why not SODM_drawTask?
 
 % Useful for generation purposes
