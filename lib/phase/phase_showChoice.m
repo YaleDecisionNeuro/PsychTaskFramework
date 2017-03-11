@@ -1,4 +1,4 @@
-function [ trialData ] = phase_showChoice(trialData, trialSettings, blockSettings, actionFnHandle)
+function [ trialData ] = phase_showChoice(trialData, blockSettings, actionFnHandle)
 % MDM_DRAWTASK Executes the MDM trial stage of showing the task choice to
 %   the participant. Choice values are derived from `trialData` and,
 %   if need be, `blockSettings`.
@@ -12,25 +12,25 @@ if isfield(blockSettings.game, 'bgrDrawFn') && ...
 end
 
 % Draw the lottery box
-drawLotto(trialSettings, blockSettings);
+drawLotto(trialData, blockSettings);
 
 % Draw the reference value
-blockSettings.game.referenceDrawFn(blockSettings, trialSettings);
+blockSettings.game.referenceDrawFn(blockSettings, trialData);
 
 % Show all drawn objects and retrieve the timestamp of display
 [~, ~, trialData.choiceDisplayTimestamp, ~, ~] = Screen('flip', windowPtr);
 
 %% Handle the display properties & book-keeping
-trialData = timeAndRecordTask(trialData, trialData, blockSettings);
+trialData = timeAndRecordTask(trialData, blockSettings);
 
 % Allow the execution of a actionFnHandle if passed
 if exist('actionFnHandle', 'var') && isa(actionFnHandle, 'function_handle')
-  trialData = actionFnHandle(trialData, trialData, blockSettings);
+  trialData = actionFnHandle(trialData, blockSettings);
 end
 end
 
 % Local function with timing responsibility
-function trialData = timeAndRecordTask(trialData, trialSettings, blockSettings)
+function trialData = timeAndRecordTask(trialData, blockSettings)
   % Extract to local variables now because struct field access costs time
   trialStart = trialData.trialStartTime; % FIXME: Relies on runTrial to set it
   trialDur = blockSettings.game.durations.choice;

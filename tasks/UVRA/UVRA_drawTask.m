@@ -1,6 +1,6 @@
-function [ trialData ] = UVRA_drawTask(trialData, trialSettings, blockSettings, callback)
+function [ trialData ] = UVRA_drawTask(trialData, blockSettings, callback)
 % UVRA_DRAWTASK Executes the monetary R&A trial stage of showing the task choice
-%   to the participant. Choice values are derived from `trialSettings` and,
+%   to the participant. Choice values are derived from `trialData` and,
 %   if need be, `blockSettings`. They are displayed vertically and expect a
 %   participant response.
 
@@ -18,26 +18,26 @@ if blockSettings.perUser.refSide == 2
 end
 
 % Draw the lottery box
-drawLotto(trialSettings, blockSettings);
+drawLotto(trialData, blockSettings);
 
 % Draw the reference value
-blockSettings.game.referenceDrawFn(blockSettings, trialSettings);
+blockSettings.game.referenceDrawFn(blockSettings, trialData);
 
 % Show all drawn objects
 Screen('flip', windowPtr);
 
 %% Handle the display properties & book-keeping
 trialData.choiceStartTime = datevec(now);
-trialData = timeAndRecordTask(trialData, trialSettings, blockSettings);
+trialData = timeAndRecordTask(trialData, blockSettings);
 
 % Allow the execution of a callback if passed
 if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, trialSettings, blockSettings);
+  trialData = callback(trialData, blockSettings);
 end
 end
 
 % Local function with timing responsibility
-function trialData = timeAndRecordTask(trialData, trialSettings, blockSettings)
+function trialData = timeAndRecordTask(trialData, blockSettings)
   %% Record choice & assign feedback color
   [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
     waitForKey({'UpArrow', 'DownArrow'}, blockSettings.game.durations.choice);

@@ -1,4 +1,4 @@
-function [ trialData ] = drawFeedback(trialData, trialSettings, blockSettings, callback)
+function [ trialData ] = drawFeedback(trialData, blockSettings, callback)
 % DRAWFEEDBACK Based on the value in `trialData.choice`, it draws the feedback
 %   that confirms to the player which option they chose (or whether they chose
 %   at all) and displays it for `blockSettings.game.durations.feedback`. Can be
@@ -36,15 +36,15 @@ Screen('FillRect', windowPtr, button2_color, button2);
 Screen('flip', windowPtr); % NOTE: This makes no sense. Why are we using it if we're not taking our time measurements from it?
 
 trialData.feedbackStartTime = datevec(now);
-trialData = timeFeedback(trialData, trialSettings, blockSettings);
+trialData = timeFeedback(trialData, blockSettings);
 
 if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, trialSettings, blockSettings);
+  trialData = callback(trialData, blockSettings);
 end
 end
 
 % Local function with timing responsibility
-function trialData = timeFeedback(trialData, trialSettings, blockSettings)
+function trialData = timeFeedback(trialData, blockSettings)
   elapsedTime = etime(datevec(now), trialData.feedbackStartTime);
   while elapsedTime < blockSettings.game.durations.feedback
     elapsedTime = etime(datevec(now), trialData.feedbackStartTime);

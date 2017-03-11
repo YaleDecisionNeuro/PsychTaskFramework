@@ -1,4 +1,4 @@
-function [ trialData ] = handleResponse(trialData, trialSettings, blockSettings, callback)
+function [ trialData ] = handleResponse(trialData, blockSettings, callback)
 % HANDLERESPONSE The draw script that handles the display of the response
 %   prompt and the eventual response or non-response. Takes standard draw
 %   script arguments.
@@ -18,13 +18,13 @@ Screen('flip', windowPtr);
 trialData.respStartTime = datevec(now);
 
 %% Wrap up
-trialData = timeAndRecordResponse(trialData, trialSettings, blockSettings);
+trialData = timeAndRecordResponse(trialData, blockSettings);
 if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, trialSettings, blockSettings);
+  trialData = callback(trialData, blockSettings);
 end
 end
 
-function trialData = timeAndRecordResponse(trialData, trialSettings, blockSettings)
+function trialData = timeAndRecordResponse(trialData, blockSettings)
   % TODO: If s.game.durations.response == 0, there shouldn't be a while condition
   % TODO: Abstract into `waitForBackTick`-like function
   % TODO: `elapsedTime` - better name?

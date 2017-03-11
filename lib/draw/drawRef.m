@@ -1,8 +1,8 @@
-function drawRef(blockSettings, trialSettings)
+function drawRef(blockSettings, trialData)
 % DRAWREF Draws the stable reference value on screen.
 
 %% 1. Obtain values
-[ referenceSide, referenceValue ] = getReferenceSideAndValue(trialSettings, blockSettings);
+[ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockSettings);
 
 %% 2. Calculate position
 W = blockSettings.device.windowWidth;
@@ -56,7 +56,7 @@ DrawFormattedText(windowPtr, displayText, textPos(1), ...
 end
 
 %% Helper function
-function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialSettings, blockSettings)
+function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockSettings)
 % Check if there is any specific reference side & value defined for this trial,
 % or for this block. If reference side is unavailable, generate it at random.
 
@@ -71,19 +71,19 @@ if isfield(blockSettings.game.levels, 'reference')
   referenceValue = blockSettings.game.levels.reference;
 end
 
-% b. check in trialSettings
-% NOTE: trialSettings is, by convention, a table, so it doesn't respond to
+% b. check in trialData
+% NOTE: trialData is, by convention, a table, so it doesn't respond to
 % `isfield` - would have to convert to struct
-trialVars = trialSettings.Properties.VariableNames;
+trialVars = trialData.Properties.VariableNames;
 
 if ismember('refSide', trialVars)
-  referenceSide = trialSettings.refSide;
+  referenceSide = trialData.refSide;
 elseif ismember('referenceSide', trialVars)
-  referenceSide = trialSettings.referenceSide;
+  referenceSide = trialData.referenceSide;
 end
 
 if ismember('reference', trialVars)
-  referenceValue = trialSettings.reference;
+  referenceValue = trialData.reference;
 end
 
 %% 2. Check values
@@ -93,6 +93,6 @@ if ~exist('referenceSide', 'var')
 end
 
 if ~exist('referenceValue', 'var')
-  error('Reference value not set in either blockSettings or trialSettings!');
+  error('Reference value not set in either blockSettings or trialData!');
 end
 end

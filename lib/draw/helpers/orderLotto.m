@@ -1,12 +1,12 @@
-function [probOrder, amtOrder] = orderLotto(trialSettings)
+function [probOrder, amtOrder] = orderLotto(trialData)
 % ORDERLOTTO Given the win color for the trial, it returns two sorted matrices
 %   with the probability (and, respectively, payoff) values sorted such that
 %   the first will appear on top and the second on the bottom of the drawTask
 %   display.
 
-  winProb = trialSettings.probs;
-  winAmt = trialSettings.stakes;
-  lossAmt = trialSettings.stakes_loss;
+  winProb = trialData.probs;
+  winAmt = trialData.stakes;
+  lossAmt = trialData.stakes_loss;
 
   % Only two options -> hard-code the default, flip if necessary
   probOrder = [winProb, 1 - winProb];
@@ -14,7 +14,7 @@ function [probOrder, amtOrder] = orderLotto(trialSettings)
 
   % NOTE: We could just go to Data.colors(trial) and compute reminder, & involve colors later
   % FIXME: This seems like it should return colors wrong?
-  if trialSettings.colors == 1
+  if trialData.colors == 1
     probOrder = fliplr(probOrder);
     amtOrder = fliplr(amtOrder);
   end

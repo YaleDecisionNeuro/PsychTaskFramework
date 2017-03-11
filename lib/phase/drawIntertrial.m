@@ -1,6 +1,6 @@
-function [ trialData ] = drawIntertrial(trialData, trialSettings, blockSettings, callback)
+function [ trialData ] = drawIntertrial(trialData, blockSettings, callback)
 % DRAWINTERTRIAL Displays the inactivity symbol in between trials. Its duration
-%   is based on the value in `trialSettings.ITIs`.
+%   is based on the value in `trialData.ITIs`.
 
 W = blockSettings.device.windowWidth; % width
 H = blockSettings.device.windowHeight; % height
@@ -10,14 +10,14 @@ center = [W / 2, H / 2];
 Screen('FillOval', windowPtr, blockSettings.objects.intertrial.color, ...
   centerRectDims(center, blockSettings.objects.intertrial.dims));
 Screen('flip', windowPtr);
-trialData = timeIntertrial(trialData, trialSettings, blockSettings);
+trialData = timeIntertrial(trialData, blockSettings);
 if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, trialSettings, blockSettings);
+  trialData = callback(trialData, blockSettings);
 end
 end
 
 % Local function with timing responsibility
-function trialData = timeIntertrial(trialData, trialSettings, blockSettings)
+function trialData = timeIntertrial(trialData, blockSettings)
 trialData.ITIStartTime = datevec(now);
 
 % Do we need the entire trial to last a constant amount of time? If so:
@@ -29,10 +29,10 @@ if blockSettings.game.constantTrialDuration
   endReference = blockSettings.game.durations.choice + ...
     blockSettings.game.durations.response + ...
     blockSettings.game.durations.feedback + ...
-    trialSettings.ITIs;
+    trialData.ITIs;
 else
   startReference = trialData.ITIStartTime;
-  endReference = trialSettings.ITIs;
+  endReference = trialData.ITIs;
 end
 
 elapsedTime = etime(datevec(now), startReference);

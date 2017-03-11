@@ -1,6 +1,6 @@
-function drawLotto(trialSettings, blockSettings)
+function drawLotto(trialData, blockSettings)
 % DrawLotto Using an open PTB screen and other properties of blockSettings,
-%   draws a lottery with values specified in trialSettings in the center of
+%   draws a lottery with values specified in trialData in the center of
 %   the screen.
 %
 % If blockSettings.objects.lottery.offCenterByPx exists, drawLotto will shift
@@ -46,11 +46,11 @@ color_ambig = blockSettings.objects.lottery.figure.colors.ambig;
 color_bgr = blockSettings.default.bgrColor;
 
 % Trial
-ambig = trialSettings.ambigs;
-% Color 1 is on top, color 2 is on the bottom. If trialSettings.color == 1,
+ambig = trialData.ambigs;
+% Color 1 is on top, color 2 is on the bottom. If trialData.color == 1,
 %   the winning number should be on top (and with default colors, red.) It
 %   should be at the bottom & blue otherwise.
-[probs, payoffs] = orderLotto(trialSettings);
+[probs, payoffs] = orderLotto(trialData);
 % If occluder exists, it lessens displayed prob numbers
 displayProbNumbers = probs - ambig / 2;
 

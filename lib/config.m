@@ -168,7 +168,7 @@ s.game.trialFn = @runTrial;
 % standard order of phases (i.e. choice display, response prompt, feedback,
 % intertrial), you can substitute a function here. It should take, and return,
 % the same arguments that the phase function in lib/phase does. (In general,
-% this is `sampleFn(trialData, trialSettings, blockSettings, callback)`.)
+% this is `sampleFn(trialData, blockSettings, callback)`.)
 %
 % By design, optionsPhaseFn is left blank. `runTrial` will complain if it is
 % not set, or if any of the phase function handles below are unset. While you
@@ -187,7 +187,7 @@ s.game.intertrialPhaseFn = @drawIntertrial;
 % %% Reference draw script
 % Reference draw script defines how the "reference" (value alternative to the
 % gamble) will be drawn. It is specific to the kind of choices you present. Its
-% default arguments are drawRef(blockSettings, trialSettings).
+% default arguments are drawRef(blockSettings, trialData).
 
 s.game.referenceDrawFn = NaN;
 

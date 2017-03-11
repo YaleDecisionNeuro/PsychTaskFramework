@@ -32,10 +32,9 @@ function Data = runBlock(Data, blockSettings)
 
   collectedData = [];
   for i = 1:numTrials
-    trialSettings = trials(i, :);
-    trialData = runTrial(trialSettings, blockSettings);
-    trialRecord = [trialSettings struct2table(trialData)];
-    collectedData = appendRow(trialRecord, ...
+    trialData = trials(i, :);
+    trialData = runTrial(trialData, blockSettings);
+    collectedData = appendRow(trialData, ...
       collectedData);
   end
 

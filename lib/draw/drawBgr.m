@@ -5,7 +5,7 @@ function drawBgr(blockSettings, callback)
 %   task-relevant drawRef function.)
 %
 % NOTE: Unlike other draw functions, it only takes `blockSettings`, not
-% `trialSettings`, and does not allow access to or modification of `trialData`.
+% `trialData`, and does not allow access to or modification of `trialData`.
 % (FIXME?)
 
 if ~isfield(blockSettings.device, 'windowPtr')
