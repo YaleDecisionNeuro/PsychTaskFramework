@@ -7,7 +7,6 @@ function [ Data ] = UVRA(observer)
 
 %% Add subfolders we'll be using to path
 addpath(genpath('./lib'));
-addpath(genpath('./tasks/RA'));
 addpath(genpath('./tasks/UVRA'));
 % NOTE: genpath gets the directory and all its subdirectories
 
