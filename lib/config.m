@@ -42,6 +42,7 @@ s.default.fontName = 'Arial';
 s.default.fontColor = [255 255 255];
 s.default.fontSize = 42;
 s.default.bgrColor = [0 0 0];
+s.default.padding = 10; % px to leave between objects
 
 %% Features of objects that your task displays
 % This is the Wild West portion of property settings. s.(object) should contain
@@ -62,6 +63,7 @@ s.objects.reference.fontColor = s.default.fontColor;
 s.objects.lottery.figure.dims = [150 300];
 s.objects.lottery.figure.colors.prob = [255 0 0; 0 0 255];
 s.objects.lottery.figure.colors.ambig = [127 127 127];
+s.objects.lottery.occluderWidth = 170;
 
 % FIXME: Deprecate in favor of getTextDims
 s.objects.lottery.stakes.misc.Digit1 = [64 64];
