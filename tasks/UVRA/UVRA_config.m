@@ -2,6 +2,8 @@ function s = UVRA_config()
   s = config(); % Get defaults from lib/config
 
   s.device.taskPath = fullfile('tasks', 'UVRA');
+  s.device.breakKeys = {'Space', '5%'};
+  s.device.choiceKeys = {'UpArrow', 'DownArrow'};
   % See lib/config for other things that s.device can contain
 
   % Meta

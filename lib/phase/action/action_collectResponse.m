@@ -1,14 +1,14 @@
 function [ trialData ] = action_collectResponse(trialData, phaseSettings, blockSettings)
 % For duration specified in phaseSettings.duration, wait for a keypress specified
 %   in phaseSettings.responseKeys
-% TODO: Make responseKeys variable
 % TODO: Establish phaseSettings?
+keys = blockSettings.device.choiceKeys;
 
 [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
-  waitForKey({'1!', '2@'}, phaseSettings.duration);
-if keyisdown && keycode(KbName('1!'))
+  waitForKey(keys, phaseSettings.duration);
+if keyisdown && keycode(KbName(keys{1}))
   trialData.choice = 1;
-elseif keyisdown && keycode(KbName('2@'))
+elseif keyisdown && keycode(KbName(keys{2}))
   trialData.choice = 2;
 else % non-press
   trialData.choice = 0;
