@@ -35,4 +35,7 @@ function s = UVRA_config()
   s.game.referenceDrawFn = @UVRA_drawRef;
   s.game.responsePhaseFn = NaN;
   s.game.feedbackPhaseFn = @UVRA_feedback;
+
+  % Graphical adjustments
+  s.objects.lottery.offCenterByPx = [0 200]; % refSide switches this around
 end
