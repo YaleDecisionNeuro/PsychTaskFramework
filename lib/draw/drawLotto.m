@@ -11,8 +11,8 @@ function drawLotto(trialSettings, blockSettings)
 %% 1. Extract settings
 % Device
 windowPtr = blockSettings.device.windowPtr;
-W = blockSettings.device.screenDims(3); % width
-H = blockSettings.device.screenDims(4); % height
+W = blockSettings.device.windowWidth; % width
+H = blockSettings.device.windowHeight; % height
 screenCenter = W / 2; % NOTE: screenCenterX
 
 % Lottery box properties

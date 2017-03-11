@@ -4,8 +4,8 @@ function [ trialData ] = UVRA_drawFeedback(trialData, trialSettings, blockSettin
 %   at all) and displays it for `blockSettings.game.durations.feedback`. Can be
 %   re-used for tasks that offer two options in a choice.
 
-W = blockSettings.device.screenDims(3); % width
-H = blockSettings.device.screenDims(4); % height
+W = blockSettings.device.windowWidth; % width
+H = blockSettings.device.windowHeight; % height
 center = [W / 2, H / 2];
 windowPtr = blockSettings.device.windowPtr;
 

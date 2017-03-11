@@ -16,8 +16,8 @@ blueProb = probOrder(2);
 % FIXME: This, technically, is only the bottom-right coordinate. If `rect`
 % passed to Screen('OpenWindow', rect) began with two non-zero values, that's
 % how far from the top-left of the screen PTB would start drawing.
-W = blockSettings.device.screenDims(3); % width
-H = blockSettings.device.screenDims(4); % height
+W = blockSettings.device.windowWidth; % width
+H = blockSettings.device.windowHeight; % height
 
 boxHeight = blockSettings.objects.lottery.figure.dims(2);
 Y1 = (H - boxHeight) / 2; % Space over the lottery box (top coordinate of display)

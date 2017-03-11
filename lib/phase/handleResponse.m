@@ -4,8 +4,8 @@ function [ trialData ] = handleResponse(trialData, trialSettings, blockSettings,
 %   script arguments.
 
 %% Helper values
-W = blockSettings.device.screenDims(3); % width
-H = blockSettings.device.screenDims(4); % height
+W = blockSettings.device.windowWidth; % width
+H = blockSettings.device.windowHeight; % height
 center = [W / 2, H / 2];
 windowPtr = blockSettings.device.windowPtr;
 

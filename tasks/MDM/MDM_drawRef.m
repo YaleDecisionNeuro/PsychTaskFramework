@@ -6,8 +6,8 @@ referenceValue = trialSettings.reference;
 % Assume that reference side is saved for block
 referenceSide = blockSettings.perUser.refSide;
 
-W = blockSettings.device.screenDims(3);
-H = blockSettings.device.screenDims(4);
+W = blockSettings.device.windowWidth;
+H = blockSettings.device.windowHeight;
 windowPtr = blockSettings.device.windowPtr;
 Screen('TextSize', blockSettings.device.windowPtr, ...
   blockSettings.objects.reference.fontSize);

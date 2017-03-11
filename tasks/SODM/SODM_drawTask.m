@@ -12,8 +12,8 @@ windowPtr = blockSettings.device.windowPtr;
 redProb = probOrder(1);
 blueProb = probOrder(2);
 
-W = blockSettings.device.screenDims(3); % width
-H = blockSettings.device.screenDims(4); % height
+W = blockSettings.device.windowWidth; % width
+H = blockSettings.device.windowHeight; % height
 
 boxHeight = blockSettings.objects.lottery.figure.dims(2);
 Y1 = (H - boxHeight) / 2; % Space over the lottery box (top coordinate of display)
