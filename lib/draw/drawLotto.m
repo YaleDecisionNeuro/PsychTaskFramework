@@ -65,9 +65,6 @@ Y2occ = Y2 - boxHeight * ambig / 2; % Top of occluder
 Y3occ = Y2 + boxHeight * ambig / 2; % Bottom of occluder
 
 %% 3. Draw the lottery box
-% Draw the background
-Screen('FillRect', windowPtr, color_bgr);
-
 % Draw probability boxes
 topBoxDims = [screenCenter - halfBoxWidth, Y1, ...
   screenCenter + halfBoxWidth, Y2] + offCenterRect;
