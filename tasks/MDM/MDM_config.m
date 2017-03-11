@@ -24,7 +24,7 @@ s.game.durations.ITIs = [4 * ones(1, 6), 5 * ones(1, 8), 6 * ones(1, 6)];
 s.game.name = 'MDM';
 s.game.preBlockFn = @preBlock;
 
-s.game.optionsPhaseFn = @MDM_drawTask;
+s.game.optionsPhaseFn = @phase_showChoice;
 s.game.referenceDrawFn = @MDM_drawRef;
 s.game.block.length = 21;
 

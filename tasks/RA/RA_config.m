@@ -16,7 +16,7 @@ s.game.name = 'MonetaryRA';
 s.game.block.name = 'Gains';
 s.game.block.length = 31; % Useful for generation purposes
 
-s.game.optionsPhaseFn = @RA_drawTask;
+s.game.optionsPhaseFn = @phase_showChoice;
 s.game.referenceDrawFn = @RA_drawRef;
 s.game.preBlockFn = @preBlock;
 
