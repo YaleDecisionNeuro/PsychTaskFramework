@@ -20,7 +20,7 @@ blockSettings.game.referenceDrawFn(blockSettings, trialData);
 % Show all drawn objects and retrieve the timestamp of display
 [~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
 trialData.choiceStartTime = datevec(now);
-% TODO: Save also to trialData.showChoiceStartTS
+trialData.showChoiceStartTS = phaseSettings.startTimestamp;
 
 %% Handle the display properties & book-keeping
 if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...

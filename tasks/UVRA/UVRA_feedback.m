@@ -39,6 +39,7 @@ Screen('FillRect', windowPtr, button2_color, button2);
 
 % Re-draw reference and note feedback length
 [~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+trialData.feedbackStartTS = phaseSettings.startTimestamp;
 trialData.feedbackStartTime = datevec(now);
 % TODO: Save also to trialData.feedbackStart / trialData.feedbackStartTS?
 

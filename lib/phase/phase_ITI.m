@@ -11,6 +11,8 @@ function [ trialData ] = phase_ITI(trialData, blockSettings, phaseSettings)
 windowPtr = blockSettings.device.windowPtr;
 drawITI(trialData, blockSettings);
 [~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+trialData.ITIStartTime = datevec(now);
+trialData.ITIStartTS = phaseSettings.startTimestamp;
 
 if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
     && isa(phaseSettings.action, 'function_handle')
@@ -24,8 +26,6 @@ end
 % as it implements the mission critical blockSettings.game.constantTrialDuration
 % switch.
 function trialData = timeIntertrial(trialData, blockSettings)
-trialData.ITIStartTime = datevec(now);
-
 % Do we need the entire trial to last a constant amount of time? If so:
 % (1) the `elapsedTime` initial reference point is `trialStartTime` rather than
 %     `.ITIStartTime`

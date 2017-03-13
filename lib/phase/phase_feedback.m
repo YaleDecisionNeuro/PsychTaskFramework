@@ -7,8 +7,8 @@ function [ trialData ] = phase_feedback(trialData, blockSettings, phaseSettings)
 windowPtr = blockSettings.device.windowPtr;
 drawFeedback(trialData, blockSettings);
 [~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+trialData.feedbackStartTS = phaseSettings.startTimestamp;
 trialData.feedbackStartTime = datevec(now);
-% TODO: Save also to trialData.feedbackStart / trialData.feedbackStartTS?
 
 %% Handle the display properties & book-keeping
 if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...

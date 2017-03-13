@@ -11,7 +11,8 @@ drawResponsePrompt(trialData, blockSettings);
 
 %% Draw
 [~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
-trialData.respStartTime = datevec(now);
+trialData.responseStartTime = datevec(now);
+trialData.responseStartTS = phaseSettings.startTimestamp;
 
 %% Handle housekeeping
 if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
@@ -23,10 +24,6 @@ end
 end
 
 function trialData = timeAndRecordResponse(trialData, blockSettings)
-  % TODO: If s.game.durations.response == 0, there shouldn't be a while condition
-  % TODO: Abstract into `waitForBackTick`-like function
-  % TODO: `elapsedTime` - better name?
-
   [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
     waitForKey({'1!', '2@'}, blockSettings.game.durations.response);
 

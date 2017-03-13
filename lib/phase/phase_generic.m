@@ -19,9 +19,11 @@ for k = 1 : numDrawCmds
 end
 
 % Show all drawn objects and retrieve display timestamp
-timestampName = sprintf('%sStart', phaseSettings.name);
-[~, ~, trialData.(timestampName), ~, ~] = Screen('flip', windowPtr);
-phaseSettings.startTimestamp = trialData.(timestampName);
+[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+
+% Copy to trialData
+timestampName = sprintf('%sStartTS', phaseSettings.name);
+trialData.(timestampName) = phaseSettings.startTimestamp;
 
 % Execute phase action(s)
 if isa(phaseSettings.action, 'function_handle')
