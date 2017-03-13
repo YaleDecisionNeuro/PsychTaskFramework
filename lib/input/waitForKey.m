@@ -1,13 +1,18 @@
-function [keyIsDown, duration, keyCode, deltaSecs] = waitForKey(keyName, until)
+function [keyIsDown, responseTime, keyCode, deltaSecs] = waitForKey(keyName, seconds)
 % WaitForKey Wait until the key supplied by `keyName` is pressed
-%   (or, optionally, until `until` seconds elapse).
+%   (or, optionally, until `seconds` seconds elapse).
+%
+% NOTE: If you require precision, bear in mind that some time elapsed between
+% drawing your phase and calling this function. To that end, you should supply
+% `phaseSettings.duration - (GetSecs() - phaseStartTS)` rather than the mere
+% `phaseSettings.duration` as the `seconds` argument.
 %
 % FIXME: Use KbQueueCheck instead of KbCheck, as per Harvard CBS FAQ
 % FIXME: Return the pressed key(s) instead of keyCode
 
-% Don't stop waiting if until is not set
-if ~exist('until', 'var')
-    until = Inf;
+% Don't stop waiting if seconds is not set
+if ~exist('seconds', 'var')
+    seconds = Inf;
 end
 
 % To avoid logic duplication, convert any argument into cell array
@@ -24,13 +29,13 @@ end
 
 % FIXME: Use `RestrictKeysForKbCheck`?
 initialTime = GetSecs();
-secs = initialTime;
-while secs - initialTime < until
+KbCheckTimestamp = initialTime;
+while KbCheckTimestamp - initialTime < seconds
     WaitSecs(0.01);
-    [keyIsDown, secs, keyCode, deltaSecs] = KbCheck;
+    [keyIsDown, KbCheckTimestamp, keyCode, deltaSecs] = KbCheck;
     if keyIsDown && any(keyCode(breakKey)) == 1
         break
     end
 end
-duration = secs - initialTime;
+responseTime = KbCheckTimestamp - initialTime;
 end
