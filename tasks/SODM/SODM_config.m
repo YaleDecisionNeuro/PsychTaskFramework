@@ -23,6 +23,7 @@ s.game.constantTrialDuration = false; % Early choice won't add to ITI
 
 %% Block properties
 s.game.name = 'SODM';
+s.game.trialFn = @runRATrial; % RA-specific trial function
 s.game.responsePhaseFn = NaN;
 s.game.preBlockFn = @preBlock;
 s.game.optionsPhaseFn = @SODM_showChoice;

@@ -1,6 +1,6 @@
-function trialData = runPhases(trialData, blockSettings)
-% RUNPHASES Fully generalized workhorse function to display any phases of an
-%   individual trial, as defined using PhaseConfig objects in
+function trialData = runGenericTrial(trialData, blockSettings)
+% RunGenericTrial Fully generalized workhorse function to display any phases of
+%   an individual trial, as defined using PhaseConfig objects in
 %   blockSettings.game.phases.
 
 % Record the properties of this trial to trialData

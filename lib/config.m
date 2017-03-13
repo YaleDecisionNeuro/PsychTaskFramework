@@ -165,19 +165,22 @@ s.game.levels.repeats = 1;
 % are invoked.
 %
 % If you wish to re-use the standard R&A task designs, you'll want to keep this
-% set to @runTrial (which you can find in lib/phase). If you wish to take
+% set to @runRATrial (which you can find in lib/). If you wish to take
 % advantage of the generic phase interface, use @runGeneralTrial.
 
-s.game.trialFn = @runTrial;
+s.game.trialFn = @runRATrial;
 
 % %% Phase scripts
-% If you're only changing an element of the task, but you're happy with the
+% NOTE: This section only applies if you're using @runRATrial as your trial
+% script. @runGenericTrial does not check these settings.
+%
+% If you're only changing some element of a phase, but you're happy with the
 % standard order of phases (i.e. choice display, response prompt, feedback,
 % intertrial), you can substitute a function here. It should take, and return,
 % the same arguments that the phase function in lib/phase does. (In general,
 % this is `sampleFn(trialData, blockSettings, phaseSettings)`.)
 %
-% By design, optionsPhaseFn is left blank. `runTrial` will complain if it is
+% By design, optionsPhaseFn is left blank. `runRATrial` will complain if it is
 % not set, or if any of the phase function handles below are unset. While you
 % might avoid setting it by writing your own trial script, it is recommended
 % that you still leverage these settings; it will make your task easier to

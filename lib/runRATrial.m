@@ -1,8 +1,9 @@
-function trialData = runTrial(trialData, blockSettings)
-% RUNTRIAL Generalized workhorse function to display all typical phases of an
-%   individual trial. In turn, it displays the task-specific choice options,
-%   response prompt, response input feedback, and the intertrial period. It
-%   displays them using function handles set in `blockSettings.game`.
+function trialData = runRATrial(trialData, blockSettings)
+% RunRATrial Workhorse function to display all typical phases of an
+%   risk-and-ambiguity trial. In turn, it displays the task-specific choice
+%   options, response prompt, response input feedback, and the intertrial
+%   period. It displays them using function handles set in
+%   `blockSettings.game`.
 
 % Record the properties of this trial to trialData
 trialData.trialStartTime = datevec(now);

@@ -23,7 +23,7 @@ s.game.constantTrialDuration = false; % Early choice won't add to ITI
 
 %% Block properties
 s.game.name = 'HLFF';
-s.game.trialFn = @runPhases;
+s.game.trialFn = @runGenericTrial;
 % See lib/phase/phaseConfig.m for meaning
 s.game.phases = { ...
   phaseConfig('showChoice', Inf, @phase_showChoice, @action_collectResponse), ...

@@ -31,7 +31,8 @@ function s = UVRA_config()
   s.game.durations.ITIs = 1;
   s.game.constantTrialDuration = false; % don't need to fit fMRI time blocks
 
-  % What phase and draw functions should runTrial use?
+  % What phase and draw functions should runRATrial use?
+  s.game.trialFn = @runRATrial; % RA-specific trial function
   s.game.preBlockFn = @preBlock;
   s.game.optionsPhaseFn = @UVRA_showChoice;
   s.game.referenceDrawFn = @drawRef;

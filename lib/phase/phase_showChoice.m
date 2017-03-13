@@ -37,7 +37,7 @@ end
 % Deprecated: remains for backwards compatibility
 function trialData = timeChoice(trialData, blockSettings)
   % Extract to local variables now because struct field access costs time
-  trialStart = trialData.trialStartTime; % FIXME: Relies on runTrial to set it
+  trialStart = trialData.choiceStartTime;
   trialDur = blockSettings.game.durations.choice;
 
   elapsedTime = etime(datevec(now), trialStart);
