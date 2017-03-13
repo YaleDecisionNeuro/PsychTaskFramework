@@ -24,7 +24,7 @@ s.game.constantTrialDuration = false; % Early choice won't add to ITI
 %% Block properties
 s.game.name = 'SODM';
 s.game.responsePhaseFn = NaN;
-s.game.preBlockFn = @SODM_preBlock;
+s.game.preBlockFn = @preBlock;
 s.game.bgrDrawFn = @SODM_drawBgr;
 s.game.optionsPhaseFn = @SODM_drawTask;
 s.game.referenceDrawFn = @drawRef;
