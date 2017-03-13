@@ -27,7 +27,7 @@ s.debug = true; % Turn off when your task script is ready
 %% Machine settings
 % This is where you set properties important for PsychToolBox to function
 % properly. Consult PTB manual if these are unclear.
-s.device.KbName = 'KeyNamesWindows';
+s.device.KbName = 'UnifyKeyNames';
 s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Must get filled in with Screen('Open')
