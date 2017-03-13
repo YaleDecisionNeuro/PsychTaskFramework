@@ -1,5 +1,5 @@
-function [ trialData ] = UVRA_drawTask(trialData, blockSettings, callback)
-% UVRA_DRAWTASK Executes the monetary R&A trial stage of showing the task choice
+function [ trialData ] = UVRA_showChoice(trialData, blockSettings, phaseSettings)
+% UVRA_SHOWCHOICE Executes the monetary R&A trial stage of showing the task choice
 %   to the participant. Choice values are derived from `trialData` and,
 %   if need be, `blockSettings`. They are displayed vertically and expect a
 %   participant response.
@@ -23,16 +23,19 @@ drawLotto(trialData, blockSettings);
 % Draw the reference value
 blockSettings.game.referenceDrawFn(blockSettings, trialData);
 
-% Show all drawn objects
-Screen('flip', windowPtr);
+% Show all drawn objects and retrieve the timestamp of display
+[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+trialData.choiceStartTime = datevec(now);
+% TODO: Save also to trialData.showChoiceStartTS
 
 %% Handle the display properties & book-keeping
-trialData.choiceStartTime = datevec(now);
-trialData = timeAndRecordTask(trialData, blockSettings);
-
-% Allow the execution of a callback if passed
-if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, blockSettings);
+if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
+    && isa(phaseSettings.action, 'function_handle')
+  % Allow the execution of a actionFnHandle if passed
+  trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
+else
+  % Deprecated: Display choice for blockSettings.game.durations.choice
+  trialData = timeAndRecordTask(trialData, blockSettings);
 end
 end
 

@@ -1,8 +1,13 @@
-function [ trialData ] = UVRA_drawFeedback(trialData, blockSettings, callback)
-% UVRA_DRAWFEEDBACK Based on the value in `trialData.choice`, it draws the feedback
+function [ trialData ] = UVRA_feedback(trialData, blockSettings, callback)
+% UVRA_FEEDBACK Based on the value in `trialData.choice`, it draws the feedback
 %   that confirms to the player which option they chose (or whether they chose
 %   at all) and displays it for `blockSettings.game.durations.feedback`. Can be
 %   re-used for tasks that offer two options in a choice.
+%
+% UVRA_feedback differs from phase_feedback by drawing the feedback vertically.
+%
+% TODO: Modularize drawFeedback so that it can draw things vertically in order
+%   to render this function unnecessary
 
 W = blockSettings.device.windowWidth; % width
 H = blockSettings.device.windowHeight; % height
@@ -33,13 +38,18 @@ Screen('FillRect', windowPtr, button1_color, button1);
 Screen('FillRect', windowPtr, button2_color, button2);
 
 % Re-draw reference and note feedback length
-Screen('flip', windowPtr); % NOTE: This makes no sense. Why are we using it if we're not taking our time measurements from it?
-
+[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
 trialData.feedbackStartTime = datevec(now);
-trialData = timeFeedback(trialData, blockSettings);
+% TODO: Save also to trialData.feedbackStart / trialData.feedbackStartTS?
 
-if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, blockSettings);
+%% Handle the display properties & book-keeping
+if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
+    && isa(phaseSettings.action, 'function_handle')
+  % Allow the execution of a actionFnHandle if passed
+  trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
+else
+  % Deprecated: Display feedback for blockSettings.game.durations.feedback
+  trialData = timeFeedback(trialData, blockSettings);
 end
 end
 

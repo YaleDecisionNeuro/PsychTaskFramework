@@ -1,26 +1,24 @@
-function [ trialData ] = handleResponse(trialData, blockSettings, callback)
-% HANDLERESPONSE The draw script that handles the display of the response
-%   prompt and the eventual response or non-response. Takes standard draw
+function [ trialData ] = phase_response(trialData, blockSettings, phaseSettings)
+% PHASE_RESPONSE The response script that handles the display of the response
+%   prompt and the eventual response or non-response. Takes standard phase
 %   script arguments.
 
 %% Helper values
-W = blockSettings.device.windowWidth; % width
-H = blockSettings.device.windowHeight; % height
-center = [W / 2, H / 2];
 windowPtr = blockSettings.device.windowPtr;
 
 %% Response prompt
-Screen('FillOval', windowPtr, blockSettings.objects.prompt.color, ...
-  centerRectDims(center, blockSettings.objects.prompt.dims));
+drawResponsePrompt(trialData, blockSettings);
 
-% Note when the prompt appeared
-Screen('flip', windowPtr);
+%% Draw
+[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
 trialData.respStartTime = datevec(now);
 
-%% Wrap up
-trialData = timeAndRecordResponse(trialData, blockSettings);
-if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, blockSettings);
+%% Handle housekeeping
+if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
+    && isa(phaseSettings.action, 'function_handle')
+  trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
+else
+  trialData = timeAndRecordResponse(trialData, blockSettings);
 end
 end
 

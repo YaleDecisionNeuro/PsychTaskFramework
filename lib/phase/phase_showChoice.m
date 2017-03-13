@@ -18,21 +18,24 @@ drawLotto(trialData, blockSettings);
 blockSettings.game.referenceDrawFn(blockSettings, trialData);
 
 % Show all drawn objects and retrieve the timestamp of display
-[~, ~, trialData.choiceDisplayTimestamp, ~, ~] = Screen('flip', windowPtr);
+[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+trialData.choiceStartTime = datevec(now);
+% TODO: Save also to trialData.showChoiceStartTS
 
-
-% Allow the execution of a actionFnHandle if passed
+%% Handle the display properties & book-keeping
 if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
     && isa(phaseSettings.action, 'function_handle')
+  % Allow the execution of a actionFnHandle if passed
   trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
 else
-  %% Handle the display properties & book-keeping
-  trialData = timeAndRecordTask(trialData, blockSettings);
+  % Deprecated: Display choice for blockSettings.game.durations.choice
+  trialData = timeChoice(trialData, blockSettings);
 end
 end
 
-% Local function with timing responsibility
-function trialData = timeAndRecordTask(trialData, blockSettings)
+% Old behavior -- let the function automagically find the duration to have
+% Deprecated: remains for backwards compatibility
+function trialData = timeChoice(trialData, blockSettings)
   % Extract to local variables now because struct field access costs time
   trialStart = trialData.trialStartTime; % FIXME: Relies on runTrial to set it
   trialDur = blockSettings.game.durations.choice;

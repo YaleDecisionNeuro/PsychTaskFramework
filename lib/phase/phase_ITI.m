@@ -1,16 +1,15 @@
 function [ trialData ] = phase_ITI(trialData, blockSettings, phaseSettings)
 % PHASE_ITI Displays the inactivity symbol in between trials. Its duration
 %   is based on the value in `trialData.ITIs`.
+%
+% TODO: Modular phase has no smart way of determining what the duration should
+%   be if it is constant. It relies on a blockSettings.game.durations field
+%   enumeration. Possible solution: trialData.trialMaxDuration, which checks for
+%   blockSettings.game.constantTrialDuration to see what duration to do.
+%   (Alternative: if isnan(phaseSettings.duration), need to compute it.)
 
-% TODO: Extract drawIntertrial
-
-W = blockSettings.device.windowWidth; % width
-H = blockSettings.device.windowHeight; % height
 windowPtr = blockSettings.device.windowPtr;
-
-center = [W / 2, H / 2];
-Screen('FillOval', windowPtr, blockSettings.objects.intertrial.color, ...
-  centerRectDims(center, blockSettings.objects.intertrial.dims));
+drawITI(trialData, blockSettings);
 [~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
 
 if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
@@ -21,7 +20,9 @@ else
 end
 end
 
-% Local function with timing responsibility
+% Unlike other in-phase timing function, timeIntertrial is not yet deprecated,
+% as it implements the mission critical blockSettings.game.constantTrialDuration
+% switch.
 function trialData = timeIntertrial(trialData, blockSettings)
 trialData.ITIStartTime = datevec(now);
 

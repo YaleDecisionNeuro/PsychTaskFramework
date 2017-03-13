@@ -33,7 +33,7 @@ function s = UVRA_config()
 
   % What phase and draw functions should runTrial use?
   s.game.preBlockFn = @preBlock;
-  s.game.optionsPhaseFn = @UVRA_drawTask;
+  s.game.optionsPhaseFn = @UVRA_showChoice;
   s.game.referenceDrawFn = @drawRef;
   s.game.responsePhaseFn = NaN;
   s.game.feedbackPhaseFn = @UVRA_feedback;

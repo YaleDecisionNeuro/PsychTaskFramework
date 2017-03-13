@@ -1,7 +1,7 @@
-function [ trialData ] = SODM_drawTask(trialData, blockSettings, callback)
-% SODM_DRAWTASK Executes the SODM trial stage of showing the task choice to
-%   the participant. Choice values are derived from `trialData` and,
-%   if need be, `blockSettings`.
+function [ trialData ] = SODM_showChoice(trialData, blockSettings, phaseSettings)
+% SODM_SHOWCHOICE Executes the SODM trial phase of showing the task choice to
+%   the participant and collecting their response. Choice values are derived
+%   from `trialData` and, if need be, `blockSettings`.
 
 windowPtr = blockSettings.device.windowPtr;
 
@@ -17,17 +17,22 @@ drawLotto(trialData, blockSettings);
 % Draw the reference value
 blockSettings.game.referenceDrawFn(blockSettings, trialData);
 
-% Show all drawn objects
-Screen('flip', windowPtr);
+% Show all drawn objects and retrieve the timestamp of display
+[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+trialData.choiceStartTime = datevec(now);
+% TODO: Save also to trialData.showChoiceStartTS
 
 %% Handle the display properties & book-keeping
-trialData.choiceStartTime = datevec(now);
-trialData = timeAndRecordTask(trialData, blockSettings);
-
-% Allow the execution of a callback if passed
-if exist('callback', 'var') && isa(callback, 'function_handle')
-  trialData = callback(trialData, blockSettings);
+if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
+    && isa(phaseSettings.action, 'function_handle')
+  % Allow the execution of a actionFnHandle if passed
+  trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
+else
+  % Try to obtain response while the task is ongoing
+  trialData = timeAndRecordTask(trialData, blockSettings);
 end
+end
+
 end
 
 % Local function with timing responsibility

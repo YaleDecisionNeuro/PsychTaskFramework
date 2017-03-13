@@ -1,7 +1,7 @@
 function [probOrder, amtOrder] = orderLotto(trialData)
 % ORDERLOTTO Given the win color for the trial, it returns two sorted matrices
 %   with the probability (and, respectively, payoff) values sorted such that
-%   the first will appear on top and the second on the bottom of the drawTask
+%   the first will appear on top and the second on the bottom of the drawLotto
 %   display.
 
   winProb = trialData.probs;
