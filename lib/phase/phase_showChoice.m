@@ -1,7 +1,7 @@
-function [ trialData ] = phase_showChoice(trialData, blockSettings, actionFnHandle)
-% MDM_DRAWTASK Executes the MDM trial stage of showing the task choice to
-%   the participant. Choice values are derived from `trialData` and,
-%   if need be, `blockSettings`.
+function [ trialData ] = phase_showChoice(trialData, blockSettings, phaseSettings)
+% PHASE_SHOWCHOICE Shows the choices defined in trialData and blockData to the
+%   participant. This includes a lottery and a reference. If available, executes
+%   action defined in phaseSettings.action; otherwise, waits for duration.
 
 windowPtr = blockSettings.device.windowPtr;
 
@@ -20,12 +20,14 @@ blockSettings.game.referenceDrawFn(blockSettings, trialData);
 % Show all drawn objects and retrieve the timestamp of display
 [~, ~, trialData.choiceDisplayTimestamp, ~, ~] = Screen('flip', windowPtr);
 
-%% Handle the display properties & book-keeping
-trialData = timeAndRecordTask(trialData, blockSettings);
 
 % Allow the execution of a actionFnHandle if passed
-if exist('actionFnHandle', 'var') && isa(actionFnHandle, 'function_handle')
-  trialData = actionFnHandle(trialData, blockSettings);
+if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
+    && isa(phaseSettings.action, 'function_handle')
+  trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
+else
+  %% Handle the display properties & book-keeping
+  trialData = timeAndRecordTask(trialData, blockSettings);
 end
 end
 

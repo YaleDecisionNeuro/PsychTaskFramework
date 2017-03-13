@@ -1,4 +1,4 @@
-function [ trialData ] = action_collectResponse(trialData, phaseSettings, blockSettings)
+function [ trialData ] = action_collectResponse(trialData, blockSettings, phaseSettings)
 % For duration specified in phaseSettings.duration, wait for a keypress specified
 %   in phaseSettings.responseKeys
 % TODO: Establish phaseSettings?
