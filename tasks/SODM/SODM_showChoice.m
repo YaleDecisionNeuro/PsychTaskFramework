@@ -33,8 +33,6 @@ else
 end
 end
 
-end
-
 % Local function with timing responsibility
 function trialData = timeAndRecordTask(trialData, blockSettings)
   %% Record choice & assign feedback color
