@@ -10,13 +10,13 @@ trialData.trialStartTime = datevec(now);
 
 % Create convenience variables
 s = blockSettings.game;
-optionsPhase = s.optionsPhaseFn;
+showChoicePhase = s.showChoicePhaseFn;
 responsePhase = s.responsePhaseFn;
 feedbackPhase = s.feedbackPhaseFn;
 intertrialPhase = s.intertrialPhaseFn;
 
 % 1. Display the choice for the trial
-trialData = optionsPhase(trialData, blockSettings);
+trialData = showChoicePhase(trialData, blockSettings);
 
 % 2. If defined, display the response-collecting phase
 if isa(responsePhase, 'function_handle')

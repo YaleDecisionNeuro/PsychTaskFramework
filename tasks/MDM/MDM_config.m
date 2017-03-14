@@ -15,7 +15,7 @@ s.device.imgPath = [s.device.taskPath filesep 'img'];
 %% Non-display settings for the game
 % (Maximum) durations of the various stages, in seconds
 s.game.constantTrialDuration = true;
-s.game.durations.choice = 6;
+s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = [4 * ones(1, 6), 5 * ones(1, 8), 6 * ones(1, 6)];
@@ -25,7 +25,7 @@ s.game.name = 'MDM';
 s.game.preBlockFn = @preBlock;
 
 s.game.trialFn = @runRATrial; % RA-specific trial function
-s.game.optionsPhaseFn = @phase_showChoice;
+s.game.showChoicePhaseFn = @phase_showChoice;
 s.game.referenceDrawFn = @drawRef;
 s.game.block.length = 21;
 

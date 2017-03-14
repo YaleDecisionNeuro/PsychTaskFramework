@@ -27,17 +27,17 @@ function s = UVRA_config()
   s.game.levels.repeats = 4;
 
   % Set durations of choice & intertrial period
-  s.game.durations.choice = Inf;
+  s.game.durations.showChoice = Inf;
   s.game.durations.ITIs = 1;
   s.game.constantTrialDuration = false; % don't need to fit fMRI time blocks
 
   % What phase and draw functions should runRATrial use?
   s.game.trialFn = @runRATrial; % RA-specific trial function
   s.game.preBlockFn = @preBlock;
-  s.game.optionsPhaseFn = @UVRA_showChoice;
-  s.game.referenceDrawFn = @drawRef;
+  s.game.showChoicePhaseFn = @UVRA_showChoice;
   s.game.responsePhaseFn = NaN;
   s.game.feedbackPhaseFn = @UVRA_feedback;
+  s.game.referenceDrawFn = @drawRef;
 
   % Graphical adjustments
   s.objects.lottery.offCenterByPx = [0 200]; % refSide switches this around

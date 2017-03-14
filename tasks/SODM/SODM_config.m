@@ -14,7 +14,7 @@ s.device.imgPath = [s.device.taskPath filesep 'img'];
 
 %% Non-display settings for the game
 % (Maximum) durations of the various stages, in seconds
-s.game.durations.choice = 10;
+s.game.durations.showChoice = 10;
 s.game.durations.response = 0;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = 2;
@@ -26,7 +26,7 @@ s.game.name = 'SODM';
 s.game.trialFn = @runRATrial; % RA-specific trial function
 s.game.responsePhaseFn = NaN;
 s.game.preBlockFn = @preBlock;
-s.game.optionsPhaseFn = @SODM_showChoice;
+s.game.showChoicePhaseFn = @SODM_showChoice;
 s.game.referenceDrawFn = @drawRef;
 s.game.bgrDrawFn = @SODM_drawBgr;
 % FIXME: Is drawBgr the best way of showing the context? Why not SODM_showChoice?

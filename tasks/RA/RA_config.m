@@ -17,7 +17,7 @@ s.game.block.name = 'Gains';
 s.game.block.length = 31; % Useful for generation purposes
 
 s.game.trialFn = @runRATrial; % RA-specific trial function
-s.game.optionsPhaseFn = @phase_showChoice;
+s.game.showChoicePhaseFn = @phase_showChoice;
 s.game.referenceDrawFn = @drawRef;
 s.game.preBlockFn = @preBlock;
 

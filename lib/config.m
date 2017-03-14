@@ -98,7 +98,7 @@ s.objects.intertrial.dims = [40 40];
 
 % (Maximum) durations of the various stages
 s.game.constantTrialDuration = false;
-s.game.durations.choice = 6;
+s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
@@ -180,7 +180,7 @@ s.game.trialFn = @runRATrial;
 % the same arguments that the phase function in lib/phase does. (In general,
 % this is `sampleFn(trialData, blockSettings, phaseSettings)`.)
 %
-% By design, optionsPhaseFn is left blank. `runRATrial` will complain if it is
+% By design, showChoicePhaseFn is left blank. `runRATrial` will complain if it is
 % not set, or if any of the phase function handles below are unset. While you
 % might avoid setting it by writing your own trial script, it is recommended
 % that you still leverage these settings; it will make your task easier to
@@ -190,7 +190,7 @@ s.game.trialFn = @runRATrial;
 % showChoice function collects responses during the display, it can be set to
 % NaN.
 
-s.game.optionsPhaseFn = NaN;
+s.game.showChoicePhaseFn = NaN;
 s.game.responsePhaseFn = @phase_response;
 s.game.feedbackPhaseFn = @phase_feedback;
 s.game.intertrialPhaseFn = @phase_ITI;
