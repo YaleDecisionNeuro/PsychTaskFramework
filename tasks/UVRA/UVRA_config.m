@@ -2,6 +2,8 @@ function s = UVRA_config()
   s = config(); % Get defaults from lib/config
 
   s.device.taskPath = fullfile('tasks', 'UVRA');
+  s.device.breakKeys = {'Space', '5%'};
+  s.device.choiceKeys = {'UpArrow', 'DownArrow'};
   % See lib/config for other things that s.device can contain
 
   % Meta
@@ -29,10 +31,16 @@ function s = UVRA_config()
   s.game.durations.ITIs = 1;
   s.game.constantTrialDuration = false; % don't need to fit fMRI time blocks
 
-  % What phase and draw functions should runTrial use?
+  % What phase and draw functions should runRATrial use?
+  s.game.trialFn = @runRATrial; % RA-specific trial function
   s.game.preBlockFn = @preBlock;
-  s.game.optionsPhaseFn = @UVRA_drawTask;
-  s.game.referenceDrawFn = @UVRA_drawRef;
+  s.game.optionsPhaseFn = @UVRA_showChoice;
+  s.game.referenceDrawFn = @drawRef;
   s.game.responsePhaseFn = NaN;
   s.game.feedbackPhaseFn = @UVRA_feedback;
+
+  % Graphical adjustments
+  s.objects.lottery.offCenterByPx = [0 200]; % refSide switches this around
+  s.objects.lottery.verticalLayout = true;
+  % s.objects.reference.offCenterByPx = [0 -200];
 end

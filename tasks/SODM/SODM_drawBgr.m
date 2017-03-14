@@ -4,6 +4,8 @@ function SODM_drawBgr(blockSettings)
 
 drawBgr(blockSettings);
 
+% FIXME: Extract position into settings
+% TODO: Extract this code into a callback function for drawBgr?
 xCoord = 100;
 yCoord = 100;
 DrawFormattedText(blockSettings.device.windowPtr, ...

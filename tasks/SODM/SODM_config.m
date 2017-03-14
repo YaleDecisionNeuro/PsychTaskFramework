@@ -23,13 +23,13 @@ s.game.constantTrialDuration = false; % Early choice won't add to ITI
 
 %% Block properties
 s.game.name = 'SODM';
+s.game.trialFn = @runRATrial; % RA-specific trial function
 s.game.responsePhaseFn = NaN;
-s.game.preBlockFn = @SODM_preBlock;
+s.game.preBlockFn = @preBlock;
+s.game.optionsPhaseFn = @SODM_showChoice;
+s.game.referenceDrawFn = @drawRef;
 s.game.bgrDrawFn = @SODM_drawBgr;
-s.game.optionsPhaseFn = @SODM_drawTask;
-s.game.referenceDrawFn = @MDM_drawRef;
-s.game.bgrDrawFn = @SODM_drawBgr;
-% FIXME: Is this the best way of showing the context? Why not SODM_drawTask?
+% FIXME: Is drawBgr the best way of showing the context? Why not SODM_showChoice?
 
 % Useful for generation purposes
 s.game.block.length = 19;

@@ -27,12 +27,15 @@ s.debug = true; % Turn off when your task script is ready
 %% Machine settings
 % This is where you set properties important for PsychToolBox to function
 % properly. Consult PTB manual if these are unclear.
-s.device.KbName = 'KeyNamesWindows';
+s.device.KbName = 'UnifyKeyNames';
 s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Must get filled in with Screen('Open')
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
 s.device.saveAfterBlock = true; % Should runBlock automatically save?
+
+s.device.breakKeys = {'5%'};
+s.device.choiceKeys = {'1!', '2@'};
 
 %% Graphics defaults
 % To prevent yourself from having to change many settings in many places, use
@@ -42,6 +45,7 @@ s.default.fontName = 'Arial';
 s.default.fontColor = [255 255 255];
 s.default.fontSize = 42;
 s.default.bgrColor = [0 0 0];
+s.default.padding = 10; % px to leave between objects
 
 %% Features of objects that your task displays
 % This is the Wild West portion of property settings. s.(object) should contain
@@ -62,6 +66,7 @@ s.objects.reference.fontColor = s.default.fontColor;
 s.objects.lottery.figure.dims = [150 300];
 s.objects.lottery.figure.colors.prob = [255 0 0; 0 0 255];
 s.objects.lottery.figure.colors.ambig = [127 127 127];
+s.objects.lottery.occluderWidth = 170;
 
 % FIXME: Deprecate in favor of getTextDims
 s.objects.lottery.stakes.misc.Digit1 = [64 64];
@@ -137,57 +142,65 @@ s.game.levels.reference = 5;
 s.game.levels.colors = [1 2];
 s.game.levels.repeats = 1;
 
-%% Paint functions
+%% Execution functions
 % To re-use the infrastructure this framework provides, you can supply only the
 % change that you need for your own task. You can do this by providing a
 % "function handle" - a reference to a function you wrote preceded by the @
-% sign. (For the monetary decision-making task, this would be @RA_drawTask. You
-% can learn more about function handles at
-% https://www.mathworks.com/help/matlab/matlab_prog/creating-a-function-handle.html.)
+% sign. (For instance, as of 13 Mar 2017, the self/other decision-making task
+% draws backgrounds using @SODM_drawBgr and displays choices using
+% @SODM_showChoice.)
 %
 % IMPORTANT: These are *crucial* items to set, as they define what components
 % your task will be using.
 %
 % NOTE: It is important to ensure that whatever trial script you'll be using
 % will be on the MATLAB path, i.e. added with `addpath(script_location)`.
+%
+% You can learn more about function handles at
+% https://www.mathworks.com/help/matlab/matlab_prog/creating-a-function-handle.html.)
 
-% %% Trial scripts: trialFn
+% %% Trial script: trialFn
 % trialFn defines what trial script each `runBlock` should use to conduct the
 % trials. The trial script is responsible for the order in which task phases
 % are invoked.
 %
 % If you wish to re-use the standard R&A task designs, you'll want to keep this
-% set to @runTrial (which you can find in lib/phase).
+% set to @runRATrial (which you can find in lib/). If you wish to take
+% advantage of the generic phase interface, use @runGeneralTrial.
 
-s.game.trialFn = @runTrial;
+s.game.trialFn = @runRATrial;
 
 % %% Phase scripts
-% If you're only changing an element of the task, but you're happy with the
+% NOTE: This section only applies if you're using @runRATrial as your trial
+% script. @runGenericTrial does not check these settings.
+%
+% If you're only changing some element of a phase, but you're happy with the
 % standard order of phases (i.e. choice display, response prompt, feedback,
 % intertrial), you can substitute a function here. It should take, and return,
 % the same arguments that the phase function in lib/phase does. (In general,
-% this is `sampleFn(trialData, trialSettings, blockSettings, callback)`.)
+% this is `sampleFn(trialData, blockSettings, phaseSettings)`.)
 %
-% By design, optionsPhaseFn is left blank. `runTrial` will complain if it is
+% By design, optionsPhaseFn is left blank. `runRATrial` will complain if it is
 % not set, or if any of the phase function handles below are unset. While you
 % might avoid setting it by writing your own trial script, it is recommended
 % that you still leverage these settings; it will make your task easier to
 % maintain and understand for your collaborators.
 %
-% (You might be able to re-use the functions written specifically for monetary
-% or medical choices, which you can find in tasks/[folder].)
+% By design, s.game.responsePhaseFn is set to @phase_response; however, if your
+% showChoice function collects responses during the display, it can be set to
+% NaN.
 
 s.game.optionsPhaseFn = NaN;
-s.game.responsePhaseFn = @handleResponse;
-s.game.feedbackPhaseFn = @drawFeedback;
-s.game.intertrialPhaseFn = @drawIntertrial;
+s.game.responsePhaseFn = @phase_response;
+s.game.feedbackPhaseFn = @phase_feedback;
+s.game.intertrialPhaseFn = @phase_ITI;
 
 % %% Reference draw script
 % Reference draw script defines how the "reference" (value alternative to the
 % gamble) will be drawn. It is specific to the kind of choices you present. Its
-% default arguments are drawRef(blockSettings, trialSettings).
+% default arguments are drawRef(blockSettings, trialData).
 
-s.game.referenceDrawFn = NaN;
+s.game.referenceDrawFn = @drawRef;
 
 % %% Background draw script
 % The default background draw script is called between the phases to set
@@ -196,9 +209,11 @@ s.game.referenceDrawFn = NaN;
 %
 % By convention, the background draw script only takes block settings and a
 % potential callback function as an argument, and does not access nor modify
-% collected data.
+% collected data. Optionally, you can specify the callback function in
+% s.game.bgrDrawCallbackFn(blockSettings).
 
 s.game.bgrDrawFn = @drawBgr;
+s.game.bgrDrawCallbackFn = NaN;
 
 %% Event functions
 % Functions that are automatically executed before and after every block these

@@ -1,7 +1,6 @@
 function [ Data, blockSettings ] = preBlock(Data, blockSettings)
-  % PREBLOCK Display "Block N: (Gains/Losses)" and wait for press of 5.
-  %
-  % TODO: Make it possible to explicitly set a block number.
+  % PREBLOCK Display "Block N: (BLOCKNAME)" and wait for press of any of
+  %   blockSettings.device.breakKeys.
 
   % Check if there are any recorded blocks yet
   if isfield(Data, 'blocks') && isfield(Data.blocks, 'numRecorded')
@@ -27,5 +26,5 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
   DrawFormattedText(windowPtr, block_text, ...
     'center', 'center', blockSettings.default.fontColor);
   Screen('flip', windowPtr); % NOTE: Necessary to display screen
-  waitForBackTick();
+  waitForKey(blockSettings.device.breakKeys);
 end

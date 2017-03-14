@@ -24,18 +24,17 @@ function Data = runBlock(Data, blockSettings)
   trials = blockSettings.game.trials;
   numTrials = size(trials, 1);
 
-  runTrial = blockSettings.game.trialFn;
-  if ~isa(runTrial, 'function_handle')
+  runTrialFn = blockSettings.game.trialFn;
+  if ~isa(runTrialFn, 'function_handle')
     error(['Function to draw trials not supplied! Make sure that you''ve set' ...
       ' settings.game.trialFn = @your_function_to_draw_trials']);
   end
 
   collectedData = [];
   for i = 1:numTrials
-    trialSettings = trials(i, :);
-    trialData = runTrial(trialSettings, blockSettings);
-    trialRecord = [trialSettings struct2table(trialData)];
-    collectedData = appendRow(trialRecord, ...
+    trialData = trials(i, :);
+    trialData = runTrialFn(trialData, blockSettings);
+    collectedData = appendRow(trialData, ...
       collectedData);
   end
 

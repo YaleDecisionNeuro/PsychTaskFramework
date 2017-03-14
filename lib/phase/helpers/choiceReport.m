@@ -1,6 +1,6 @@
-function report = choiceReport(trialData, trialSettings)
+function report = choiceReport(trialData)
 % CHOICEREPORT Prints to stdout what the choice in `trialData` was and what
-%   the properties in `trialSettings` were.
+%   the properties in `trialData` were.
 
   choice = trialData.choice;
   if choice == 0
@@ -9,7 +9,7 @@ function report = choiceReport(trialData, trialSettings)
     answer = sprintf('Answered %d ', choice);
   end
   context = sprintf(['with payoff %d, reference %d, probability %.2f, ' ...
-    'ambiguity %.2f'], trialSettings.stakes, trialSettings.reference, ...
-    trialSettings.probs, trialSettings.ambigs);
+    'ambiguity %.2f'], trialData.stakes, trialData.reference, ...
+    trialData.probs, trialData.ambigs);
   report = [answer context];
 end
