@@ -39,6 +39,9 @@ function s = UVRA_config()
   s.game.feedbackPhaseFn = @UVRA_feedback;
   s.game.referenceDrawFn = @drawRef;
 
+  s.game.showChoiceActionFn = @action_collectResponse;
+  s.game.feedbackActionFn = @action_display;
+
   % Graphical adjustments
   s.objects.lottery.offCenterByPx = [0 200]; % refSide switches this around
   s.objects.lottery.verticalLayout = true;

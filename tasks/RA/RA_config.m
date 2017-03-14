@@ -21,6 +21,10 @@ s.game.showChoicePhaseFn = @phase_showChoice;
 s.game.referenceDrawFn = @drawRef;
 s.game.preBlockFn = @preBlock;
 
+s.game.showChoiceActionFn = @action_display;
+s.game.responseActionFn = @action_collectResponse;
+s.game.feedbackActionFn = @action_display;
+
 %% Available trial values to be used for trial generation
 s.game.levels.stakes = [5, 6, 7, 8, 10, 12, 14, 16, 19, 23, 27, 31, 37, 44, 52, 61, 73, 86, 101, 120];
 s.game.levels.probs = [.25 .5 .75];

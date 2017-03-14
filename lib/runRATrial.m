@@ -16,24 +16,48 @@ feedbackPhase = s.feedbackPhaseFn;
 intertrialPhase = s.intertrialPhaseFn;
 
 % 1. Display the choice for the trial
-trialData = showChoicePhase(trialData, blockSettings);
+if isfield(s, 'showChoiceActionFn') && isFunction(s.showChoiceActionFn)
+  showChoiceConf = phaseConfig('showChoice', 'duration', s.durations.showChoice, ...
+    'phaseScript', showChoicePhase, 'action', s.showChoiceActionFn);
+  trialData = runPhase(trialData, blockSettings, showChoiceConf);
+else
+  trialData = showChoicePhase(trialData, blockSettings);
+end
 
 % 2. If defined, display the response-collecting phase
-if isa(responsePhase, 'function_handle')
-  trialData = responsePhase(trialData, blockSettings);
+if isFunction(responsePhase)
+  if isfield(s, 'responseActionFn') && isFunction(s.responseActionFn)
+    responseConf = phaseConfig('response', 'duration', s.durations.response, ...
+      'phaseScript', responsePhase, 'action', s.responseActionFn);
+    trialData = runPhase(trialData, blockSettings, responseConf);
+  else
+    trialData = responsePhase(trialData, blockSettings);
+  end
 end
 
 % Print choice to stdout
 disp(choiceReport(trialData));
 
 % 3. If defined, display the feedback phase
-if isa(feedbackPhase, 'function_handle')
-  trialData = feedbackPhase(trialData, blockSettings);
+if isFunction(feedbackPhase)
+  if isfield(s, 'feedbackActionFn') && isFunction(s.feedbackActionFn)
+    feedbackConf = phaseConfig('feedback', 'duration', s.durations.feedback, ...
+      'phaseScript', feedbackPhase, 'action', s.feedbackActionFn);
+    trialData = runPhase(trialData, blockSettings, feedbackConf);
+  else
+    trialData = feedbackPhase(trialData, blockSettings);
+  end
 end
 
 % 4. If defined, display the intertrial phase
-if isa(intertrialPhase, 'function_handle')
-  trialData = intertrialPhase(trialData, blockSettings);
+if isFunction(intertrialPhase)
+  if isfield(s, 'intertrialActionFn') && isFunction(s.intertrialActionFn)
+    intertrialConf = phaseConfig('intertrial', 'duration', s.durations.intertrial, ...
+      'phaseScript', intertrialPhase, 'action', s.intertrialActionFn);
+    trialData = runPhase(trialData, blockSettings, intertrialConf);
+  else
+    trialData = intertrialPhase(trialData, blockSettings);
+  end
 end
 
 trialData.trialEndTime = datevec(now);

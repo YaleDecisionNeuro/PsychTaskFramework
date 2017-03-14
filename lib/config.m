@@ -195,6 +195,12 @@ s.game.responsePhaseFn = @phase_response;
 s.game.feedbackPhaseFn = @phase_feedback;
 s.game.intertrialPhaseFn = @phase_ITI;
 
+% %% (Optional) phase action scripts
+s.game.showChoiceActionFn = NaN;
+s.game.responseActionFn = NaN;
+s.game.feedbackActionFn = NaN;
+s.game.intertrialActionFn = NaN;
+
 % %% Reference draw script
 % Reference draw script defines how the "reference" (value alternative to the
 % gamble) will be drawn. It is specific to the kind of choices you present. Its

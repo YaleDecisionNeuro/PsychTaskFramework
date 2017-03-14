@@ -29,6 +29,10 @@ s.game.showChoicePhaseFn = @phase_showChoice;
 s.game.referenceDrawFn = @drawRef;
 s.game.block.length = 21;
 
+s.game.showChoiceActionFn = @action_display;
+s.game.responseActionFn = @action_collectResponse;
+s.game.feedbackActionFn = @action_display;
+
 %% Available trial values - are shared across med & monetary tasks!
 s.game.levels.stakes = 2:5; % Levels are translated via lookup table
 s.game.levels.probs = [.25 .5 .75];
