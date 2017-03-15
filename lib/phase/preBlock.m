@@ -22,7 +22,10 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
   % Display
   % TODO: Factor out the "display text in the center of the screen" logic
   windowPtr = blockSettings.device.windowPtr;
-  drawBgr(blockSettings);
+  if isfield(blockSettings.game, 'bgrDrawFn') && ...
+      isa(blockSettings.game.bgrDrawFn, 'function_handle')
+    blockSettings.game.bgrDrawFn(blockSettings);
+  end
   DrawFormattedText(windowPtr, block_text, ...
     'center', 'center', blockSettings.default.fontColor);
   Screen('flip', windowPtr); % NOTE: Necessary to display screen
