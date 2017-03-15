@@ -11,6 +11,10 @@ function pickAndEvaluateTrial(DataObject, settings)
 % - What should be retrieved? Trial info, choice info, display info
 % - What should the function do? Draw the selection process.
 % - What should the function return? Selected trial row, kind of outcome, and level of outcome?
+%
+% This can be run as a post-block callback. To do this, include
+% `blockSettings.game.postBlockFn = @pickAndEvaluateTrial` in your
+% configuration file.
 
 %% 1. Pick a trial at random
 blockIdx = randi(DataObject.blocks.numRecorded);

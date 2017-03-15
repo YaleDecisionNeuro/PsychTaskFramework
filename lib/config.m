@@ -32,9 +32,17 @@ s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Must get filled in with Screen('Open')
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
-s.device.saveAfterBlock = true; % Should runBlock automatically save?
 
+% Should runBlock automatically save the user data file? If so, when?
+s.device.saveAfterBlock = true;
+
+%% Which keys should the tasks listen to?
+% `breakKeys` are what "press key to start" phases will wait for. The default
+%   is '5%', as that's what many fMRI scanners use to signal the start of
+%   recording.
 s.device.breakKeys = {'5%'};
+% `choiceKeys` are the keys that the subject is directed to use to signal their
+%   choice.
 s.device.choiceKeys = {'1!', '2@'};
 
 %% Graphics defaults
