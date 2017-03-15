@@ -35,6 +35,7 @@ s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboar
 
 % Should runBlock automatically save the user data file? If so, when?
 s.device.saveAfterBlock = true;
+s.device.saveAfterTrial = false; % FIXME: in task scripts, "practice" only unsets saveAfterBlock
 
 %% Which keys should the tasks listen to?
 % `breakKeys` are what "press key to start" phases will wait for. The default

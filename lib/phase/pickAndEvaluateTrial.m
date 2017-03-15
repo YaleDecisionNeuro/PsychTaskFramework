@@ -1,22 +1,13 @@
 function pickAndEvaluateTrial(DataObject, settings)
-% PickAndEvaluateTrial Picks a recorded trial at random and evaluates it.
-%
-% Three parts to this logic:
-% 0. Pick a trial at random
-% 1. Get the trial and calculate its outcome
-% 2. Display the outcome
-%
-% Both should be extracted into their own separate logic, at least in part.
-%
-% - What should be retrieved? Trial info, choice info, display info
-% - What should the function do? Draw the selection process.
-% - What should the function return? Selected trial row, kind of outcome, and level of outcome?
+% Picks a recorded trial at random, evaluates it, and displays the outcome.
 %
 % This can be run as a post-block callback. To do this, include
 % `blockSettings.game.postBlockFn = @pickAndEvaluateTrial` in your
 % configuration file.
+%
+% FIXME: This was written in a hurry, and should at some point be refactored.
 
-%% 1. Pick a trial at random
+%% 1. Pick an available trial at random
 blockIdx = randi(DataObject.blocks.numRecorded);
 block = DataObject.blocks.recorded{blockIdx};
 trialIdx = randi(height(block.records));
@@ -47,7 +38,7 @@ switch trial.choseLottery
   case 1
     % Determine message to display
     msg = 'You chose the gamble. Random draw got you a ';
-    msg = [msg settings.game.colorKey{outcomeColorIdx} ' marble.']
+    msg = [msg settings.game.colorKey{outcomeColorIdx} ' marble.'];
     %  (3. Re-paint lottery with true probability layout
 
     if trial.ambigs > 0
@@ -77,8 +68,7 @@ Screen(settings.device.windowPtr, 'Flip');
 disp(randDraw);
 
 % 7. Wait for keypress
-waitForKey({'5%', 'Space'});
-Screen('CloseAll'); % FIXME: Not necessarily - this doesn't have to be the last display of the game
+waitForKey(settings.device.breakKeys);
 end
 
 function [ outcomeKind, outcomeLevel, outcomeColorIdx, trueLotteryProb, randomDraw ] = evaluateTrial(trial)

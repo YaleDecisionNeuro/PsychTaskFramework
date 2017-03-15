@@ -20,8 +20,22 @@ if ~exist('blockId', 'var') || ~exist('trialId', 'var')
   error('You must provide blockId and trialId!');
 end
 
-block = Data.blocks.recorded{blockId};
-trial = block.records(trialId, :);
+% Get the trials (and warn if they are unavailable)
+totalBlocks = numel(Data.blocks.recorded);
+if blockId <= totalBlocks
+  block = Data.blocks.recorded{blockId};
+else
+  error('You selected block %d, but there are only %d blocks.', ...
+    blockId, totalBlocks);
+end
+
+totalTrials = height(block.records);
+if trialId <= totalTrials
+  trial = block.records(trialId, :);
+else
+  error('Cannot retrieve trial %d from block %d: only %d records available.', ...
+    trialId, blockId, totalTrials);
+end
 
 % Save info to a, p, c for easy comparison to bag lookup table
 a = trial.ambigs;

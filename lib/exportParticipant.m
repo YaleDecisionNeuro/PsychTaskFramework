@@ -12,8 +12,7 @@ if ~isfield(DataObject, 'blocks')
 end
 
 src = DataObject.blocks;
-if src.numRecorded == 0
-  % FIXME: This is not a sufficient test.
+if ~isfield(src, 'recorded') || numel(src.recorded) == 0
   warning('DataObject for %d contains no recorded blocks.', subjId);
   return;
 end

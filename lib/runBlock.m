@@ -14,6 +14,9 @@ function Data = runBlock(Data, blockSettings)
   % If `Data.filename` does not exist, it will not know how to save the trial
   % choices (and will issue a warning).
 
+  %% 0. Validate the DataObject
+  Data = prepForRecording(Data);
+
   %% 1. If settings say so, run pre-block callback (e.g. display title)
   if isfield(blockSettings.game, 'preBlockFn') && ...
      isa(blockSettings.game.preBlockFn, 'function_handle')
@@ -23,6 +26,7 @@ function Data = runBlock(Data, blockSettings)
   %% 2. Iterate through trials
   trials = blockSettings.game.trials;
   numTrials = size(trials, 1);
+  firstTrial = getFirstTrial(Data);
 
   runTrialFn = blockSettings.game.trialFn;
   if ~isa(runTrialFn, 'function_handle')
@@ -30,17 +34,18 @@ function Data = runBlock(Data, blockSettings)
       ' settings.game.trialFn = @your_function_to_draw_trials']);
   end
 
-  collectedData = [];
-  for i = 1:numTrials
-    trialData = trials(i, :);
+  for k = firstTrial : numTrials
+    trialData = trials(k, :);
     trialData = runTrialFn(trialData, blockSettings);
-    collectedData = appendRow(trialData, ...
-      collectedData);
+    Data = addTrial(Data, trialData, blockSettings);
+    if blockSettings.device.saveAfterTrial
+      saveData(Data);
+    end
   end
 
   %% 3. Save participant file after block
-  Data = addBlock(Data, collectedData, blockSettings);
-  if blockSettings.device.saveAfterBlock
+  Data = finishBlock(Data);
+  if blockSettings.device.saveAfterBlock || blockSettings.device.saveAfterTrial
     saveData(Data);
   end
 
@@ -62,22 +67,50 @@ function [ tbl ] = appendRow(row, tbl)
   end
 end
 
-function [ DataObject ] = addBlock(DataObject, blockData, blockSettings)
-% ADDBLOCK Appends `blockData` to the cell array `DataObject.recordedBlocks`.
-%   Stores records in `.records` and the settings used for the block in
-%   `.settings`.
+function [ DataObject ] = addTrial(DataObject, trialData, blockSettings)
+% Appends `trialData` to the latest incomplete block record in DataObject.
+%
+% Assumes that prepForRecording already ran on the DataObject.
 
-% Increment recorded count
-if ~isfield(DataObject.blocks, 'numRecorded')
-  DataObject.blocks.numRecorded = 0;
-end
-DataObject.blocks.numRecorded = DataObject.blocks.numRecorded + 1;
-n = DataObject.blocks.numRecorded;
+% Get the index of the current block being recorded
+% (numRecorded is *recorded thus far*, so it's always the one after that)
+currentBlockIdx = DataObject.blocks.numRecorded + 1;
 
-% Record the block
-if ~isfield(DataObject.blocks, 'recorded')
-  DataObject.blocks.recorded = cell(0);
+% If the block is new, set it up with current settings
+if numel(DataObject.blocks.recorded) < currentBlockIdx
+  DataObject.blocks.recorded{currentBlockIdx} = struct;
+  DataObject.blocks.recorded{currentBlockIdx}.settings = blockSettings;
+  DataObject.blocks.recorded{currentBlockIdx}.records  = [];
 end
-DataObject.blocks.recorded{n}.records = blockData;
-DataObject.blocks.recorded{n}.settings = blockSettings;
+
+% Add trialData to the DataObject
+DataObject.blocks.recorded{currentBlockIdx}.records = appendRow(trialData, ...
+  DataObject.blocks.recorded{currentBlockIdx}.records);
+end
+
+function [ DataObject ] = finishBlock(DataObject)
+% Mark that the block is finished and shouldn't be resumed.
+  DataObject.blocks.numRecorded = DataObject.blocks.numRecorded + 1;
+end
+
+function [ DataObject ] = prepForRecording(DataObject)
+% Ensure that DataObject has the fields it is expected to have.
+  if ~isfield(DataObject.blocks, 'numRecorded')
+    DataObject.blocks.numRecorded = 0;
+  end
+  if ~isfield(DataObject.blocks, 'recorded')
+    DataObject.blocks.recorded = cell(0);
+  end
+end
+
+function [ firstTrial ] = getFirstTrial(DataObject)
+% Determine the first trial to run if the block was previously interrupted
+numStartedBlocks = numel(DataObject.blocks.recorded);
+numFinishedBlocks = DataObject.blocks.numRecorded;
+
+if numStartedBlocks > numFinishedBlocks
+  firstTrial = height(DataObject.blocks.recorded{end}.records) + 1;
+else
+  firstTrial = 1;
+end
 end

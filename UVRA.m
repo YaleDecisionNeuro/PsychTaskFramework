@@ -38,9 +38,10 @@ if exist('observer', 'var') % Running actual trials -> record
       settings.perUser.refSide = 2;
   end
 else % Running practice
-  Data.observer = 1;
+  Data.observer = NaN;
   settings.perUser.refSide = randi(2);
   settings.device.saveAfterBlock = false;
+  settings.device.saveAfterTrial = false;
 end
 
 %% Generate trials/blocks - if they haven't been generated before
