@@ -1,7 +1,7 @@
 function [ exportTable ] = exportTaskData(taskName, fname)
 % Export Exports all participant data in tasks/`taskName`/data.
 
-dataFolder = sprintf(fullfile('tasks', '%s', 'data'), taskName);
+dataFolder = fullfile('tasks', taskName, 'data');
 dataFiles = dir(fullfile(dataFolder, '*.mat'));
 
 % 1. Load the DataObject from each file
