@@ -15,9 +15,9 @@ end
 windowPtr = blockSettings.device.windowPtr;
 HideCursor(windowPtr);
 
-Screen('FillRect', windowPtr, blockSettings.default.bgrColor);
-Screen('TextFont', windowPtr, blockSettings.default.fontName);
-Screen('TextSize', windowPtr, blockSettings.default.fontSize);
+Screen('FillRect', windowPtr, blockSettings.graphicDefault.bgrColor);
+Screen('TextFont', windowPtr, blockSettings.graphicDefault.fontName);
+Screen('TextSize', windowPtr, blockSettings.graphicDefault.fontSize);
 
 if isfield(blockSettings.game, 'bgrDrawCallbackFn') && ...
     isFunction(blockSettings.game.bgrDrawCallbackFn)

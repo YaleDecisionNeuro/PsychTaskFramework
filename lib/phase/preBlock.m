@@ -27,7 +27,7 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
     blockSettings.game.bgrDrawFn(blockSettings);
   end
   DrawFormattedText(windowPtr, block_text, ...
-    'center', 'center', blockSettings.default.fontColor);
+    'center', 'center', blockSettings.graphicDefault.fontColor);
   Screen('flip', windowPtr); % NOTE: Necessary to display screen
   waitForKey(blockSettings.device.breakKeys);
 end

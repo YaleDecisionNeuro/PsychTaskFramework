@@ -32,7 +32,7 @@ end
 if ~isfield(settings.device, 'screenId')
   settings.device.screenId = max(Screen('Screens'));
 end
-if ~isfield(settings.default, 'bgrColor')
+if ~isfield(settings.graphicDefault, 'bgrColor')
   settings.device.bgrColor = [0 0 0];
 end
 
@@ -41,11 +41,11 @@ if isfield(settings.device, 'screenDims') && ...
   % Only open a partial screen
   [settings.device.windowPtr, settings.device.screenDims] = ...
     Screen('OpenWindow', settings.device.screenId, ...
-    settings.default.bgrColor, settings.device.screenDims);
+    settings.graphicDefault.bgrColor, settings.device.screenDims);
 else
   [settings.device.windowPtr, settings.device.screenDims] = ...
     Screen('OpenWindow', settings.device.screenId, ...
-    settings.default.bgrColor);
+    settings.graphicDefault.bgrColor);
 end
 
 windowRect = settings.device.screenDims;
