@@ -33,8 +33,8 @@ end
 offCenterRect = repmat(offCenterByPx, [1 2]); % Useful for texture rect coords
 
 % Padding: how much space to leave between precise boundaries
-if isfield(blockSettings.default, 'padding')
-  padding = blockSettings.default.padding;
+if isfield(blockSettings.graphicDefault, 'padding')
+  padding = blockSettings.graphicDefault.padding;
 else
   padding = 10;
 end
@@ -43,7 +43,7 @@ end
 % NOTE: The order of colors remains the same: color(1, :) is on top
 colors = blockSettings.objects.lottery.figure.colors.prob;
 color_ambig = blockSettings.objects.lottery.figure.colors.ambig;
-color_bgr = blockSettings.default.bgrColor;
+color_bgr = blockSettings.graphicDefault.bgrColor;
 
 % Trial
 ambig = trialData.ambigs;

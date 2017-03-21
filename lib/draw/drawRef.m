@@ -52,7 +52,7 @@ end
 % 3. Draw text
 textPos = [refDims.x - textDims(1)/2, refDims.y - textDims(2)/2];
 DrawFormattedText(windowPtr, displayText, textPos(1), ...
-  textPos(2), blockSettings.default.fontColor);
+  textPos(2), blockSettings.graphicDefault.fontColor);
 end
 
 %% Helper function

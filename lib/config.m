@@ -1,28 +1,24 @@
 function s = config(changes)
-% CONFIG Return default settings *for the block*. If changes is provided
-%   as a `struct` with same field names, the values are overwritten. (NOTE: This
-%   is not implemented yet -- if you need to alter values for a block, you'll
-%   need to directly alter the struct that this function returns! If you need to
-%   do this regularly, consider splitting this off to a separate `config`-like
-%   function that either (a) calls `config`, alters the values, then returns
-%   them, or less preferable (b) is a copy of this file.)
+% Default documented settings for all tasks in a freely modifiable struct.
 %
-% The default err on the side of catering to LevyLab's R&A paradigm. If you're
-% not using it, nuke s.objects from high orbit.
+% Although `config` contains task-wide settings, it is typically modified with
+% block-specific settings right before being passed to `runBlock` or
+% equivalent.
 %
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %
-% TODO: Implement `changes` -- a recursive sweep through
+% The defaults used here err on the side of catering to LevyLab's R&A paradigm.
+% If you're not using it, nuke s.objects from high orbit.
+%
+% TODO: Implement `changes` to bring some order to post-return alterations.
 
 %%% Defaults
-% TODO: All the graphical settings should be a class enforcing fieldnames, etc.
-% TODO: (That way, they can actually inherit from default.)
-% (Or at least, create a skeleton of a struct to provide guidance.)
-
 %% Debugging
-% This will cause PsychDebugWindowConfiguration to be run unless overruled in
-% a downstream config.
-s.debug = true; % Turn off when your task script is ready
+% This will run PsychDebugWindowConfiguration unless overruled in a downstream
+% config. (This means skipping sync checks and transparent background.)
+%
+% You should turn it off when your task is ready.
+s.debug = true;
 
 %% Machine settings
 % This is where you set properties important for PsychToolBox to function
@@ -30,14 +26,14 @@ s.debug = true; % Turn off when your task script is ready
 s.device.KbName = 'UnifyKeyNames';
 s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
-s.device.screenDims = NaN; % Must get filled in with Screen('Open')
+s.device.screenDims = NaN; % Screen('Open') will open in this `rect`. If not set, will be set by Screen('Open').
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
 
 % Should runBlock automatically save the user data file? If so, when?
 s.device.saveAfterBlock = true;
-s.device.saveAfterTrial = false; % FIXME: in task scripts, "practice" only unsets saveAfterBlock
+s.device.saveAfterTrial = false;
 
-%% Which keys should the tasks listen to?
+% Which keys should the tasks listen to?
 % `breakKeys` are what "press key to start" phases will wait for. The default
 %   is '5%', as that's what many fMRI scanners use to signal the start of
 %   recording.
@@ -48,13 +44,13 @@ s.device.choiceKeys = {'1!', '2@'};
 
 %% Graphics defaults
 % To prevent yourself from having to change many settings in many places, use
-% `s.default.X` to define property `X` for a particular display feature. This
+% `s.graphicDefault.X` to define property `X` for a particular display feature. This
 % way, you'll only have to change it in one spot,
-s.default.fontName = 'Arial';
-s.default.fontColor = [255 255 255];
-s.default.fontSize = 42;
-s.default.bgrColor = [0 0 0];
-s.default.padding = 10; % px to leave between objects
+s.graphicDefault.fontName = 'Arial';
+s.graphicDefault.fontColor = [255 255 255];
+s.graphicDefault.fontSize = 42;
+s.graphicDefault.bgrColor = [0 0 0];
+s.graphicDefault.padding = 10; % px to leave between objects
 
 %% Features of objects that your task displays
 % This is the Wild West portion of property settings. s.(object) should contain
@@ -69,8 +65,8 @@ s.default.padding = 10; % px to leave between objects
 s.objects.reference.misc.Digit1 = [31 30];
 s.objects.reference.misc.Digit2 = [42 30];
 s.objects.reference.dims = [50 100];
-s.objects.reference.fontSize = s.default.fontSize;
-s.objects.reference.fontColor = s.default.fontColor;
+s.objects.reference.fontSize = s.graphicDefault.fontSize;
+s.objects.reference.fontColor = s.graphicDefault.fontColor;
 
 s.objects.lottery.figure.dims = [150 300];
 s.objects.lottery.figure.colors.prob = [255 0 0; 0 0 255];
@@ -81,11 +77,11 @@ s.objects.lottery.occluderWidth = 170;
 s.objects.lottery.stakes.misc.Digit1 = [64 64];
 s.objects.lottery.stakes.misc.Digit2 = [92 64];
 s.objects.lottery.stakes.misc.Digit3 = [120 64];
-s.objects.lottery.stakes.fontSize = s.default.fontSize;
-s.objects.lottery.stakes.fontColor = s.default.fontColor;
+s.objects.lottery.stakes.fontSize = s.graphicDefault.fontSize;
+s.objects.lottery.stakes.fontColor = s.graphicDefault.fontColor;
 
 s.objects.lottery.probLabels.fontSize = 20;
-s.objects.lottery.probLabels.fontColor = s.default.fontColor;
+s.objects.lottery.probLabels.fontColor = s.graphicDefault.fontColor;
 s.objects.lottery.probLabels.dims = [31 30];
 
 s.objects.prompt.dims = [40 40];

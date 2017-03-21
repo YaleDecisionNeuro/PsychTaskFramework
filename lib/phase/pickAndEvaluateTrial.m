@@ -23,7 +23,7 @@ if isempty(Screen('Windows'))
   KbName(settings.device.KbName);
   [settings.device.windowPtr, settings.device.screenDims] = ...
     Screen('OpenWindow', settings.device.screenId, ...
-    settings.default.bgrColor);
+    settings.graphicDefault.bgrColor);
 end
 %  1. Use drawLotto and drawRef to show the lotto
 drawLotto(trial, settings);
