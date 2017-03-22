@@ -61,10 +61,6 @@ s.graphicDefault.padding = 10; % px to leave between objects
 % write will rely on these values; the way you choose to encode them in the
 % settings is up to you. (This might change in future versions.)
 
-% FIXME: Deprecate in favor of getTextDims
-s.objects.reference.misc.Digit1 = [31 30];
-s.objects.reference.misc.Digit2 = [42 30];
-s.objects.reference.dims = [50 100];
 s.objects.reference.fontSize = s.graphicDefault.fontSize;
 s.objects.reference.fontColor = s.graphicDefault.fontColor;
 
@@ -73,16 +69,11 @@ s.objects.lottery.figure.colors.prob = [255 0 0; 0 0 255];
 s.objects.lottery.figure.colors.ambig = [127 127 127];
 s.objects.lottery.occluderWidth = 170;
 
-% FIXME: Deprecate in favor of getTextDims
-s.objects.lottery.stakes.misc.Digit1 = [64 64];
-s.objects.lottery.stakes.misc.Digit2 = [92 64];
-s.objects.lottery.stakes.misc.Digit3 = [120 64];
 s.objects.lottery.stakes.fontSize = s.graphicDefault.fontSize;
 s.objects.lottery.stakes.fontColor = s.graphicDefault.fontColor;
 
 s.objects.lottery.probLabels.fontSize = 20;
 s.objects.lottery.probLabels.fontColor = s.graphicDefault.fontColor;
-s.objects.lottery.probLabels.dims = [31 30];
 
 s.objects.prompt.dims = [40 40];
 s.objects.prompt.color = [0 255 0];
