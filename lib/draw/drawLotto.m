@@ -14,10 +14,10 @@ H = blockSettings.device.windowHeight; % height
 screenCenter = W / 2; % NOTE: screenCenterX
 
 % Lottery box properties
-boxHeight = blockSettings.objects.lottery.figure.dims(2);
-halfBoxWidth = blockSettings.objects.lottery.figure.dims(1) / 2;
-if isfield(blockSettings.objects.lottery, 'occluderWidth')
-  halfOccluderWidth = blockSettings.objects.lottery.occluderWidth / 2;
+boxHeight = blockSettings.objects.lottery.box.dims(2);
+halfBoxWidth = blockSettings.objects.lottery.box.dims(1) / 2;
+if isfield(blockSettings.objects.lottery.box, 'occluderWidth')
+  halfOccluderWidth = blockSettings.objects.lottery.box.occluderWidth / 2;
 else
   halfOccluderWidth = halfBoxWidth;
 end
@@ -41,9 +41,8 @@ end
 
 % Colors
 % NOTE: The order of colors remains the same: color(1, :) is on top
-colors = blockSettings.objects.lottery.figure.colors.prob;
-color_ambig = blockSettings.objects.lottery.figure.colors.ambig;
-color_bgr = blockSettings.graphicDefault.bgrColor;
+colors = blockSettings.objects.lottery.box.probColors;
+ambigColor = blockSettings.objects.lottery.box.ambigColors;
 
 % Trial
 ambig = trialData.ambigs;
@@ -77,7 +76,7 @@ Screen('FillRect', windowPtr, colors(2, :), bottomBoxDims);
 % Paint occluder over probability boxes
 occluderDims = [screenCenter - halfOccluderWidth, Y2occ, ...
   screenCenter + halfOccluderWidth, Y3occ] + offCenterRect;
-Screen('FillRect', windowPtr, color_ambig, occluderDims);
+Screen('FillRect', windowPtr, ambigColor, occluderDims);
 
 %% 4. Draw the probabilities
 % Determine the dimensions
