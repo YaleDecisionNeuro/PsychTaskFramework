@@ -2,7 +2,7 @@ function Data = runBlock(Data, blockSettings)
   % RUNBLOCK Scaffolds multiple trial calls of the same kind and saves the file
   %   after al of them have run.
   %
-  % The main thing `runBlock` needs from blockSettings is for `.game.trialFn`
+  % The main thing `runBlock` needs from blockSettings is for `.task.fnHandles.trialFn`
   % to be a function handle to which it can pass Data, trial #, and blockSettings.
   %
   % If `blockSettings.game` includes fields `preBlockFn` and/or `postBlockFn`,
@@ -18,9 +18,9 @@ function Data = runBlock(Data, blockSettings)
   Data = prepForRecording(Data);
 
   %% 1. If settings say so, run pre-block callback (e.g. display title)
-  if isfield(blockSettings.game, 'preBlockFn') && ...
-     isa(blockSettings.game.preBlockFn, 'function_handle')
-    blockSettings.game.preBlockFn(Data, blockSettings);
+  if isfield(blockSettings.task.fnHandles, 'preBlockFn') && ...
+     isa(blockSettings.task.fnHandles.preBlockFn, 'function_handle')
+    blockSettings.task.fnHandles.preBlockFn(Data, blockSettings);
   end
 
   %% 2. Iterate through trials
@@ -28,10 +28,10 @@ function Data = runBlock(Data, blockSettings)
   numTrials = size(trials, 1);
   firstTrial = getFirstTrial(Data);
 
-  runTrialFn = blockSettings.game.trialFn;
+  runTrialFn = blockSettings.task.fnHandles.trialFn;
   if ~isa(runTrialFn, 'function_handle')
     error(['Function to draw trials not supplied! Make sure that you''ve set' ...
-      ' settings.game.trialFn = @your_function_to_draw_trials']);
+      ' settings.task.fnHandles.trialFn = @your_function_to_draw_trials']);
   end
 
   for k = firstTrial : numTrials
@@ -50,9 +50,9 @@ function Data = runBlock(Data, blockSettings)
   end
 
   %% 4. If settings say so, run post-block callback
-  if isfield(blockSettings.game, 'postBlockFn') && ...
-     isa(blockSettings.game.postBlockFn, 'function_handle')
-    blockSettings.game.postBlockFn(Data, blockSettings);
+  if isfield(blockSettings.task.fnHandles, 'postBlockFn') && ...
+     isa(blockSettings.task.fnHandles.postBlockFn, 'function_handle')
+    blockSettings.task.fnHandles.postBlockFn(Data, blockSettings);
   end
 end
 

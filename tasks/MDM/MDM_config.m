@@ -22,11 +22,11 @@ s.game.durations.ITIs = [4 * ones(1, 6), 5 * ones(1, 8), 6 * ones(1, 6)];
 
 %% Common block properties
 s.task.taskName = 'MDM';
-s.game.preBlockFn = @preBlock;
+s.task.fnHandles.preBlockFn = @preBlock;
 
-s.game.trialFn = @runRATrial; % RA-specific trial function
+s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
 s.game.showChoicePhaseFn = @phase_showChoice;
-s.game.referenceDrawFn = @drawRef;
+s.task.fnHandles.referenceDrawFn = @drawRef;
 s.task.blockLength = 21;
 
 s.game.showChoiceActionFn = @action_display;

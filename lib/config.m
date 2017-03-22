@@ -26,7 +26,11 @@ s.debug = true;
 s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Screen('Open') will open in this `rect`. If not set, will be set by Screen('Open').
+
+% Machine / MATLAB settings
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
+s.device.rngAlgorithm = 'mt19937ar'; % see RandStream.list for other options
+s.device.rngSeed = sum(100 * clock);
 
 % Should runBlock automatically save the user data file? If so, when?
 s.device.saveAfterBlock = true;
@@ -122,6 +126,60 @@ s.task.numBlocks = NaN; % Overall number of blocks in the task
 s.task.blocksPerSession = NaN; % Number of blocks in each session
 s.task.blockLength = 1; % NOTE: Deprecated in favor of numBlocks
 
+% %%% General functions that your task will re-use
+% To re-use the infrastructure this framework provides, you can supply only the
+% change that you need for your own task. You can do this by providing a
+% "function handle" - a reference to a function you wrote preceded by the @
+% sign. (For instance, the self/other decision-making task draws additional
+% condition information into the backgrounds using @SODM_drawCondition set as
+% bgrDrawCallbackFn.)
+
+% IMPORTANT: These are *crucial* items to set, as they define what components
+% your task will be using.
+%
+% NOTE: It is important to ensure that whatever trial script you'll be using
+% will be on the MATLAB path, i.e. added with `addpath(script_location)`.
+%
+% You can learn more about function handles at
+% https://www.mathworks.com/help/matlab/matlab_prog/creating-a-function-handle.html.)
+
+% %% Trial script: trialFn
+% trialFn defines what trial script each `runBlock` should use to conduct the
+% trials. The trial script is responsible for the order in which task phases
+% are invoked.
+%
+% If you wish to re-use the standard R&A task designs, you'll want to keep this
+% set to @runRATrial (which you can find in lib/). If you wish to take
+% advantage of the generic phase interface, use @runGeneralTrial.
+s.task.fnHandles.trialFn = @runRATrial;
+
+% %% Event functions
+% Functions that are automatically executed before and after every block these
+% settings are applied to.
+
+% @preBlock is a helpful default in `lib/phase` - displays block number before
+% every block, waits for the press of `breakKeys` button to start first trial.
+s.task.fnHandles.preBlockFn = @preBlock;
+s.task.fnHandles.postBlockFn = NaN;
+
+% %% Background draw script
+% The default background draw script is called between the phases to set
+% background and font properties back to default. You might wish to alter it
+% to, e.g., to make sure that the reference is drawn at all times.
+%
+% By convention, the background draw script only takes block settings and a
+% potential callback function as an argument, and does not access nor modify
+% collected data. Optionally, you can specify the callback function in
+% s.task.fnHandles.bgrDrawCallbackFn(blockSettings).
+s.task.fnHandles.bgrDrawFn = @drawBgr;
+s.task.fnHandles.bgrDrawCallbackFn = NaN;
+
+% %% Reference draw script
+% Reference draw script defines how the "reference" (value alternative to the
+% gamble) will be drawn. It is specific to the kind of choices you present. Its
+% default arguments are drawRef(blockSettings, trialData).
+s.task.fnHandles.referenceDrawFn = @drawRef;
+
 % (Maximum) durations of the various trial phases
 s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
@@ -160,34 +218,6 @@ s.game.levels.reference = 5;
 s.game.levels.colors = [1 2];
 s.game.levels.repeats = 1;
 
-%% Execution functions
-% To re-use the infrastructure this framework provides, you can supply only the
-% change that you need for your own task. You can do this by providing a
-% "function handle" - a reference to a function you wrote preceded by the @
-% sign. (For instance, as of 13 Mar 2017, the self/other decision-making task
-% draws backgrounds using @SODM_drawBgr and displays choices using
-% @SODM_showChoice.)
-%
-% IMPORTANT: These are *crucial* items to set, as they define what components
-% your task will be using.
-%
-% NOTE: It is important to ensure that whatever trial script you'll be using
-% will be on the MATLAB path, i.e. added with `addpath(script_location)`.
-%
-% You can learn more about function handles at
-% https://www.mathworks.com/help/matlab/matlab_prog/creating-a-function-handle.html.)
-
-% %% Trial script: trialFn
-% trialFn defines what trial script each `runBlock` should use to conduct the
-% trials. The trial script is responsible for the order in which task phases
-% are invoked.
-%
-% If you wish to re-use the standard R&A task designs, you'll want to keep this
-% set to @runRATrial (which you can find in lib/). If you wish to take
-% advantage of the generic phase interface, use @runGeneralTrial.
-
-s.game.trialFn = @runRATrial;
-
 % %% Phase scripts
 % NOTE: This section only applies if you're using @runRATrial as your trial
 % script. @runGenericTrial does not check these settings.
@@ -218,36 +248,6 @@ s.game.showChoiceActionFn = NaN;
 s.game.responseActionFn = NaN;
 s.game.feedbackActionFn = NaN;
 s.game.intertrialActionFn = NaN;
-
-% %% Reference draw script
-% Reference draw script defines how the "reference" (value alternative to the
-% gamble) will be drawn. It is specific to the kind of choices you present. Its
-% default arguments are drawRef(blockSettings, trialData).
-
-s.game.referenceDrawFn = @drawRef;
-
-% %% Background draw script
-% The default background draw script is called between the phases to set
-% background and font properties back to default. You might wish to alter it
-% to, e.g., to make sure that the reference is drawn at all times.
-%
-% By convention, the background draw script only takes block settings and a
-% potential callback function as an argument, and does not access nor modify
-% collected data. Optionally, you can specify the callback function in
-% s.game.bgrDrawCallbackFn(blockSettings).
-
-s.game.bgrDrawFn = @drawBgr;
-s.game.bgrDrawCallbackFn = NaN;
-
-%% Event functions
-% Functions that are automatically executed before and after every block these
-% settings are applied to.
-
-% @preBlock is a helpful default in `lib/phase` - displays block number before
-% every block, waits for the press of '5%' button to start first trial.
-
-s.game.preBlockFn = @preBlock;
-s.game.postBlockFn = NaN;
 
 %% Lookup tables
 % If you're using any images or map your payoff values to a textual label,

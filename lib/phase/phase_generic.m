@@ -4,9 +4,9 @@ function [ trialData ] = phase_generic(trialData, blockSettings, phaseSettings)
 windowPtr = blockSettings.device.windowPtr;
 
 % Draw the background
-if isfield(blockSettings.game, 'bgrDrawFn') && ...
-    isa(blockSettings.game.bgrDrawFn, 'function_handle')
-  blockSettings.game.bgrDrawFn(blockSettings);
+if isfield(blockSettings.task.fnHandles, 'bgrDrawFn') && ...
+    isa(blockSettings.task.fnHandles.bgrDrawFn, 'function_handle')
+  blockSettings.task.fnHandles.bgrDrawFn(blockSettings);
 end
 
 % Iterate through drawCmds
