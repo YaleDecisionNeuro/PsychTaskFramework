@@ -2,7 +2,7 @@ function plannedBlocks = generateBlocks(blockSettings, ...
     includeTrial, includeIndex, adHocTrials)
 % GENERATEBLOCKS Returns a cell array of trial tables generated with
 %   `generateTrials` from blockSettings.game.levels, separated into blocks with
-%   a fixed number of rows (defined in blockSettings.game.block.length). If
+%   a fixed number of rows (defined in blockSettings.task.blockLength). If
 %   given further arguments, it will also add to the final trial table the
 %   table `includeTrial` at per-block indices passed in `includeIndex`. If
 %   `adHocTrials` are provided, they are mixed in with the generated trials
@@ -29,8 +29,8 @@ end
 numTrials = height(allTrials);
 allTrials = allTrials(randperm(numTrials), :);
 
-%% Step 2: Separate trials into blocks by block.length
-% NOTE: Block length is assumed to include any catch trials, but those are not
+%% Step 2: Separate trials into blocks by blockLength
+% NOTE: blockLength is assumed to include any catch trials, but those are not
 %   assigned yet, which is why they're subtracted.
 if exist('includeTrial', 'var')
   if exist('includeIndex', 'var')
@@ -41,7 +41,7 @@ if exist('includeTrial', 'var')
 else
   minusTrials = 0;
 end
-blockLen = blockSettings.game.block.length - minusTrials;
+blockLen = blockSettings.task.blockLength - minusTrials;
 
 if rem(numTrials, blockLen) ~= 0
   error('%d trials cannot be divided into even blocks of length %d', ...

@@ -69,7 +69,7 @@ else
   % Run practice -- random `numSelect` trials of a random block
   numSelect = 3;
   blockIdx = randi(settingsLF.task.numBlocks);
-  randomIdx = randperm(settingsLF.game.block.length, numSelect);
+  randomIdx = randperm(settingsLF.task.blockLength, numSelect);
   settingsLF.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
   Data = runBlock(Data, settingsLF);
 end

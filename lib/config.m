@@ -33,7 +33,7 @@ s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboar
 s.device.saveAfterBlock = true;
 s.device.saveAfterTrial = false;
 
-% Which keys should the tasks listen to?
+% Which keys does the device listen to?
 % `breakKeys` are what "press key to start" phases will wait for. The default
 %   is '5%', as that's what many fMRI scanners use to signal the start of
 %   recording.
@@ -121,6 +121,7 @@ s.task.constantTrialDuration = false;
 % supports equal-length blocks and sessions. In the future)
 s.task.numBlocks = NaN; % Overall number of blocks in the task
 s.task.blocksPerSession = NaN; % Number of blocks in each session
+s.task.blockLength = 1; % NOTE: Deprecated in favor of numBlocks
 
 % (Maximum) durations of the various trial phases
 s.game.durations.showChoice = 6;
@@ -140,7 +141,6 @@ s.game.durations.ITIs = [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 % to your benefit to make sure that this uniquely identifies your setting for
 % the specific task and task block
 s.game.block.name = NaN;
-s.game.block.length = 1;
 
 % NOTE: If you have a trial you'd like to repeat in every trial in a particular
 %   place in the block, you'll define it in .repeatTrial and the in-block
