@@ -13,7 +13,7 @@ function s = UVRA_config()
   %   and marks the block in data export.
 
   % Fitting trials into blocks and blocks into sessions
-  s.game.block.length = 20; % trials per block
+  s.task.blockLength = 20; % trials per block
   s.task.numBlocks = 6; % blocks per game
   s.task.blocksPerSession = 2;
 

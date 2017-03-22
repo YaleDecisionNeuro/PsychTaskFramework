@@ -132,7 +132,7 @@ else
     else
       blockSettings = medSettings;
     end
-    randomIdx = randperm(blockSettings.game.block.length, numSelect);
+    randomIdx = randperm(blockSettings.task.blockLength, numSelect);
     blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
     Data = runBlock(Data, blockSettings);
   end

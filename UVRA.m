@@ -78,7 +78,7 @@ else
   % Run practice -- random `numSelect` trials of a random block
   numSelect = 3;
   blockIdx = randi(settings.task.numBlocks);
-  randomIdx = randperm(settings.game.block.length, numSelect);
+  randomIdx = randperm(settings.task.blockLength, numSelect);
   settings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
   Data = runBlock(Data, settings);
 end

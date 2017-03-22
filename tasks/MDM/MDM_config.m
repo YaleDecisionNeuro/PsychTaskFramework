@@ -27,7 +27,7 @@ s.game.preBlockFn = @preBlock;
 s.game.trialFn = @runRATrial; % RA-specific trial function
 s.game.showChoicePhaseFn = @phase_showChoice;
 s.game.referenceDrawFn = @drawRef;
-s.game.block.length = 21;
+s.task.blockLength = 21;
 
 s.game.showChoiceActionFn = @action_display;
 s.game.responseActionFn = @action_collectResponse;

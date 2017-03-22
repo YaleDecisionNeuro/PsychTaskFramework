@@ -32,7 +32,7 @@ s.game.phases = { ...
 s.game.referenceDrawFn = @drawRef;
 
 % Useful for generation purposes
-s.game.block.length = 12;
+s.task.blockLength = 12;
 s.task.numBlocks = 2;
 
 %% Available trial values

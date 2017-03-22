@@ -23,7 +23,7 @@ s.task.constantTrialDuration = false; % Early choice won't add to ITI
 
 %% Block properties
 s.task.taskName = 'SODM';
-s.game.block.length = 19;
+s.task.blockLength = 19;
 
 s.game.trialFn = @runRATrial; % RA-specific trial function
 s.game.responsePhaseFn = NaN;
