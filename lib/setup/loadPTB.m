@@ -18,10 +18,7 @@ if exist('RandStream', 'var') % Not on Octave
 end
 
 %% Set the keyboard layout
-if ~isfield(settings.device, 'KbName')
-  settings.device.KbName = 'UnifyKeyNames';
-end
-KbName(settings.device.KbName);
+KbName('UnifyKeyNames');
 
 %% Invoke PTB debug configuration if debug mode is set
 if isfield(settings, 'debug') && settings.debug == true

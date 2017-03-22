@@ -23,7 +23,6 @@ s.debug = true;
 %% Machine settings
 % This is where you set properties important for PsychToolBox to function
 % properly. Consult PTB manual if these are unclear.
-s.device.KbName = 'UnifyKeyNames';
 s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Screen('Open') will open in this `rect`. If not set, will be set by Screen('Open').

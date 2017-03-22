@@ -18,18 +18,17 @@ trial = block.records(trialIdx, :);
 [ outcomeKind, outcomeLevel, outcomeColorIdx, trueProb, randDraw ] = evaluateTrial(trial);
 
 %% 3. Draw the trial
-%  0. Open PTB window if it isn't yet opened (`isempty(Screen('Windows'))`)
+% 0. Open PTB window if it isn't yet opened (`isempty(Screen('Windows'))`)
+standalone = false;
 if isempty(Screen('Windows'))
-  KbName(settings.device.KbName);
-  [settings.device.windowPtr, settings.device.screenDims] = ...
-    Screen('OpenWindow', settings.device.screenId, ...
-    settings.graphicDefault.bgrColor);
+  standalone = true;
+  settings = loadPTB(settings);
 end
-%  1. Use drawLotto and drawRef to show the lotto
+% 1. Use drawLotto and drawRef to show the lotto
 drawLotto(trial, settings);
 settings.game.referenceDrawFn(settings, trial);
 Screen(settings.device.windowPtr, 'Flip');
-%  2. Disappear the non-picked choice
+% 2. Disappear the non-picked choice
 WaitSecs(5);
 switch trial.choseLottery
   case 0
@@ -69,6 +68,11 @@ disp(randDraw);
 
 % 7. Wait for keypress
 waitForKey(settings.device.breakKeys);
+
+% 8. If this was a one-off show, close screen
+if standalone
+  unloadPTB(settings);
+end
 end
 
 function [ outcomeKind, outcomeLevel, outcomeColorIdx, trueLotteryProb, randomDraw ] = evaluateTrial(trial)
