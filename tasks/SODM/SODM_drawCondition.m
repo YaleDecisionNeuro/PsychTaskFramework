@@ -1,7 +1,7 @@
 function SODM_drawCondition(blockSettings)
 % SODM_drawCondition Draw the designation of a self-rewarding vs.
 %   other-rewarding task. This can either be set in
-%   blockSettings.game.bgrDrawCallbackFn, or called directly from a draw
+%   blockSettings.task.fnHandles.bgrDrawCallbackFn, or called directly from a draw
 %   function.
 
 % FIXME: Extract position into settings

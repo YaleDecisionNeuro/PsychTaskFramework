@@ -25,13 +25,13 @@ s.task.constantTrialDuration = false; % Early choice won't add to ITI
 s.task.taskName = 'SODM';
 s.task.blockLength = 19;
 
-s.game.trialFn = @runRATrial; % RA-specific trial function
+s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
 s.game.responsePhaseFn = NaN;
-s.game.preBlockFn = @preBlock;
+s.task.fnHandles.preBlockFn = @preBlock;
 s.game.showChoicePhaseFn = @SODM_showChoice;
-s.game.referenceDrawFn = @drawRef;
-s.game.bgrDrawFn = @drawBgr;
-s.game.bgrDrawCallbackFn = @SODM_drawCondition;
+s.task.fnHandles.referenceDrawFn = @drawRef;
+s.task.fnHandles.bgrDrawFn = @drawBgr;
+s.task.fnHandles.bgrDrawCallbackFn = @SODM_drawCondition;
 
 s.game.showChoiceActionFn = @action_collectResponse;
 s.game.feedbackActionFn = @action_display;

@@ -16,10 +16,10 @@ s.task.taskName = 'MonetaryRA';
 s.game.block.name = 'Gains';
 s.task.blockLength = 31; % Useful for generation purposes
 
-s.game.trialFn = @runRATrial; % RA-specific trial function
+s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
 s.game.showChoicePhaseFn = @phase_showChoice;
-s.game.referenceDrawFn = @drawRef;
-s.game.preBlockFn = @preBlock;
+s.task.fnHandles.referenceDrawFn = @drawRef;
+s.task.fnHandles.preBlockFn = @preBlock;
 
 s.game.showChoiceActionFn = @action_display;
 s.game.responseActionFn = @action_collectResponse;

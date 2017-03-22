@@ -23,13 +23,13 @@ s.task.constantTrialDuration = false; % Early choice won't add to ITI
 
 %% Block properties
 s.task.taskName = 'HLFF';
-s.game.trialFn = @runGenericTrial;
+s.task.fnHandles.trialFn = @runGenericTrial;
 % See lib/phase/phaseConfig.m for meaning
 s.game.phases = { ...
   phaseConfig('showChoice', Inf, @phase_showChoice, @action_collectResponse), ...
   phaseConfig('feedback', 0.5, @phase_generic, @action_display, @drawFeedback), ...
   phaseConfig('ITI', 2, @phase_ITI, @action_display)};
-s.game.referenceDrawFn = @drawRef;
+s.task.fnHandles.referenceDrawFn = @drawRef;
 
 % Useful for generation purposes
 s.task.blockLength = 12;

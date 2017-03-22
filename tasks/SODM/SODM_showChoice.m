@@ -6,16 +6,16 @@ function [ trialData ] = SODM_showChoice(trialData, blockSettings, phaseSettings
 windowPtr = blockSettings.device.windowPtr;
 
 % Draw the background
-if isfield(blockSettings.game, 'bgrDrawFn') && ...
-    isa(blockSettings.game.bgrDrawFn, 'function_handle')
-  blockSettings.game.bgrDrawFn(blockSettings);
+if isfield(blockSettings.task.fnHandles, 'bgrDrawFn') && ...
+    isa(blockSettings.task.fnHandles.bgrDrawFn, 'function_handle')
+  blockSettings.task.fnHandles.bgrDrawFn(blockSettings);
 end
 
 % Draw the lottery box
 drawLotto(trialData, blockSettings);
 
 % Draw the reference value
-blockSettings.game.referenceDrawFn(blockSettings, trialData);
+blockSettings.task.fnHandles.referenceDrawFn(blockSettings, trialData);
 
 % Show all drawn objects and retrieve the timestamp of display
 [~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);

@@ -2,7 +2,7 @@ function pickAndEvaluateTrial(DataObject, settings)
 % Picks a recorded trial at random, evaluates it, and displays the outcome.
 %
 % This can be run as a post-block callback. To do this, include
-% `blockSettings.game.postBlockFn = @pickAndEvaluateTrial` in your
+% `blockSettings.task.fnHandles.postBlockFn = @pickAndEvaluateTrial` in your
 % configuration file.
 %
 % FIXME: This was written in a hurry, and should at some point be refactored.
@@ -26,13 +26,13 @@ if isempty(Screen('Windows'))
 end
 % 1. Use drawLotto and drawRef to show the lotto
 drawLotto(trial, settings);
-settings.game.referenceDrawFn(settings, trial);
+settings.task.fnHandles.referenceDrawFn(settings, trial);
 Screen(settings.device.windowPtr, 'Flip');
 % 2. Disappear the non-picked choice
 WaitSecs(5);
 switch trial.choseLottery
   case 0
-    settings.game.referenceDrawFn(settings, trial);
+    settings.task.fnHandles.referenceDrawFn(settings, trial);
     msg = 'You have chosen the alternative to the gamble.';
   case 1
     % Determine message to display
@@ -55,7 +55,7 @@ Screen(settings.device.windowPtr, 'Flip');
 % 6. Display the final outcome
 WaitSecs(1);
 if trial.choseLottery == 0
-  settings.game.referenceDrawFn(settings, trial);
+  settings.task.fnHandles.referenceDrawFn(settings, trial);
 elseif trial.choseLottery == 1
   drawLotto(trial, settings);
 end
