@@ -9,10 +9,10 @@ s = config();
 
 %% Machine settings
 s.device.taskPath = ['tasks' filesep 'RA'];
-s.game.constantTrialDuration = true; % This is fMRI, so intertrial compensates for any fast responses in order to make each trial last a constant amount of time
+s.task.constantTrialDuration = true; % This is fMRI, so intertrial compensates for any fast responses in order to make each trial last a constant amount of time
 
 %% Game settings
-s.game.name = 'MonetaryRA';
+s.task.taskName = 'MonetaryRA';
 s.game.block.name = 'Gains';
 s.game.block.length = 31; % Useful for generation purposes
 

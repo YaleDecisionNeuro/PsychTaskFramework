@@ -68,7 +68,7 @@ else
 end
 
 Summary.bagNumber = bag;
-Summary.winningColor = block.settings.game.colorKey{c};
+Summary.winningColor = block.settings.objects.lottery.box.colorKey{c};
 Summary.lotteryWin = w;
 Summary.lotteryLoss = l;
 switch choseLottery

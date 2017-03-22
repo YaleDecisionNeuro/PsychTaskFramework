@@ -19,10 +19,10 @@ s.game.durations.response = 0;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = 2;
 
-s.game.constantTrialDuration = false; % Early choice won't add to ITI
+s.task.constantTrialDuration = false; % Early choice won't add to ITI
 
 %% Block properties
-s.game.name = 'HLFF';
+s.task.taskName = 'HLFF';
 s.game.trialFn = @runGenericTrial;
 % See lib/phase/phaseConfig.m for meaning
 s.game.phases = { ...

@@ -27,7 +27,7 @@ for blockId = 1:n
   % Add task name, block name and block id as columns
   % FIXME: Generally, which fields should get extracted from the `settings`
   % struct? Should this be user-definable in some way, shape, or form?
-  taskName = blk.settings.game.name;
+  taskName = blk.settings.task.taskName;
   blockName = blk.settings.game.block.name;
 
   finalRecords = blk.records;

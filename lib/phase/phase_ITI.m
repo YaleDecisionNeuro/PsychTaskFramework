@@ -5,7 +5,7 @@ function [ trialData ] = phase_ITI(trialData, blockSettings, phaseSettings)
 % TODO: Modular phase has no smart way of determining what the duration should
 %   be if it is constant. It relies on a blockSettings.game.durations field
 %   enumeration. Possible solution: trialData.trialMaxDuration, which checks for
-%   blockSettings.game.constantTrialDuration to see what duration to do.
+%   blockSettings.task.constantTrialDuration to see what duration to do.
 %   (Alternative: if isnan(phaseSettings.duration), need to compute it.)
 
 windowPtr = blockSettings.device.windowPtr;
@@ -23,14 +23,14 @@ end
 end
 
 % Unlike other in-phase timing function, timeIntertrial is not yet deprecated,
-% as it implements the mission critical blockSettings.game.constantTrialDuration
+% as it implements the mission critical blockSettings.task.constantTrialDuration
 % switch.
 function trialData = timeIntertrial(trialData, blockSettings)
 % Do we need the entire trial to last a constant amount of time? If so:
 % (1) the `elapsedTime` initial reference point is `trialStartTime` rather than
 %     `.ITIStartTime`
 % (2) the endtime is the sum of `s.game.durations` rather than `.durations.ITIs`
-if blockSettings.game.constantTrialDuration
+if blockSettings.task.constantTrialDuration
   startReference = trialData.trialStartTime;
   endReference = blockSettings.game.durations.showChoice + ...
     blockSettings.game.durations.response + ...

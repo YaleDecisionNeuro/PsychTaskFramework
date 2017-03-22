@@ -14,14 +14,14 @@ s.device.imgPath = [s.device.taskPath filesep 'img'];
 
 %% Non-display settings for the game
 % (Maximum) durations of the various stages, in seconds
-s.game.constantTrialDuration = true;
+s.task.constantTrialDuration = true;
 s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = [4 * ones(1, 6), 5 * ones(1, 8), 6 * ones(1, 6)];
 
 %% Common block properties
-s.game.name = 'MDM';
+s.task.taskName = 'MDM';
 s.game.preBlockFn = @preBlock;
 
 s.game.trialFn = @runRATrial; % RA-specific trial function

@@ -72,6 +72,13 @@ s.objects.lottery.box.probColors = [255 0 0; 0 0 255];
 s.objects.lottery.box.ambigColors = [127 127 127];
 s.objects.lottery.box.occluderWidth = 170;
 
+% What are the "human" names of the lottery colors? These should be in the same
+% order as `.box.probColors` set above.
+%
+% Useful for contexts in which color indices need to be translated, especially
+% for a choice evaluation for the participant's eyes.
+s.objects.lottery.box.colorKey = {'blue', 'red'};
+
 s.objects.lottery.stakes.fontSize = s.graphicDefault.fontSize;
 s.objects.lottery.stakes.fontColor = s.graphicDefault.fontColor;
 
@@ -97,11 +104,20 @@ s.objects.intertrial.color = [255 255 255];
 s.objects.intertrial.shape = 'Oval';
 s.objects.intertrial.dims = [40 40];
 
-%% Non-display settings for the game
-% Same Wild-West rules apply -- the format can be whatever you end up using
+%% Settings for the task as a whole
+% Obligatory: set it to identify the task for the datafiles
+s.task.taskName = char.empty;
+s.task.taskPath = char.empty;
 
-% (Maximum) durations of the various stages
-s.game.constantTrialDuration = false;
+% Should the intertrial period be extended to last as long as the sum of each
+% phase's maximum durations? In other words, should the ITI display duration
+% ensure that each trial lasts an exactly set time, regardless of the
+% participants's choices that might accelerate the trial timeline?
+%
+% If the task is set in a scanner, you almost certainly want to set it to true.
+s.task.constantTrialDuration = false;
+
+% (Maximum) durations of the various trial phases
 s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;
@@ -114,16 +130,10 @@ s.game.durations.ITIs = [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 % However, current method of shuffling ITIs will work as long as their number
 % divides the number of trials within a block without remainder.
 
-s.game.colorKey = {'blue', 'red'};
-% Deprecated. This is remnant of the way the script used to be written -- it
-% might be useful for those who wish to (for example) automatically replace
-% `colors` value used in data collection with the actual color used.
-
 %% Block properties
 % Naming. Useful to quickly identify the properties used to run a trial -- it's
 % to your benefit to make sure that this uniquely identifies your setting for
 % the specific task and task block
-s.game.name = NaN;
 s.game.block.name = NaN;
 s.game.block.length = 1;
 
