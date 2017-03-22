@@ -7,7 +7,7 @@ function s = UVRA_config()
   % See lib/config for other things that s.device can contain
 
   % Meta
-  s.game.name = 'UVRA';
+  s.task.taskName = 'UVRA';
   s.game.block.name = 'Gains';
   % This marks the default block name, will be displayed in pre-block screen,
   %   and marks the block in data export.
@@ -29,7 +29,7 @@ function s = UVRA_config()
   % Set durations of choice & intertrial period
   s.game.durations.showChoice = Inf;
   s.game.durations.ITIs = 1;
-  s.game.constantTrialDuration = false; % don't need to fit fMRI time blocks
+  s.task.constantTrialDuration = false; % don't need to fit fMRI time blocks
 
   % What phase and draw functions should runRATrial use?
   s.game.trialFn = @runRATrial; % RA-specific trial function
