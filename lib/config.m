@@ -117,6 +117,11 @@ s.task.taskPath = char.empty;
 % If the task is set in a scanner, you almost certainly want to set it to true.
 s.task.constantTrialDuration = false;
 
+% How many blocks and sessions should be generated? (Currently, PTF only
+% supports equal-length blocks and sessions. In the future)
+s.task.numBlocks = NaN; % Overall number of blocks in the task
+s.task.blocksPerSession = NaN; % Number of blocks in each session
+
 % (Maximum) durations of the various trial phases
 s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
