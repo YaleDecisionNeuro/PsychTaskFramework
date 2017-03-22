@@ -33,7 +33,7 @@ s.game.referenceDrawFn = @drawRef;
 
 % Useful for generation purposes
 s.game.block.length = 12;
-s.game.block.numBlocks = 2;
+s.task.numBlocks = 2;
 
 %% Available trial values
 s.game.levels.probs = [.25 .5 .75];

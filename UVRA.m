@@ -45,11 +45,11 @@ else % Running practice
 end
 
 %% Generate trials/blocks - if they haven't been generated before
-% NOTE: If the number of generated trials changes, settings.game.block.numBlocks
+% NOTE: If the number of generated trials changes, settings.task.numBlocks
 %   will need to be changed to an integer that divides the generated trial count.
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   blocks = generateBlocks(settings);
-  numBlocks = settings.game.block.numBlocks;
+  numBlocks = settings.task.numBlocks;
   Data.blocks.planned = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.blocks.numRecorded = 0;
@@ -77,7 +77,7 @@ if exist('observer', 'var')
 else
   % Run practice -- random `numSelect` trials of a random block
   numSelect = 3;
-  blockIdx = randi(settings.game.block.numBlocks);
+  blockIdx = randi(settings.task.numBlocks);
   randomIdx = randperm(settings.game.block.length, numSelect);
   settings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
   Data = runBlock(Data, settings);

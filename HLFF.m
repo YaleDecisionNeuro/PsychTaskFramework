@@ -43,11 +43,11 @@ settingsLF = HLFF_config_LF(settings);
 settingsLF.textures = loadTexturesFromConfig(settingsLF);
 
 %% Generate trials/blocks - if they haven't been generated before
-% NOTE: If the number of generated trials changes, settings.game.block.numBlocks
+% NOTE: If the number of generated trials changes, settings.task.numBlocks
 %   will need to be changed to an integer that divides the generated trial count.
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   blocks = generateBlocks(settingsLF);
-  numBlocks = settingsLF.game.block.numBlocks;
+  numBlocks = settingsLF.task.numBlocks;
   Data.blocks.planned = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.blocks.numRecorded = 0;
@@ -68,7 +68,7 @@ if exist('observer', 'var')
 else
   % Run practice -- random `numSelect` trials of a random block
   numSelect = 3;
-  blockIdx = randi(settingsLF.game.block.numBlocks);
+  blockIdx = randi(settingsLF.task.numBlocks);
   randomIdx = randperm(settingsLF.game.block.length, numSelect);
   settingsLF.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
   Data = runBlock(Data, settingsLF);
