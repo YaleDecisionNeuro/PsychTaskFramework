@@ -22,7 +22,7 @@ settings = loadPTB(settings);
 if exist('observer', 'var') % Running actual trials -> record
   % Find-or-create participant data file *in appropriate location*
   fname = [num2str(observer) '.mat'];
-  folder = fullfile(settings.device.taskPath, 'data');
+  folder = fullfile(settings.task.taskPath, 'data');
   fname = [folder filesep fname];
   [ Data, participantExisted ] = loadOrCreate(observer, fname);
 

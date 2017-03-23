@@ -16,5 +16,5 @@ function s = SODM_config_monetary(initial_config)
   s.lookups.stakes.txt = {'$0'; '$5'; '$8'; '$12'; '$25'};
   s.lookups.stakes.img = {'0.jpg'; '5.jpg'; '8.jpg'; '12.jpg'; '25.jpg'};
   % Fix images to path
-  s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.device.imgPath);
+  s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.task.imgPath);
 end
