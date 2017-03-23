@@ -180,6 +180,90 @@ s.task.fnHandles.bgrDrawCallbackFn = NaN;
 % default arguments are drawRef(blockSettings, trialData).
 s.task.fnHandles.referenceDrawFn = @drawRef;
 
+%%% Trial-specific settings
+% Configure what values your trials will be generated with, and what functions
+% and actions each trial's phases should use.
+
+% `.phases` is a cell array of PhaseConfigs (see lib/phase/phaseConfig.m).
+% Each cell defines what phase function oversees the execution of the
+% phase, what action should be taken at the end of the phase, how long the
+% phase should last and, optionally, what draw scripts should be invoked.
+% See tasks/HLFF/HLFF_config for an example.
+s.trial.phases = cell.empty
+
+% If you wish to run "old-school" Levylab R&A task with legacy settings,
+% you should fill `s.phases_RA` with a call to `RA_phaseStruct`. (You can,
+% and should, run the task with the new phase architecture, but this will
+% remain an option.)
+s.trial.phases_RA = struct.empty;
+
+%% What values should the trial be generated with?
+% These values are R&A-centric in that generateTrials and generateBlocks only
+% knows how to generate different combinations of stakes, probs, and ambigs.
+% If you want to generate combinations beyond that, you might have to write
+% your own functions for it.
+
+% Stakes, or payoffs, are the possible win-values in the lottery. Stakes_loss
+% are the possible loss values in the lottery. Reference is the available
+% no-risk alternative.
+%
+% If you're using images or textual labels, you will need to use *indices* of
+% s.trial.lookups.txt and s.trial.lookups.img. For instance, if the textual
+% description of possible outcomes is {"no cookies", "one cookie", "two
+% cookies", "a dozen cookies"}, and you want possible lottery win values to be
+% two cookies, loss value to be no cookie and sure option to be one cookie,
+% you'd need to use
+%
+%   stakes = [2]; stakes_loss = 0; reference = 1;
+%
+% in order to get s.lookups.txt{2} in case of a win.
+s.trial.generate.stakes = [5, 6, 7, 8];
+s.trial.generate.stakes_loss = 0;
+s.trial.generate.reference = 5;
+
+% Probabilities for full-information trials.
+s.trial.generate.probs = [.25 .5 .75];
+
+% Ambiguities for partial-information trials. The default trial-generation
+% procedure only uses P = .5, but the drawLotto script can handle any base
+% probability value that's larger than half the ambiguity.
+s.trial.generate.ambigs = [.24 .5 .74];
+
+% How much "hang time" should there be between trials?
+%
+% If a single value n is provided, then all intertrial periods will be n
+% seconds long. If multiple values are provided -- ideally as many as there
+% will be trials in the block -- they will be randomly distributed among the
+% trials within the block.
+%
+% If you need trials of constant length, intertrial period should be extended
+% by whatever time the participants saved by answering early. In order to do
+% that, set `s.task.constantBlockDuration` to `true`.
+s.trial.generate.ITIs = 5;
+% NOTE: Values for the fMRI R&A task are
+%   [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
+
+% Color indices. Currently, they refer to `s.objects.lottery.box.probColors`
+% and `s.objects.lottery.box.colorKey`.
+s.trial.generate.colors = [1 2];
+
+% How many times should a unique stakes-prob-ambig combination be repeated in
+% the generation process?
+s.trial.generate.repeats = 1;
+
+% If there is an additional trial (or trials) that you wish to run in every
+% block, this is where you would define them. See the implemented task configs
+% for examples.
+%
+% If `.catchIdx` is left as NaN, the catch trial(s) will be inserted into
+% a random position in the block. If it is a number n, it will be injected at
+% n-th row.
+%
+% NOTE: The ITI for the catch trial(s) should be defined here, not in the `ITIs`
+% field above.
+s.trial.generate.catchTrial = table.empty;
+s.trial.generate.catchIdx = NaN;
+
 % (Maximum) durations of the various trial phases
 s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
@@ -187,7 +271,7 @@ s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 % These have to be in each block, in some order -- in most fMRI block designs,
 % the block has to be constant. Some designs might want to shuffle these in
-% particular ways, just like items in `s.game.levels`; other designs might want
+% particular ways, just like items in `s.trial.generate`; other designs might want
 % to omit ITIs altogether.
 %
 % However, current method of shuffling ITIs will work as long as their number
@@ -198,25 +282,6 @@ s.game.durations.ITIs = [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 % to your benefit to make sure that this uniquely identifies your setting for
 % the specific task and task block
 s.game.block.name = NaN;
-
-% NOTE: If you have a trial you'd like to repeat in every trial in a particular
-%   place in the block, you'll define it in .repeatTrial and the in-block
-%   position(s) in .repeatIndex
-% s.game.block.repeatIndex = NaN;
-% s.game.block.repeatTrial = [];
-
-%% Available trial values
-% Up to you how you use these -- it's suggested that you pass them to a trial
-% generating function that will re-make them into an orderly shuffled table
-%
-% The following values are just samples of what you can use.
-s.game.levels.stakes = [5, 6, 7, 8];
-s.game.levels.probs = [.25 .5 .75];
-s.game.levels.ambigs = [.24 .5 .74];
-s.game.levels.stakes_loss = 0;
-s.game.levels.reference = 5;
-s.game.levels.colors = [1 2];
-s.game.levels.repeats = 1;
 
 % %% Phase scripts
 % NOTE: This section only applies if you're using @runRATrial as your trial

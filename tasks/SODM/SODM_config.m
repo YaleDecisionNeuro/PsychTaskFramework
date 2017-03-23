@@ -40,17 +40,17 @@ s.game.feedbackActionFn = @action_display;
 s.objects.condition.position = [100 100];
 
 %% Available trial values
-s.game.levels.probs = [.25 .5 .75];
-s.game.levels.ambigs = [.24 .5 .74];
-s.game.levels.colors = [1 2];
-s.game.levels.repeats = 2;
-s.game.levels.stakes = 3:5;
+s.trial.generate.probs = [.25 .5 .75];
+s.trial.generate.ambigs = [.24 .5 .74];
+s.trial.generate.colors = [1 2];
+s.trial.generate.repeats = 2;
+s.trial.generate.stakes = 3:5;
 % Actually 2:5, but 3:5 is used for automated trial generation
-s.game.levels.stakes_loss = 1;
-s.game.levels.reference = 2;
+s.trial.generate.stakes_loss = 1;
+s.trial.generate.reference = 2;
 
-s.game.block.repeatIndex = 1;
-s.game.block.catchTrial = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
+s.trial.generate.catchIdx = 1;
+s.game.block.catchVals = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
   'stakes_loss', 1, 'reference', 2, 'colors', NaN, 'ITIs', 5);
-s.game.block.repeatRow = generateTrials(s.game.block.catchTrial);
+s.trial.generate.catchTrial = generateTrials(s.game.block.catchVals);
 end

@@ -36,11 +36,11 @@ s.task.blockLength = 12;
 s.task.numBlocks = 2;
 
 %% Available trial values
-s.game.levels.probs = [.25 .5 .75];
-s.game.levels.ambigs = [];
-s.game.levels.colors = [1 2];
-s.game.levels.repeats = 2;
-s.game.levels.stakes = 2:5;
-s.game.levels.stakes_loss = 1;
-s.game.levels.reference = 2;
+s.trial.generate.probs = [.25 .5 .75];
+s.trial.generate.ambigs = [];
+s.trial.generate.colors = [1 2];
+s.trial.generate.repeats = 2;
+s.trial.generate.stakes = 2:5;
+s.trial.generate.stakes_loss = 1;
+s.trial.generate.reference = 2;
 end

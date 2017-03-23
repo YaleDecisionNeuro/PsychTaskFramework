@@ -26,16 +26,16 @@ s.game.responseActionFn = @action_collectResponse;
 s.game.feedbackActionFn = @action_display;
 
 %% Available trial values to be used for trial generation
-s.game.levels.stakes = [5, 6, 7, 8, 10, 12, 14, 16, 19, 23, 27, 31, 37, 44, 52, 61, 73, 86, 101, 120];
-s.game.levels.probs = [.25 .5 .75];
-s.game.levels.ambigs = [.24 .5 .74];
-s.game.levels.stakes_loss = 0;
-s.game.levels.reference = 5;
-s.game.levels.colors = [1 2];
-s.game.levels.repeats = 1;
+s.trial.generate.stakes = [5, 6, 7, 8, 10, 12, 14, 16, 19, 23, 27, 31, 37, 44, 52, 61, 73, 86, 101, 120];
+s.trial.generate.probs = [.25 .5 .75];
+s.trial.generate.ambigs = [.24 .5 .74];
+s.trial.generate.stakes_loss = 0;
+s.trial.generate.reference = 5;
+s.trial.generate.colors = [1 2];
+s.trial.generate.repeats = 1;
 
-s.game.block.repeatIndex = 1; % where will the test of stochastic dominance be
-s.game.block.repeatRow = table(4, 0.5, 0, 0, 5, randperm(2, 1), 10, ...
+s.trial.generate.catchIdx = 1; % where will the test of stochastic dominance be
+s.trial.generate.catchTrial = table(4, 0.5, 0, 0, 5, randperm(2, 1), 10, ...
   'VariableNames', {'stakes', 'probs', 'ambigs', 'stakes_loss', 'reference', ...
   'colors', 'ITIs'});
 end

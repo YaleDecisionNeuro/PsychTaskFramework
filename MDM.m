@@ -57,14 +57,14 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   % need to be disambiguated.
 
   % 1. Generate 1 repeat of reference level trials, all possible P/A values
-  tempLevels = medSettings.game.levels;
+  tempLevels = medSettings.trial.generate;
   tempLevels.stakes = tempLevels.reference;
   tempLevels.repeats = 1;
   fillTrials = generateTrials(tempLevels);
   % fillTrials = fillTrials(randperm(height(fillTrials), 4), :)
 
   % 2. Generate 2 additional trials with reference payoff
-  tempLevels = medSettings.game.levels;
+  tempLevels = medSettings.trial.generate;
   tempLevels.stakes = tempLevels.reference;
   tempLevels.probs = 0.25;
   tempLevels.ambigs = 0.5;
@@ -75,14 +75,14 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   % 3. Have generateBlocks create the standard number of repeats with
   %    non-reference values
   tempMedSettings = medSettings;
-  tempMedSettings.game.levels.stakes = medSettings.game.levels.stakes(2:end);
-  medBlocks = generateBlocks(tempMedSettings, medSettings.game.block.repeatRow, ...
-    medSettings.game.block.repeatIndex, fillTrials);
+  tempMedSettings.trial.generate.stakes = medSettings.trial.generate.stakes(2:end);
+  medBlocks = generateBlocks(tempMedSettings, medSettings.trial.generate.catchTrial, ...
+    medSettings.trial.generate.catchIdx, fillTrials);
 
   tempMonSettings = monSettings;
-  tempMonSettings.game.levels.stakes = monSettings.game.levels.stakes(2:end);
-  monBlocks = generateBlocks(tempMonSettings, monSettings.game.block.repeatRow, ...
-    monSettings.game.block.repeatIndex, fillTrials);
+  tempMonSettings.trial.generate.stakes = monSettings.trial.generate.stakes(2:end);
+  monBlocks = generateBlocks(tempMonSettings, monSettings.trial.generate.catchTrial, ...
+    monSettings.trial.generate.catchIdx, fillTrials);
 
   % 4. Determine and save the order of blocks
   lastDigit = mod(Data.observer, 10);

@@ -34,20 +34,20 @@ s.game.responseActionFn = @action_collectResponse;
 s.game.feedbackActionFn = @action_display;
 
 %% Available trial values - are shared across med & monetary tasks!
-s.game.levels.stakes = 2:5; % Levels are translated via lookup table
-s.game.levels.probs = [.25 .5 .75];
-s.game.levels.ambigs = [.24 .5 .74];
-s.game.levels.stakes_loss = 1;
-s.game.levels.reference = 2;
-s.game.levels.colors = [1 2];
-s.game.levels.repeats = 4;
+s.trial.generate.stakes = 2:5; % Levels are translated via lookup table
+s.trial.generate.probs = [.25 .5 .75];
+s.trial.generate.ambigs = [.24 .5 .74];
+s.trial.generate.stakes_loss = 1;
+s.trial.generate.reference = 2;
+s.trial.generate.colors = [1 2];
+s.trial.generate.repeats = 4;
 
 % Useful for generation purposes
-s.game.block.repeatIndex = 1;
-% s.game.block.repeatRow = table(2, NaN, 0, 1, 2, NaN, 5, ...
+s.trial.generate.catchIdx = 1;
+% s.trial.generate.catchTrial = table(2, NaN, 0, 1, 2, NaN, 5, ...
 %   'VariableNames', {'stakes', 'probs', 'ambigs', 'stakes_loss', 'reference', ...
 %   'colors', 'ITIs'});
-s.game.block.catchTrial = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
+s.game.block.catchVals = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
   'stakes_loss', 1, 'reference', 2, 'colors', NaN, 'ITIs', 5);
-s.game.block.repeatRow = generateTrials(s.game.block.catchTrial);
+s.trial.generate.catchTrial = generateTrials(s.game.block.catchVals);
 end

@@ -67,8 +67,8 @@ if isfield(blockSettings, 'perUser') && isfield(blockSettings.perUser, 'refSide'
   referenceSide = blockSettings.perUser.refSide;
 end
 
-if isfield(blockSettings.game.levels, 'reference')
-  referenceValue = blockSettings.game.levels.reference;
+if isfield(blockSettings.trial.generate, 'reference')
+  referenceValue = blockSettings.trial.generate.reference;
 end
 
 % b. check in trialData

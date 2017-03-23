@@ -1,18 +1,18 @@
 function plannedBlocks = generateBlocks(blockSettings, ...
-    includeTrial, includeIndex, adHocTrials)
+    catchTrial, catchIdx, adHocTrials)
 % GENERATEBLOCKS Returns a cell array of trial tables generated with
-%   `generateTrials` from blockSettings.game.levels, separated into blocks with
+%   `generateTrials` from blockSettings.trial.generate, separated into blocks with
 %   a fixed number of rows (defined in blockSettings.task.blockLength). If
 %   given further arguments, it will also add to the final trial table the
-%   table `includeTrial` at per-block indices passed in `includeIndex`. If
+%   table `catchTrial` at per-block indices passed in `catchIdx`. If
 %   `adHocTrials` are provided, they are mixed in with the generated trials
 %   prior to randomizationand separation into blocks.
 %
-% NOTE: IncludeTrial must include all the columns that `generateTrials` will
-% create based on `blockSettings.game.levels`. An easy way to find what these
-% are is to run this function without includeTrial or includeIndex.
+% NOTE: catchTrial must include all the columns that `generateTrials` will
+% create based on `blockSettings.trial.generate`. An easy way to find what these
+% are is to run this function without catchTrial or catchIdx.
 %
-% If includeIndex is not provided, the catch trial will be placed randomly
+% If catchIdx is not provided, the catch trial will be placed randomly
 %   within each block.
 %
 % The function also adds ITIs to be generated per trial. NOTE: If ITIs matter
@@ -21,7 +21,7 @@ function plannedBlocks = generateBlocks(blockSettings, ...
 % defined in the column `ITIs`.)
 
 %% Step 1: Generate all trials for this kind of a block & randomize
-levels = blockSettings.game.levels;
+levels = blockSettings.trial.generate;
 allTrials = generateTrials(levels);
 if exist('adHocTrials', 'var')
   allTrials = [allTrials; adHocTrials];
@@ -32,12 +32,8 @@ allTrials = allTrials(randperm(numTrials), :);
 %% Step 2: Separate trials into blocks by blockLength
 % NOTE: blockLength is assumed to include any catch trials, but those are not
 %   assigned yet, which is why they're subtracted.
-if exist('includeTrial', 'var')
-  if exist('includeIndex', 'var')
-    minusTrials = includeIndex;
-  else
-    minusTrials = 1;
-  end
+if exist('catchTrial', 'var')
+  minusTrials = height(catchTrial);
 else
   minusTrials = 0;
 end
@@ -63,12 +59,12 @@ for k = 1:length(endIndices)
     trialTbl.ITIs = ITIs(randperm(length(ITIs)));
   end
 
-  % Insert constant catch trial at includeIndex of each block
-  if exist('includeTrial', 'var')
-    if exist('includeIndex', 'var')
-      trialTbl = injectRowAtIndex(trialTbl, includeTrial, includeIndex, levels);
+  % Insert constant catch trial at catchIdx of each block
+  if exist('catchTrial', 'var')
+    if exist('catchIdx', 'var')
+      trialTbl = injectRowAtIndex(trialTbl, catchTrial, catchIdx, levels);
     else
-      trialTbl = injectRowAtIndex(trialTbl, includeTrial, randi(blockLen), levels);
+      trialTbl = injectRowAtIndex(trialTbl, catchTrial, randi(blockLen), levels);
     end
   end
   plannedBlocks{k} = trialTbl;

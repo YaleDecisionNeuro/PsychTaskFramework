@@ -57,12 +57,12 @@ lossSettings = RA_Loss_config(gainSettings);
 %% Generate trials/blocks - if they haven't been generated before
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   % Gains
-  gainBlocks = generateBlocks(gainSettings, gainSettings.game.block.repeatRow, ...
-    gainSettings.game.block.repeatIndex);
+  gainBlocks = generateBlocks(gainSettings, gainSettings.trial.generate.catchTrial, ...
+    gainSettings.trial.generate.catchIdx);
 
   % Losses
-  lossBlocks = generateBlocks(lossSettings, lossSettings.game.block.repeatRow, ...
-    lossSettings.game.block.repeatIndex);
+  lossBlocks = generateBlocks(lossSettings, lossSettings.trial.generate.catchTrial, ...
+    lossSettings.trial.generate.catchIdx);
 
   lastDigit = mod(Data.observer, 10);
   gainsFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
