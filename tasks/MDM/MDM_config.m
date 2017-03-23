@@ -14,7 +14,7 @@ s.task.imgPath = [s.task.taskPath filesep 'img'];
 
 %% Non-display settings for the game
 % (Maximum) durations of the various stages, in seconds
-s.task.constantTrialDuration = true;
+s.task.constantBlockDuration = true;
 s.game.durations.showChoice = 6;
 s.game.durations.response = 3.5;
 s.game.durations.feedback = 0.5;

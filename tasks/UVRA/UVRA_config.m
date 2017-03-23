@@ -29,7 +29,7 @@ function s = UVRA_config()
   % Set durations of choice & intertrial period
   s.game.durations.showChoice = Inf;
   s.game.durations.ITIs = 1;
-  s.task.constantTrialDuration = false; % don't need to fit fMRI time blocks
+  s.task.constantBlockDuration = false; % don't need to fit fMRI time blocks
 
   % What phase and draw functions should runRATrial use?
   s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
