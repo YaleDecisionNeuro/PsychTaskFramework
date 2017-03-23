@@ -19,7 +19,11 @@ Screen('FillRect', windowPtr, blockSettings.default.bgrColor);
 Screen('TextFont', windowPtr, blockSettings.default.fontName);
 Screen('TextSize', windowPtr, blockSettings.default.fontSize);
 
-if exist('callback', 'var') && isa(callback, 'function_handle')
+if isfield(blockSettings.game, 'bgrDrawCallbackFn') && ...
+    isFunction(blockSettings.game.bgrDrawCallbackFn)
+  blockSettings.game.bgrDrawCallbackFn(blockSettings);
+end
+if exist('callback', 'var') && isFunction(callback)
   callback(blockSettings);
 end
 end

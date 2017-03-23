@@ -23,16 +23,21 @@ s.game.constantTrialDuration = false; % Early choice won't add to ITI
 
 %% Block properties
 s.game.name = 'SODM';
+s.game.block.length = 19;
+
 s.game.trialFn = @runRATrial; % RA-specific trial function
 s.game.responsePhaseFn = NaN;
 s.game.preBlockFn = @preBlock;
 s.game.showChoicePhaseFn = @SODM_showChoice;
 s.game.referenceDrawFn = @drawRef;
-s.game.bgrDrawFn = @SODM_drawBgr;
-% FIXME: Is drawBgr the best way of showing the context? Why not SODM_showChoice?
+s.game.bgrDrawFn = @drawBgr;
+s.game.bgrDrawCallbackFn = @SODM_drawCondition;
 
-% Useful for generation purposes
-s.game.block.length = 19;
+s.game.showChoiceActionFn = @action_collectResponse;
+s.game.feedbackActionFn = @action_display;
+
+%% Graphical setup for the condition
+s.objects.condition.position = [100 100];
 
 %% Available trial values
 s.game.levels.probs = [.25 .5 .75];
