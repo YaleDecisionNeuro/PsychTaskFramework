@@ -118,7 +118,7 @@ s.task.taskPath = char.empty;
 % participants's choices that might accelerate the trial timeline?
 %
 % If the task is set in a scanner, you almost certainly want to set it to true.
-s.task.constantTrialDuration = false;
+s.task.constantBlockDuration = false;
 
 % How many blocks and sessions should be generated? (Currently, PTF only
 % supports equal-length blocks and sessions. In the future)

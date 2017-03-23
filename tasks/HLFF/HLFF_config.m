@@ -19,7 +19,7 @@ s.game.durations.response = 0;
 s.game.durations.feedback = 0.5;
 s.game.durations.ITIs = 2;
 
-s.task.constantTrialDuration = false; % Early choice won't add to ITI
+s.task.constantBlockDuration = false; % Early choice won't add to ITI
 
 %% Block properties
 s.task.taskName = 'HLFF';
