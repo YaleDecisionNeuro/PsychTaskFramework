@@ -189,13 +189,13 @@ s.task.fnHandles.referenceDrawFn = @drawRef;
 % phase, what action should be taken at the end of the phase, how long the
 % phase should last and, optionally, what draw scripts should be invoked.
 % See tasks/HLFF/HLFF_config for an example.
-s.trial.phases = cell.empty
+s.trial.phases = cell.empty;
 
 % If you wish to run "old-school" Levylab R&A task with legacy settings,
-% you should fill `s.phases_RA` with a call to `RA_phaseStruct`. (You can,
+% you should fill `s.legacyPhases` with a call to `legacyPhaseStruct`. (You can,
 % and should, run the task with the new phase architecture, but this will
 % remain an option.)
-s.trial.phases_RA = struct.empty;
+s.trial.legacyPhases = struct.empty;
 
 %% What values should the trial be generated with?
 % These values are R&A-centric in that generateTrials and generateBlocks only
