@@ -17,5 +17,5 @@ function s = HLFF_config_LF(initial_config)
   s.lookups.stakes.img = {'nothing.png', 'pretzel1.jpeg', 'pretzel2.jpeg', ...
     'pretzel3.jpeg', 'pretzel4.jpeg'};
   % Fix images to path
-  s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.device.imgPath);
+  s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.task.imgPath);
 end

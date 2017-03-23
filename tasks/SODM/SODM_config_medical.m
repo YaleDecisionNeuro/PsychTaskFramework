@@ -18,5 +18,5 @@ function s = SODM_config_medical(initial_config)
   s.lookups.stakes.img = {'no effect.jpg'; 'slight improvement.jpg'; ...
     'moderate improvement.jpg'; 'major improvement.jpg'; 'recovery.jpg'};
   % Fix images to path
-  s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.device.imgPath);
+  s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.task.imgPath);
 end

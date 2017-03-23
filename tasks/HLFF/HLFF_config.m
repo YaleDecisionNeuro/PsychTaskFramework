@@ -6,8 +6,8 @@ function s = HLFF_config()
 s = config();
 
 %% Machine settings
-s.device.taskPath = ['tasks' filesep 'HLFF'];
-s.device.imgPath = [s.device.taskPath filesep 'img'];
+s.task.taskPath = ['tasks' filesep 'HLFF'];
+s.task.imgPath = [s.task.taskPath filesep 'img'];
 
 %% Features of objects that your task displays
 % Inheriting all objects from `config`

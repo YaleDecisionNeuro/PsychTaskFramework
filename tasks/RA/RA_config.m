@@ -8,7 +8,7 @@ function s = RA_config()
 s = config();
 
 %% Machine settings
-s.device.taskPath = ['tasks' filesep 'RA'];
+s.task.taskPath = ['tasks' filesep 'RA'];
 s.task.constantTrialDuration = true; % This is fMRI, so intertrial compensates for any fast responses in order to make each trial last a constant amount of time
 
 %% Game settings

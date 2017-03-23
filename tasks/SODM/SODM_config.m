@@ -6,8 +6,8 @@ function s = SODM_config()
 s = config();
 
 %% Machine settings
-s.device.taskPath = ['tasks' filesep 'SODM'];
-s.device.imgPath = [s.device.taskPath filesep 'img'];
+s.task.taskPath = ['tasks' filesep 'SODM'];
+s.task.imgPath = [s.task.taskPath filesep 'img'];
 
 %% Features of objects that your task displays
 % Inheriting all objects from `config`
