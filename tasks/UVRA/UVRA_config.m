@@ -18,13 +18,13 @@ function s = UVRA_config()
   s.task.blocksPerSession = 2;
 
   % Winning pay-offs
-  s.game.levels.stakes = [5, 8, 12, 17, 25];
-  s.game.levels.stakes_loss = 0;
-  s.game.levels.reference = 5;
-  s.game.levels.probs = [.25 .5 .75];
-  s.game.levels.ambigs = [.24 .5 .74];
-  s.game.levels.colors = [1 2];
-  s.game.levels.repeats = 4;
+  s.trial.generate.stakes = [5, 8, 12, 17, 25];
+  s.trial.generate.stakes_loss = 0;
+  s.trial.generate.reference = 5;
+  s.trial.generate.probs = [.25 .5 .75];
+  s.trial.generate.ambigs = [.24 .5 .74];
+  s.trial.generate.colors = [1 2];
+  s.trial.generate.repeats = 4;
 
   % Set durations of choice & intertrial period
   s.game.durations.showChoice = Inf;
