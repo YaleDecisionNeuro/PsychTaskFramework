@@ -51,7 +51,7 @@ trialTbl = table(stakes, probs, ambigs);
 
 %% 2. If other values exist, generate them and add as columns
 numTrials = height(trialTbl);
-excludeFields = {'stakes', 'probs', 'ambigs', 'repeats'};
+excludeFields = {'stakes', 'probs', 'ambigs', 'repeats', 'catchTrial', 'catchIdx'};
 allFields = fieldnames(levelSettings);
 getFields = allFields(~ismember(allFields, excludeFields));
 
