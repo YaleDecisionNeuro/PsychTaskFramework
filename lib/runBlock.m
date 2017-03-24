@@ -73,8 +73,7 @@ function [ DataObject ] = addTrial(DataObject, trialData, blockSettings)
 % Assumes that prepForRecording already ran on the DataObject.
 
 % Get the index of the current block being recorded
-% (numRecorded is *recorded thus far*, so it's always the one after that)
-currentBlockIdx = DataObject.blocks.numRecorded + 1;
+currentBlockIdx = DataObject.numFinishedBlocks + 1;
 
 % If the block is new, set it up with current settings
 if numel(DataObject.blocks.recorded) < currentBlockIdx
@@ -90,13 +89,13 @@ end
 
 function [ DataObject ] = finishBlock(DataObject)
 % Mark that the block is finished and shouldn't be resumed.
-  DataObject.blocks.numRecorded = DataObject.blocks.numRecorded + 1;
+  DataObject.numFinishedBlocks = DataObject.numFinishedBlocks + 1;
 end
 
 function [ DataObject ] = prepForRecording(DataObject)
 % Ensure that DataObject has the fields it is expected to have.
-  if ~isfield(DataObject.blocks, 'numRecorded')
-    DataObject.blocks.numRecorded = 0;
+  if ~isfield(DataObject, 'numFinishedBlocks')
+    DataObject.numFinishedBlocks = 0;
   end
   if ~isfield(DataObject.blocks, 'recorded')
     DataObject.blocks.recorded = cell(0);
@@ -106,7 +105,7 @@ end
 function [ firstTrial ] = getFirstTrial(DataObject)
 % Determine the first trial to run if the block was previously interrupted
 numStartedBlocks = numel(DataObject.blocks.recorded);
-numFinishedBlocks = DataObject.blocks.numRecorded;
+numFinishedBlocks = DataObject.numFinishedBlocks;
 
 if numStartedBlocks > numFinishedBlocks
   firstTrial = height(DataObject.blocks.recorded{end}.records) + 1;

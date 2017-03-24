@@ -8,7 +8,7 @@ function pickAndEvaluateTrial(DataObject, settings)
 % FIXME: This was written in a hurry, and should at some point be refactored.
 
 %% 1. Pick an available trial at random
-blockIdx = randi(DataObject.blocks.numRecorded);
+blockIdx = randi(DataObject.numFinishedBlocks);
 block = DataObject.blocks.recorded{blockIdx};
 trialIdx = randi(height(block.records));
 trial = block.records(trialIdx, :);
