@@ -64,8 +64,8 @@ function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData,
 % Approach: Start from general options and overwrite with more specific ones
 
 % a. Check in blockSettings
-if isfield(blockSettings, 'perUser') && isfield(blockSettings.perUser, 'refSide')
-  referenceSide = blockSettings.perUser.refSide;
+if isfield(blockSettings, 'runSetup') && isfield(blockSettings.runSetup, 'refSide')
+  referenceSide = blockSettings.runSetup.refSide;
 end
 
 if isfield(blockSettings.trial.generate, 'reference')

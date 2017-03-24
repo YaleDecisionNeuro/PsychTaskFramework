@@ -51,7 +51,7 @@ bag = bagMap.bagNumber(mask);
 if ismember('choseLottery', trial.Properties.VariableNames)
   choseLottery = trial.choseLottery;
 else
-  choseLottery = keyToChoice(trial.choice, block.settings.perUser.refSide);
+  choseLottery = keyToChoice(trial.choice, block.settings.runSetup.refSide);
 end
 
 % Is there a look-up table for stakes? If so, use it!

@@ -32,13 +32,13 @@ if exist('observer', 'var') % Running actual trials -> record
   Data.observer = observer;
   Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
   if mod(observer, 2) == 0
-      settings.perUser.refSide = 1;
+      settings.runSetup.refSide = 1;
   else
-      settings.perUser.refSide = 2;
+      settings.runSetup.refSide = 2;
   end
 else % Running practice
   Data.observer = NaN;
-  settings.perUser.refSide = randi(2);
+  settings.runSetup.refSide = randi(2);
   settings.device.saveAfterBlock = false;
   settings.device.saveAfterTrial = false;
 end
