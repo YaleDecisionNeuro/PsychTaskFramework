@@ -1,5 +1,5 @@
 function [Data] = saveData(Data)
-% SAVEDATA Saves a participant data file to `Data.filename`. Ensures that it
+% SAVEDATA Saves a subject data file to `Data.filename`. Ensures that it
 %   stores the struct Data correctly, such that `loadOrCreate` can load it
 %   properly.
 %

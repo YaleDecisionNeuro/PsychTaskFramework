@@ -1,4 +1,4 @@
-function [ Data ] = RA(observer)
+function [ Data ] = RA(subjectId)
 % RA Main task script for the monetary risk and ambiguity task. Loads settings,
 %   executes requisite blocks, and records data for the subject whose ID is
 %   passed as an argument.
@@ -19,32 +19,32 @@ addpath(genpath('./tasks/RA'));
 settings = RA_config();
 settings = loadPTB(settings);
 
-if exist('observer', 'var') % Running actual trials -> record
-  % Find-or-create participant data file *in appropriate location*
-  fname = [num2str(observer) '.mat'];
+if exist('subjectId', 'var') % Running actual trials -> record
+  % Find-or-create subject data file *in appropriate location*
+  fname = [num2str(subjectId) '.mat'];
   folder = fullfile(settings.task.taskPath, 'data');
   fname = [folder filesep fname];
-  [ Data, participantExisted ] = loadOrCreate(observer, fname);
+  [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
   % TODO: Prompt experimenter if this is correct
-  if participantExisted
-    disp('Participant file exists, reusing...')
+  if subjectExisted
+    disp('Subject file exists, reusing...')
   else
-    disp('Participant has no file, creating...')
+    disp('Subject has no file, creating...')
     Data.date = datestr(now, 'yyyymmddTHHMMSS');
   end
 
-  % Save participant ID + date
+  % Save subject ID + date
   % TODO: Prompt for correctness before launching PTB?
-  Data.observer = observer;
+  Data.subjectId = subjectId;
   Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
-  if mod(observer, 2) == 0
+  if mod(subjectId, 2) == 0
       settings.runSetup.refSide = 1;
   else
       settings.runSetup.refSide = 2;
   end
 else % Running practice
-  Data.observer = NaN;
+  Data.subjectId = NaN;
   settings.runSetup.refSide = randi(2);
   settings.device.saveAfterBlock = false;
   settings.device.saveAfterTrial = false;
@@ -64,7 +64,7 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   lossBlocks = generateBlocks(lossSettings, lossSettings.trial.generate.catchTrial, ...
     lossSettings.trial.generate.catchIdx);
 
-  lastDigit = mod(Data.observer, 10);
+  lastDigit = mod(Data.subjectId, 10);
   gainsFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
   gainsIdx = [1 1 0 0 0 0 1 1];
   if ~gainsFirst
@@ -101,7 +101,7 @@ end
 % NOTE: Incidentally, this takes care of an attempt to run more than 8 blocks -
 %   9:8 is empty, so the for loop will not run if firstBlockIdx > lastBlockIdx
 
-if exist('observer', 'var')
+if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
     if Data.blocks.planned{blockIdx}.blockKind == 0
       blockSettings = lossSettings;

@@ -43,7 +43,7 @@ function Data = runBlock(Data, blockSettings)
     end
   end
 
-  %% 3. Save participant file after block
+  %% 3. Save subject file after block
   Data = finishBlock(Data);
   if blockSettings.device.saveAfterBlock || blockSettings.device.saveAfterTrial
     saveData(Data);

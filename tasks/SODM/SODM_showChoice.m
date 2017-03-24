@@ -1,6 +1,6 @@
 function [ trialData ] = SODM_showChoice(trialData, blockSettings, phaseSettings)
 % SODM_SHOWCHOICE Executes the SODM trial phase of showing the task choice to
-%   the participant and collecting their response. Choice values are derived
+%   the subject and collecting their response. Choice values are derived
 %   from `trialData` and, if need be, `blockSettings`.
 
 windowPtr = blockSettings.device.windowPtr;

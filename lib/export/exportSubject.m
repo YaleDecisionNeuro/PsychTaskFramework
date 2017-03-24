@@ -1,10 +1,10 @@
-function [ exportTable ] = exportParticipant(DataObject, fname)
-% ExportParticipant Given a DataObject, it unites all records in one table.
+function [ exportTable ] = exportSubject(DataObject, fname)
+% ExportSubject Given a DataObject, it unites all records in one table.
 %   If given fname, it will also write the table into a file.
 %
 % The file format has to be any that `writetable` can handle; consult its docs.
 
-subjId = DataObject.observer;
+subjId = DataObject.subjectId;
 exportTable = table();
 if ~isfield(DataObject, 'blocks')
   warning('DataObject for %d contains no planned or recorded blocks.', subjId)

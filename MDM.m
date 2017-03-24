@@ -1,6 +1,6 @@
-function [ Data ] = MDM(observer)
+function [ Data ] = MDM(subjectId)
 % MDM Runs a medical decision-making task and records its results for the
-%   participant whose subject number is passed in. Modeled on (and largely
+%   subject whose subject number is passed in. Modeled on (and largely
 %   copy-pasted from) RA.m, to test out image implementation (#5).
 
 %% Add subfolders we'll be using to path
@@ -12,32 +12,32 @@ addpath(genpath('./tasks/MDM'));
 settings = MDM_config();
 settings = loadPTB(settings);
 
-if exist('observer', 'var') % Running actual trials -> record
-  % Find-or-create participant data file *in appropriate location*
-  fname = [num2str(observer) '.mat'];
+if exist('subjectId', 'var') % Running actual trials -> record
+  % Find-or-create subject data file *in appropriate location*
+  fname = [num2str(subjectId) '.mat'];
   folder = fullfile(settings.task.taskPath, 'data');
   fname = [folder filesep fname];
-  [ Data, participantExisted ] = loadOrCreate(observer, fname);
+  [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
   % TODO: Prompt experimenter if this is correct
-  if participantExisted
-    disp('Participant file exists, reusing...')
+  if subjectExisted
+    disp('Subject file exists, reusing...')
   else
-    disp('Participant has no file, creating...')
+    disp('Subject has no file, creating...')
     Data.date = datestr(now, 'yyyymmddTHHMMSS');
   end
 
-  % Save participant ID + date
+  % Save subject ID + date
   % TODO: Prompt for correctness before launching PTB?
-  Data.observer = observer;
+  Data.subjectId = subjectId;
   Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
-  if mod(observer, 2) == 0
+  if mod(subjectId, 2) == 0
       settings.runSetup.refSide = 1;
   else
       settings.runSetup.refSide = 2;
   end
 else % Running practice
-  Data.observer = NaN;
+  Data.subjectId = NaN;
   settings.runSetup.refSide = randi(2);
   settings.device.saveAfterBlock = false;
   settings.device.saveAfterTrial = false;
@@ -85,7 +85,7 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
     monSettings.trial.generate.catchIdx, fillTrials);
 
   % 4. Determine and save the order of blocks
-  lastDigit = mod(Data.observer, 10);
+  lastDigit = mod(Data.subjectId, 10);
   medFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
   medIdx = [1 1 0 0];
   if ~medFirst
@@ -113,7 +113,7 @@ end
 firstBlockIdx = Data.blocks.numRecorded + 1;
 lastBlockIdx = 4; % FIXME: Derive from settings
 
-if exist('observer', 'var')
+if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
     if Data.blocks.planned{blockIdx}.blockKind == 0
       blockSettings = monSettings;
