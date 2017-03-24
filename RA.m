@@ -74,7 +74,7 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   numBlocks = 8;
   Data.blocks.planned = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
-  Data.blocks.numRecorded = 0;
+  Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = gainsIdx(blockIdx);
     withinKindIdx = sum(gainsIdx(1 : blockIdx) == blockKind);
@@ -92,7 +92,7 @@ end
 % Strategy: Run each block with separate settings; define its trials by
 % subsetting them; handle any prompts / continuations here, or pass different
 % callbacks
-firstBlockIdx = Data.blocks.numRecorded + 1;
+firstBlockIdx = Data.numFinishedBlocks + 1;
 if firstBlockIdx > 4
   lastBlockIdx = 8;
 else

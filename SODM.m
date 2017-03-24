@@ -90,7 +90,7 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   numBlocks = 8; % TODO: Derive from settings?
   Data.blocks.planned = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
-  Data.blocks.numRecorded = 0;
+  Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = medIdx(blockIdx);
     beneficiaryKind = selfIdx(blockIdx);
@@ -109,7 +109,7 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
 end
 
 % Display blocks
-firstBlockIdx = Data.blocks.numRecorded + 1;
+firstBlockIdx = Data.numFinishedBlocks + 1;
 lastBlockIdx = 8; % FIXME: Derive from settings
 
 if exist('subjectId', 'var')

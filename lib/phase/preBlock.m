@@ -3,8 +3,8 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
   %   blockSettings.device.breakKeys.
 
   % Check if there are any recorded blocks yet
-  if isfield(Data, 'blocks') && isfield(Data.blocks, 'numRecorded')
-    block_num = Data.blocks.numRecorded + 1;
+  if isfield(Data, 'blocks') && isfield(Data, 'numFinishedBlocks')
+    block_num = Data.numFinishedBlocks + 1;
   else
     block_num = 1;
   end
