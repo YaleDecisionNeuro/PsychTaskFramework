@@ -24,7 +24,7 @@ function Data = runBlock(Data, blockSettings)
   end
 
   %% 2. Iterate through trials
-  trials = blockSettings.game.trials;
+  trials = blockSettings.runSetup.trialsToRun;
   numTrials = size(trials, 1);
   firstTrial = getFirstTrial(Data);
 

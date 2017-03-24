@@ -88,7 +88,7 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
 
   % Logic: Do mon/med blocks first, pass self/other to them depending on selfIdx
   numBlocks = 8; % TODO: Derive from settings?
-  Data.blocks.planned = cell(numBlocks, 1);
+  Data.plannedBlocks = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
@@ -97,11 +97,11 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
     withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
 
     if blockKind == 1
-      Data.blocks.planned{blockIdx} = struct('trials', ...
+      Data.plannedBlocks{blockIdx} = struct('trials', ...
         medBlocks{withinKindIdx}, 'blockKind', blockKind, ...
         'beneficiaryKind', beneficiaryKind);
     else
-      Data.blocks.planned{blockIdx} = struct('trials', ...
+      Data.plannedBlocks{blockIdx} = struct('trials', ...
         monBlocks{withinKindIdx}, 'blockKind', blockKind, ...
         'beneficiaryKind', beneficiaryKind);
     end
@@ -115,14 +115,14 @@ lastBlockIdx = 8; % FIXME: Derive from settings
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
     % Determine monetary or medical
-    if Data.blocks.planned{blockIdx}.blockKind == 0
+    if Data.plannedBlocks{blockIdx}.blockKind == 0
       blockSettings = monSettings;
     else
       blockSettings = medSettings;
     end
 
     % Determine self or other
-    if Data.blocks.planned{blockIdx}.beneficiaryKind == 0
+    if Data.plannedBlocks{blockIdx}.beneficiaryKind == 0
       blockSettings.game.block.beneficiaryKind = 0;
       blockSettings.game.block.beneficiaryText = 'Friend';
     else
@@ -132,7 +132,7 @@ if exist('subjectId', 'var')
     blockSettings.runSetup.blockName = [blockSettings.runSetup.blockName ' / ' ...
       blockSettings.game.block.beneficiaryText];
 
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials;
+    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
     Data = runBlock(Data, blockSettings);
   end
 else
@@ -140,14 +140,14 @@ else
   numSelect = 3;
   for blockIdx = 1:4
     % Determine medical or monetary
-    if Data.blocks.planned{blockIdx}.blockKind == 0
+    if Data.plannedBlocks{blockIdx}.blockKind == 0
       blockSettings = monSettings;
     else
       blockSettings = medSettings;
     end
 
     % Determine self or other
-    if Data.blocks.planned{blockIdx}.beneficiaryKind == 0
+    if Data.plannedBlocks{blockIdx}.beneficiaryKind == 0
       blockSettings.game.block.beneficiaryKind = 0;
       blockSettings.game.block.beneficiaryText = 'Friend';
     else
@@ -158,7 +158,7 @@ else
       blockSettings.game.block.beneficiaryText];
 
     randomIdx = randperm(blockSettings.task.blockLength, numSelect);
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
     Data = runBlock(Data, blockSettings);
   end
 end

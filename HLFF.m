@@ -45,14 +45,14 @@ settingsLF.runSetup.textures = loadTexturesFromConfig(settingsLF);
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, settings.task.numBlocks
 %   will need to be changed to an integer that divides the generated trial count.
-if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
+if ~isfield(Data, 'planned')
   blocks = generateBlocks(settingsLF);
   numBlocks = settingsLF.task.numBlocks;
-  Data.blocks.planned = cell(numBlocks, 1);
+  Data.plannedBlocks = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
-    Data.blocks.planned{blockIdx} = struct('trials', blocks{blockIdx});
+    Data.plannedBlocks{blockIdx} = struct('trials', blocks{blockIdx});
   end
 end
 
@@ -62,7 +62,7 @@ lastBlockIdx = 2; % FIXME: Derive from settings
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    settingsLF.game.trials = Data.blocks.planned{blockIdx}.trials;
+    settingsLF.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
     Data = runBlock(Data, settingsLF);
   end
 else
@@ -70,7 +70,7 @@ else
   numSelect = 3;
   blockIdx = randi(settingsLF.task.numBlocks);
   randomIdx = randperm(settingsLF.task.blockLength, numSelect);
-  settingsLF.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+  settingsLF.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
   Data = runBlock(Data, settingsLF);
 end
 
