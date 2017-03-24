@@ -50,11 +50,11 @@ end
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   blocks = generateBlocks(settings);
   numBlocks = settings.task.numBlocks;
-  Data.blocks.planned = cell(numBlocks, 1);
+  Data.plannedBlocks = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
-    Data.blocks.planned{blockIdx} = struct('trials', blocks{blockIdx});
+    Data.plannedBlocks{blockIdx} = struct('trials', blocks{blockIdx});
   end
 end
 
@@ -71,7 +71,7 @@ end
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    settings.game.trials = Data.blocks.planned{blockIdx}.trials;
+    settings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
     Data = runBlock(Data, settings);
   end
 else
@@ -79,7 +79,7 @@ else
   numSelect = 3;
   blockIdx = randi(settings.task.numBlocks);
   randomIdx = randperm(settings.task.blockLength, numSelect);
-  settings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+  settings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
   Data = runBlock(Data, settings);
 end
 

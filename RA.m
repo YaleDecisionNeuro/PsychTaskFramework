@@ -72,17 +72,17 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   end
 
   numBlocks = 8;
-  Data.blocks.planned = cell(numBlocks, 1);
+  Data.plannedBlocks = cell(numBlocks, 1);
   Data.blocks.recorded = cell(0);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = gainsIdx(blockIdx);
     withinKindIdx = sum(gainsIdx(1 : blockIdx) == blockKind);
     if blockKind == 1
-      Data.blocks.planned{blockIdx} = struct('trials', ...
+      Data.plannedBlocks{blockIdx} = struct('trials', ...
         gainBlocks{withinKindIdx}, 'blockKind', blockKind);
     else
-      Data.blocks.planned{blockIdx} = struct('trials', ...
+      Data.plannedBlocks{blockIdx} = struct('trials', ...
         lossBlocks{withinKindIdx}, 'blockKind', blockKind);
     end
   end
@@ -103,25 +103,25 @@ end
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    if Data.blocks.planned{blockIdx}.blockKind == 0
+    if Data.plannedBlocks{blockIdx}.blockKind == 0
       blockSettings = lossSettings;
     else
       blockSettings = gainSettings;
     end
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials;
+    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
     Data = runBlock(Data, blockSettings);
   end
 else
   % Run practice -- only first n trials of first two blocks?
   numSelect = 3;
   for blockIdx = 6:7 % Known to be two different blocks
-    if Data.blocks.planned{blockIdx}.blockKind == 0
+    if Data.plannedBlocks{blockIdx}.blockKind == 0
       blockSettings = lossSettings;
     else
       blockSettings = gainSettings;
     end
     randomIdx = randperm(blockSettings.task.blockLength, numSelect);
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
+    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
     Data = runBlock(Data, blockSettings);
   end
 end
