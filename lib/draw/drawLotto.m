@@ -109,8 +109,7 @@ DrawFormattedText(windowPtr, bottomProbString, botXY(1), botXY(2), probColor);
 %% 5. Draw the payoffs
 % Choose how to display the payoff (different function for monetary amounts,
 %   vs. for images with labels)
-if isfield(blockSettings.runSetup, 'lookups') && ...
-    ~isempty(blockSettings.runSetup.lookups)
+if configHasLookups(blockSettings)
   drawPayoffImageAndLabel(payoffs);
 else
   drawPayoffAmount(payoffs);

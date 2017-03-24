@@ -32,8 +32,7 @@ end
 
 Screen('TextSize', windowPtr, blockSettings.objects.reference.fontSize);
 
-if ~isfield(blockSettings.runSetup, 'lookups') || ...
-    isempty(blockSettings.runSetup.lookups)
+if ~configHasLookups(blockSettings)
   % 1, Prepare text (and nothing else)
   displayText = dollarFormatter(referenceValue);
   textDims = getTextDims(windowPtr, displayText);
