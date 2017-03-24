@@ -1,7 +1,7 @@
 function [ choseLottery ] = keyToChoice(recordedChoice, refSide)
 % KEYTOCHOICE Based on the choice recorded according to current rules (0 = no
 %   response, 1 = choice on left, 2 = choice on right) and the knowledge of
-%   which side has the reference, output whether the participant chose the
+%   which side has the reference, output whether the subject chose the
 %   gamble as true / false / NaN.
 
 % Strategy: build a dictionary for which recordedChoice will be an index.

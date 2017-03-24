@@ -1,6 +1,6 @@
 function [ trialData ] = phase_showChoice(trialData, blockSettings, phaseSettings)
 % PHASE_SHOWCHOICE Shows the choices defined in trialData and blockData to the
-%   participant. This includes a lottery and a reference. If available, executes
+%   subject. This includes a lottery and a reference. If available, executes
 %   action defined in phaseSettings.action; otherwise, waits for duration.
 
 windowPtr = blockSettings.device.windowPtr;

@@ -1,6 +1,6 @@
-function [ Data, existed ] = loadOrCreate(participantId, fname)
-% LOADORCREATE Load a participant data file. If it does not exist, create it.
-% (Currently assumes that participant data is stored in a struct called Data,
+function [ Data, existed ] = loadOrCreate(subjectId, fname)
+% LOADORCREATE Load a subject data file. If it does not exist, create it.
+% (Currently assumes that subject data is stored in a struct called Data,
 % and that the folders in the path to `fname` all exist.)
 
 [path, ~, ~] = fileparts(fname);
@@ -13,7 +13,7 @@ if existed
   temp = load(fname, 'Data');
   Data = temp.Data;
 else
-  Data.observer = participantId;
+  Data.subjectId = subjectId;
   Data.filename = fname;
   save(fname, 'Data');
 end

@@ -79,7 +79,7 @@ s.objects.lottery.box.occluderWidth = 170;
 % order as `.box.probColors` set above.
 %
 % Useful for contexts in which color indices need to be translated, especially
-% for a choice evaluation for the participant's eyes.
+% for a choice evaluation for the subject's eyes.
 s.objects.lottery.box.colorKey = {'blue', 'red'};
 
 s.objects.lottery.stakes.fontSize = s.graphicDefault.fontSize;
@@ -115,7 +115,7 @@ s.task.taskPath = char.empty;
 % Should the intertrial period be extended to last as long as the sum of each
 % phase's maximum durations? In other words, should the ITI display duration
 % ensure that each trial lasts an exactly set time, regardless of the
-% participants's choices that might accelerate the trial timeline?
+% subjects's choices that might accelerate the trial timeline?
 %
 % If the task is set in a scanner, you almost certainly want to set it to true.
 s.task.constantBlockDuration = false;
@@ -241,7 +241,7 @@ s.trial.generate.ambigs = [.24 .5 .74];
 % trials within the block.
 %
 % If you need trials of constant length, intertrial period should be extended
-% by whatever time the participants saved by answering early. In order to do
+% by whatever time the subjects saved by answering early. In order to do
 % that, set `s.task.constantBlockDuration` to `true`.
 s.trial.generate.ITIs = 5;
 % NOTE: Values for the fMRI R&A task are
