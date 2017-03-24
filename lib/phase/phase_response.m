@@ -37,5 +37,5 @@ function trialData = timeAndRecordResponse(trialData, blockSettings)
       trialData.rt = NaN;
   end
   trialData.choseLottery = keyToChoice(trialData.choice, ...
-    blockSettings.perUser.refSide);
+    blockSettings.runSetup.refSide);
 end

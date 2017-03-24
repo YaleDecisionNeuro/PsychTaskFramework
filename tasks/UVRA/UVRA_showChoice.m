@@ -13,7 +13,7 @@ if isfield(blockSettings.task.fnHandles, 'bgrDrawFn') && ...
 end
 
 % Determine off-centering
-if blockSettings.perUser.refSide == 2
+if blockSettings.runSetup.refSide == 2
   blockSettings.objects.lottery.offCenterByPx = -1 * blockSettings.objects.lottery.offCenterByPx;
 end
 
@@ -53,5 +53,5 @@ function trialData = timeAndRecordTask(trialData, blockSettings)
       trialData.rt = NaN;
   end
   trialData.choseLottery = keyToChoice(trialData.choice, ...
-    blockSettings.perUser.refSide);
+    blockSettings.runSetup.refSide);
 end

@@ -21,5 +21,5 @@ else % non-press
   trialData.rt = NaN;
 end
 trialData.choseLottery = keyToChoice(trialData.choice, ...
-  blockSettings.perUser.refSide);
+  blockSettings.runSetup.refSide);
 end
