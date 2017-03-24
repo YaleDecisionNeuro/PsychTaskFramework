@@ -40,7 +40,7 @@ else % Running practice
 end
 
 settingsLF = HLFF_config_LF(settings);
-settingsLF.textures = loadTexturesFromConfig(settingsLF);
+settingsLF.runSetup.textures = loadTexturesFromConfig(settingsLF);
 
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, settings.task.numBlocks

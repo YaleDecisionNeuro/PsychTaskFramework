@@ -6,16 +6,16 @@ function s = HLFF_config_LF(initial_config)
     s = config();
   end
 
-  s.game.block.name = 'Food';
+  s.runSetup.blockName = 'Food';
 
   s.objects.lottery.stakes.fontSize = 24;
   s.objects.reference.fontSize = s.objects.lottery.stakes.fontSize;
 
   %% Lookup tables
-  s.lookups.stakes.txt = {'No pretzels', '10 pretzels', '15 pretzels', ...
+  s.runSetup.lookups.txt = {'No pretzels', '10 pretzels', '15 pretzels', ...
     '20 pretzels', '30 pretzels'};
-  s.lookups.stakes.img = {'nothing.png', 'pretzel1.jpeg', 'pretzel2.jpeg', ...
+  s.runSetup.lookups.img = {'nothing.png', 'pretzel1.jpeg', 'pretzel2.jpeg', ...
     'pretzel3.jpeg', 'pretzel4.jpeg'};
   % Fix images to path
-  s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.task.imgPath);
+  s.runSetup.lookups.img = prependPath(s.runSetup.lookups.img, s.task.imgPath);
 end

@@ -8,7 +8,7 @@ function s = UVRA_config()
 
   % Meta
   s.task.taskName = 'UVRA';
-  s.game.block.name = 'Gains';
+  s.runSetup.blockName = 'Gains';
   % This marks the default block name, will be displayed in pre-block screen,
   %   and marks the block in data export.
 

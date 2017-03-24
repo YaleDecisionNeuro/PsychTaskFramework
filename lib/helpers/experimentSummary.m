@@ -56,8 +56,9 @@ end
 
 % Is there a look-up table for stakes? If so, use it!
 settings = block.settings;
-if isfield(settings, 'lookups')
-  lookupTable = settings.lookups.stakes.txt;
+if isfield(blockSettings.runSetup, 'lookups') && ...
+    ~isempty(blockSettings.runSetup.lookups)
+  lookupTable = settings.runSetup.lookups.txt;
   w = textLookup(trial.stakes, lookupTable);
   l = textLookup(trial.stakes_loss, lookupTable);
   r = textLookup(trial.reference, lookupTable);

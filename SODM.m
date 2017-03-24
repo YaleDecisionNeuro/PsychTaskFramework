@@ -48,8 +48,8 @@ end
 % Disambiguate settings here
 monSettings = SODM_config_monetary(settings);
 medSettings = SODM_config_medical(settings);
-medSettings.textures = loadTexturesFromConfig(medSettings);
-monSettings.textures = loadTexturesFromConfig(monSettings);
+medSettings.runSetup.textures = loadTexturesFromConfig(medSettings);
+monSettings.runSetup.textures = loadTexturesFromConfig(monSettings);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
@@ -129,7 +129,7 @@ if exist('observer', 'var')
       blockSettings.game.block.beneficiaryKind = 1;
       blockSettings.game.block.beneficiaryText = 'Myself';
     end
-    blockSettings.game.block.name = [blockSettings.game.block.name ' / ' ...
+    blockSettings.runSetup.blockName = [blockSettings.runSetup.blockName ' / ' ...
       blockSettings.game.block.beneficiaryText];
 
     blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials;
@@ -154,7 +154,7 @@ else
       blockSettings.game.block.beneficiaryKind = 1;
       blockSettings.game.block.beneficiaryText = 'Myself';
     end
-    blockSettings.game.block.name = [blockSettings.game.block.name ' / ' ...
+    blockSettings.runSetup.blockName = [blockSettings.runSetup.blockName ' / ' ...
       blockSettings.game.block.beneficiaryText];
 
     randomIdx = randperm(blockSettings.task.blockLength, numSelect);

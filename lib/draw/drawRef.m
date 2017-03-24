@@ -32,18 +32,19 @@ end
 
 Screen('TextSize', windowPtr, blockSettings.objects.reference.fontSize);
 
-if ~isfield(blockSettings, 'lookups')
+if ~isfield(blockSettings.runSetup, 'lookups') || ...
+    isempty(blockSettings.runSetup.lookups)
   % 1, Prepare text (and nothing else)
   displayText = dollarFormatter(referenceValue);
   textDims = getTextDims(windowPtr, displayText);
 else
   % 1. Prepare text
-  lookupTbl = blockSettings.lookups.stakes.txt;
+  lookupTbl = blockSettings.runSetup.lookups.txt;
   [ displayText, textDims ] = textLookup(referenceValue, lookupTbl, windowPtr);
 
   % 2. Draw the reference image underneath
-  imgLookupTbl = blockSettings.lookups.stakes.img;
-  textureBank = blockSettings.textures;
+  imgLookupTbl = blockSettings.runSetup.lookups.img;
+  textureBank = blockSettings.runSetup.textures;
   [ img, imgDims ] = imgLookup(referenceValue, imgLookupTbl, textureBank);
   Screen('DrawTexture', windowPtr, img, [], ...
     xyAndDimsToRect([refDims.x - imgDims(1)/2, refDims.y], imgDims));

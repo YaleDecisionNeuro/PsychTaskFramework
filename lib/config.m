@@ -212,7 +212,7 @@ s.trial.legacyPhases = struct.empty;
 % no-risk alternative.
 %
 % If you're using images or textual labels, you will need to use *indices* of
-% s.trial.lookups.txt and s.trial.lookups.img. For instance, if the textual
+% s.runSetup.lookups.txt and s.runSetup.lookups.img. For instance, if the textual
 % description of possible outcomes is {"no cookies", "one cookie", "two
 % cookies", "a dozen cookies"}, and you want possible lottery win values to be
 % two cookies, loss value to be no cookie and sure option to be one cookie,
@@ -220,7 +220,7 @@ s.trial.legacyPhases = struct.empty;
 %
 %   stakes = [2]; stakes_loss = 0; reference = 1;
 %
-% in order to get s.lookups.txt{2} in case of a win.
+% in order to get s.runSetup.lookups.txt{2} in case of a win.
 s.trial.generate.stakes = [5, 6, 7, 8];
 s.trial.generate.stakes_loss = 0;
 s.trial.generate.reference = 5;
@@ -268,19 +268,32 @@ s.trial.generate.repeats = 1;
 s.trial.generate.catchTrial = table.empty;
 s.trial.generate.catchIdx = NaN;
 
+%%% Run settings
+% This will be specific to each block that you run. None of these settings have
+% a default, although default is suggested.
 
 %% Block properties
-% Naming. Useful to quickly identify the properties used to run a trial -- it's
-% to your benefit to make sure that this uniquely identifies your setting for
-% the specific task and task block
-s.game.block.name = NaN;
+% Block name is useful to quickly identify the properties used to run a trial
+% -- it's to your benefit to make sure that this uniquely identifies your
+% setting for the specific task and task block. It is used this way in data
+% export.
+s.runSetup.blockName = char.empty;
 
 %% Lookup tables
 % If you're using any images or map your payoff values to a textual label,
 % you'd define the lookup tables here! For an example, see MDM_config. For an
 % explanation, see the README.
+s.runSetup.lookups.txt = cell.empty;
+s.runSetup.lookups.img = cell.empty;
 
-% s.lookups.stakes.txt = {'destitution', 'status quo', 'unimaginable riches'}
+%% Textures
+% As a rule, if your lookups contain any images, you will need to generate
+% PsychToolBox textures. This framework expects you to do this by populating
+%
+%   settings.runSetup.textures = loadTexturesFromConfig(settings);
+%
+% at a point in your task master script when PTB is already loaded.
+s.runSetup.textures = cell.empty;
 
 %% Changes
 % FIXME: This fails with sub-subfields, or rather, replaces them wholesale

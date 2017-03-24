@@ -3,7 +3,7 @@ function s = RA_Loss_config(gains_config)
 %   modifying the ones created for the gains block.
 s = gains_config;
 
-s.game.block.name = 'Loss';
+s.runSetup.blockName = 'Loss';
 s.trial.generate.stakes = -1 * s.trial.generate.stakes;
 s.trial.generate.reference = -1 * s.trial.generate.reference;
 s.trial.generate.catchTrial.stakes = -4;

@@ -28,7 +28,7 @@ for blockId = 1:n
   % FIXME: Generally, which fields should get extracted from the `settings`
   % struct? Should this be user-definable in some way, shape, or form?
   taskName = blk.settings.task.taskName;
-  blockName = blk.settings.game.block.name;
+  blockName = blk.settings.runSetup.blockName;
 
   finalRecords = blk.records;
   finalRecords = addConstantColumnToTable(finalRecords, 'taskName', taskName);
