@@ -12,7 +12,7 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
 
   % Check if the name of the block is defined
   try
-    block_name = sprintf(' (%s)', blockSettings.game.block.name);
+    block_name = sprintf(' (%s)', blockSettings.runSetup.blockName);
   catch
     block_name = '';
   end

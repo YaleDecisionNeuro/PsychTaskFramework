@@ -6,11 +6,11 @@ function s = MDM_config_monetary(initial_config)
 s = initial_config;
 
 %% Block properties
-s.game.block.name = 'Monetary';
+s.runSetup.blockName = 'Monetary';
 
 %% Lookup tables
-s.lookups.stakes.txt = {'$0'; '$5'; '$8'; '$12'; '$25'};
-s.lookups.stakes.img = {'0.jpg'; '5.jpg'; '8.jpg'; '12.jpg'; '25.jpg'};
+s.runSetup.lookups.txt = {'$0'; '$5'; '$8'; '$12'; '$25'};
+s.runSetup.lookups.img = {'0.jpg'; '5.jpg'; '8.jpg'; '12.jpg'; '25.jpg'};
 % Fix images to path
-s.lookups.stakes.img = prependPath(s.lookups.stakes.img, s.task.imgPath);
+s.runSetup.lookups.img = prependPath(s.runSetup.lookups.img, s.task.imgPath);
 end

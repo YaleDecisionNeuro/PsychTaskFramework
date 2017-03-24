@@ -46,8 +46,8 @@ end
 % Disambiguate settings here
 monSettings = MDM_config_monetary(settings);
 medSettings = MDM_config_med(settings);
-medSettings.textures = loadTexturesFromConfig(medSettings);
-monSettings.textures = loadTexturesFromConfig(monSettings);
+medSettings.runSetup.textures = loadTexturesFromConfig(medSettings);
+monSettings.runSetup.textures = loadTexturesFromConfig(monSettings);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')

@@ -109,7 +109,8 @@ DrawFormattedText(windowPtr, bottomProbString, botXY(1), botXY(2), probColor);
 %% 5. Draw the payoffs
 % Choose how to display the payoff (different function for monetary amounts,
 %   vs. for images with labels)
-if isfield(blockSettings, 'lookups')
+if isfield(blockSettings.runSetup, 'lookups') && ...
+    ~isempty(blockSettings.runSetup.lookups)
   drawPayoffImageAndLabel(payoffs);
 else
   drawPayoffAmount(payoffs);
@@ -120,7 +121,7 @@ end
 function drawPayoffImageAndLabel(payoffs)
   % 1. Draw labels
   Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.stakes.fontSize);
-  lookupTbl = blockSettings.lookups.stakes.txt;
+  lookupTbl = blockSettings.runSetup.lookups.txt;
   [ botLabel, botLabelDims ] = textLookup(payoffs(1), lookupTbl, windowPtr);
   [ topLabel, topLabelDims ] = textLookup(payoffs(2), lookupTbl, windowPtr);
 
@@ -134,8 +135,8 @@ function drawPayoffImageAndLabel(payoffs)
   DrawFormattedText(windowPtr, botLabel, botLabelXY(1), botLabelXY(2), payoffColor);
 
   % 2. Draw images of stakes
-  imgLookupTbl = blockSettings.lookups.stakes.img;
-  textureBank = blockSettings.textures;
+  imgLookupTbl = blockSettings.runSetup.lookups.img;
+  textureBank = blockSettings.runSetup.textures;
   [ botImg, botImgDims ] = imgLookup(payoffs(1), imgLookupTbl, textureBank);
   [ topImg, topImgDims ] = imgLookup(payoffs(2), imgLookupTbl, textureBank);
 

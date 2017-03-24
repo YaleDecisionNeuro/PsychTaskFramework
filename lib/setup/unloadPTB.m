@@ -28,7 +28,7 @@ end
 
 function textureIds = getTextureIds(config)
   try
-    textureArray = values(config.textures);
+    textureArray = values(config.runSetup.textures);
     textureIds = cellfun(@(x) x.textureId, textureArray, 'UniformOutput', true);
   catch
     textureIds = [];
