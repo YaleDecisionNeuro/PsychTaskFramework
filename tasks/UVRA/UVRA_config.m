@@ -12,6 +12,12 @@ function s = UVRA_config()
   % This marks the default block name, will be displayed in pre-block screen,
   %   and marks the block in data export.
 
+  % Set durations of choice & intertrial period
+  s.trial.legacyPhases = legacyPhaseStruct;
+  s.trial.legacyPhases.showChoice.duration = Inf;
+  s.trial.legacyPhases.intertrial.duration = 1;
+  s.task.constantBlockDuration = false; % don't need to fit fMRI time blocks
+
   % Fitting trials into blocks and blocks into sessions
   s.task.blockLength = 20; % trials per block
   s.task.numBlocks = 6; % blocks per game
@@ -25,22 +31,18 @@ function s = UVRA_config()
   s.trial.generate.ambigs = [.24 .5 .74];
   s.trial.generate.colors = [1 2];
   s.trial.generate.repeats = 4;
-
-  % Set durations of choice & intertrial period
-  s.game.durations.showChoice = Inf;
-  s.game.durations.ITIs = 1;
-  s.task.constantBlockDuration = false; % don't need to fit fMRI time blocks
+  s.trial.generate.ITIs = s.trial.legacyPhases.intertrial.duration;
 
   % What phase and draw functions should runRATrial use?
   s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
   s.task.fnHandles.preBlockFn = @preBlock;
-  s.game.showChoicePhaseFn = @UVRA_showChoice;
-  s.game.responsePhaseFn = NaN;
-  s.game.feedbackPhaseFn = @UVRA_feedback;
+  s.trial.legacyPhases.showChoice.phaseScript = @UVRA_showChoice;
+  s.trial.legacyPhases.response.phaseScript = NaN;
+  s.trial.legacyPhases.feedback.phaseScript = @UVRA_feedback;
   s.task.fnHandles.referenceDrawFn = @drawRef;
 
-  s.game.showChoiceActionFn = @action_collectResponse;
-  s.game.feedbackActionFn = @action_display;
+  s.trial.legacyPhases.showChoice.action = @action_collectResponse;
+  s.trial.legacyPhases.feedback.action = @action_display;
 
   % Graphical adjustments
   s.objects.lottery.offCenterByPx = [0 200]; % refSide switches this around

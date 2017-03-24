@@ -14,10 +14,11 @@ s.task.imgPath = [s.task.taskPath filesep 'img'];
 
 %% Non-display settings for the game
 % (Maximum) durations of the various stages, in seconds
-s.game.durations.showChoice = 10;
-s.game.durations.response = 0;
-s.game.durations.feedback = 0.5;
-s.game.durations.ITIs = 2;
+s.trial.legacyPhases = legacyPhaseStruct;
+s.trial.legacyPhases.showChoice.duration = 10;
+s.trial.legacyPhases.response.duration = 0;
+s.trial.legacyPhases.feedback.duration = 0.5;
+s.trial.legacyPhases.intertrial.duration = 2;
 
 s.task.constantBlockDuration = false; % Early choice won't add to ITI
 
@@ -26,15 +27,16 @@ s.task.taskName = 'SODM';
 s.task.blockLength = 19;
 
 s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
-s.game.responsePhaseFn = NaN;
 s.task.fnHandles.preBlockFn = @preBlock;
-s.game.showChoicePhaseFn = @SODM_showChoice;
+s.trial.legacyPhases.showChoice.phaseScript = @SODM_showChoice;
+s.trial.legacyPhases.showChoice.action = @action_collectResponse;
+s.trial.legacyPhases.response.phaseScript = NaN;
+s.trial.legacyPhases.response.action = NaN;
+s.trial.legacyPhases.feedback.action = @action_display;
+
 s.task.fnHandles.referenceDrawFn = @drawRef;
 s.task.fnHandles.bgrDrawFn = @drawBgr;
 s.task.fnHandles.bgrDrawCallbackFn = @SODM_drawCondition;
-
-s.game.showChoiceActionFn = @action_collectResponse;
-s.game.feedbackActionFn = @action_display;
 
 %% Graphical setup for the condition
 s.objects.condition.position = [100 100];
@@ -48,9 +50,10 @@ s.trial.generate.stakes = 3:5;
 % Actually 2:5, but 3:5 is used for automated trial generation
 s.trial.generate.stakes_loss = 1;
 s.trial.generate.reference = 2;
+s.trial.generate.ITIs = s.trial.legacyPhases.intertrial.duration;
 
 s.trial.generate.catchIdx = 1;
-s.game.block.catchVals = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
+catchVals = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
   'stakes_loss', 1, 'reference', 2, 'colors', NaN, 'ITIs', 5);
-s.trial.generate.catchTrial = generateTrials(s.game.block.catchVals);
+s.trial.generate.catchTrial = generateTrials(catchVals);
 end

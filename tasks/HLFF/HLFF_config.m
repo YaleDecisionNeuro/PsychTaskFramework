@@ -14,10 +14,10 @@ s.task.imgPath = [s.task.taskPath filesep 'img'];
 
 %% Non-display settings for the game
 % (Maximum) durations of the various stages, in seconds
-s.game.durations.showChoice = 10;
-s.game.durations.response = 0;
-s.game.durations.feedback = 0.5;
-s.game.durations.ITIs = 2;
+% s.trial.legacyPhases.showChoice.duration = 10;
+% s.trial.legacyPhases.response.duration = 0;
+% s.trial.legacyPhases.feedback.duration = 0.5;
+% s.trial.legacyPhases.intertrial.duration = 2;
 
 s.task.constantBlockDuration = false; % Early choice won't add to ITI
 
@@ -25,7 +25,7 @@ s.task.constantBlockDuration = false; % Early choice won't add to ITI
 s.task.taskName = 'HLFF';
 s.task.fnHandles.trialFn = @runGenericTrial;
 % See lib/phase/phaseConfig.m for meaning
-s.game.phases = { ...
+s.trial.phases = { ...
   phaseConfig('showChoice', Inf, @phase_showChoice, @action_collectResponse), ...
   phaseConfig('feedback', 0.5, @phase_generic, @action_display, @drawFeedback), ...
   phaseConfig('ITI', 2, @phase_ITI, @action_display)};

@@ -37,7 +37,7 @@ end
 function trialData = timeAndRecordTask(trialData, blockSettings)
   %% Record choice & assign feedback color
   [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
-    waitForKey({'1!', '2@'}, blockSettings.game.durations.showChoice);
+    waitForKey({'1!', '2@'}, blockSettings.trial.legacyPhases.showChoice.duration);
   if keyisdown && keycode(KbName('1!'))
       trialData.choice = 1;
   elseif keyisdown && keycode(KbName('2@'))

@@ -191,10 +191,14 @@ s.task.fnHandles.referenceDrawFn = @drawRef;
 % See tasks/HLFF/HLFF_config for an example.
 s.trial.phases = cell.empty;
 
+% %% Legacy phase scripts
+% NOTE: This section only applies if you're using @runRATrial as your trial
+% script. @runGenericTrial does not check these settings.
+%
 % If you wish to run "old-school" Levylab R&A task with legacy settings,
 % you should fill `s.legacyPhases` with a call to `legacyPhaseStruct`. (You can,
 % and should, run the task with the new phase architecture, but this will
-% remain an option.)
+% remain an option.) Check out lib/phase/legacyPhaseStruct.m for details.
 s.trial.legacyPhases = struct.empty;
 
 %% What values should the trial be generated with?
@@ -264,55 +268,12 @@ s.trial.generate.repeats = 1;
 s.trial.generate.catchTrial = table.empty;
 s.trial.generate.catchIdx = NaN;
 
-% (Maximum) durations of the various trial phases
-s.game.durations.showChoice = 6;
-s.game.durations.response = 3.5;
-s.game.durations.feedback = 0.5;
-s.game.durations.ITIs = [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
-% These have to be in each block, in some order -- in most fMRI block designs,
-% the block has to be constant. Some designs might want to shuffle these in
-% particular ways, just like items in `s.trial.generate`; other designs might want
-% to omit ITIs altogether.
-%
-% However, current method of shuffling ITIs will work as long as their number
-% divides the number of trials within a block without remainder.
 
 %% Block properties
 % Naming. Useful to quickly identify the properties used to run a trial -- it's
 % to your benefit to make sure that this uniquely identifies your setting for
 % the specific task and task block
 s.game.block.name = NaN;
-
-% %% Phase scripts
-% NOTE: This section only applies if you're using @runRATrial as your trial
-% script. @runGenericTrial does not check these settings.
-%
-% If you're only changing some element of a phase, but you're happy with the
-% standard order of phases (i.e. choice display, response prompt, feedback,
-% intertrial), you can substitute a function here. It should take, and return,
-% the same arguments that the phase function in lib/phase does. (In general,
-% this is `sampleFn(trialData, blockSettings, phaseSettings)`.)
-%
-% By design, showChoicePhaseFn is left blank. `runRATrial` will complain if it is
-% not set, or if any of the phase function handles below are unset. While you
-% might avoid setting it by writing your own trial script, it is recommended
-% that you still leverage these settings; it will make your task easier to
-% maintain and understand for your collaborators.
-%
-% By design, s.game.responsePhaseFn is set to @phase_response; however, if your
-% showChoice function collects responses during the display, it can be set to
-% NaN.
-
-s.game.showChoicePhaseFn = NaN;
-s.game.responsePhaseFn = @phase_response;
-s.game.feedbackPhaseFn = @phase_feedback;
-s.game.intertrialPhaseFn = @phase_ITI;
-
-% %% (Optional) phase action scripts
-s.game.showChoiceActionFn = NaN;
-s.game.responseActionFn = NaN;
-s.game.feedbackActionFn = NaN;
-s.game.intertrialActionFn = NaN;
 
 %% Lookup tables
 % If you're using any images or map your payoff values to a textual label,
