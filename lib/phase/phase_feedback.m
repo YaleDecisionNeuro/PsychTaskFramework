@@ -1,7 +1,7 @@
 function [ trialData ] = phase_feedback(trialData, blockSettings, phaseSettings)
 % PHASE_FEEDBACK Based on the value in `trialData.choice`, draws the feedback
 %   that confirms to the player which option they chose (or whether they chose
-%   at all) and displays it for `blockSettings.game.durations.feedback`. Can be
+%   at all) and displays it for `blockSettings.trial.legacyPhases.feedback.duration`. Can be
 %   re-used for tasks that offer two options in a choice.
 
 windowPtr = blockSettings.device.windowPtr;
@@ -16,7 +16,7 @@ if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
   % Allow the execution of a actionFnHandle if passed
   trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
 else
-  % Deprecated: Display feedback for blockSettings.game.durations.feedback
+  % Deprecated: Display feedback for blockSettings.trial.legacyPhases.feedback.duration
   trialData = timeFeedback(trialData, blockSettings);
 end
 end
@@ -25,7 +25,7 @@ end
 % Deprecated: remains for backwards compatibility
 function trialData = timeFeedback(trialData, blockSettings)
   elapsedTime = etime(datevec(now), trialData.feedbackStartTime);
-  while elapsedTime < blockSettings.game.durations.feedback
+  while elapsedTime < blockSettings.trial.legacyPhases.feedback.duration
     elapsedTime = etime(datevec(now), trialData.feedbackStartTime);
   end
 end

@@ -26,11 +26,18 @@ if ~iscell(keyName)
 else
     breakKey = cell2mat(cellfun(@(x) KbName(x), keyName, 'UniformOutput', false));
 end
-
+% Special case: zero duration
+if seconds == 0
+    [~, ~, keyCode, ~] = KbCheck;
+    keyIsDown = false;
+    responseTime = 0;
+    deltaSecs = NaN;
+    return;
+end
 % FIXME: Use `RestrictKeysForKbCheck`?
 initialTime = GetSecs();
 KbCheckTimestamp = initialTime;
-while KbCheckTimestamp - initialTime < seconds
+while KbCheckTimestamp - initialTime <= seconds
     WaitSecs(0.01);
     [keyIsDown, KbCheckTimestamp, keyCode, deltaSecs] = KbCheck;
     if keyIsDown && any(keyCode(breakKey)) == 1

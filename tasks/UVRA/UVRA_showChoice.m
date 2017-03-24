@@ -34,7 +34,7 @@ if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
   % Allow the execution of a actionFnHandle if passed
   trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
 else
-  % Deprecated: Display choice for blockSettings.game.durations.showChoice
+  % Deprecated: Display choice for blockSettings.trial.legacyPhases.showChoice.duration
   trialData = timeAndRecordTask(trialData, blockSettings);
 end
 end
@@ -43,7 +43,7 @@ end
 function trialData = timeAndRecordTask(trialData, blockSettings)
   %% Record choice & assign feedback color
   [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
-    waitForKey({'UpArrow', 'DownArrow'}, blockSettings.game.durations.showChoice);
+    waitForKey({'UpArrow', 'DownArrow'}, blockSettings.trial.legacyPhases.showChoice.duration);
   if keyisdown && keycode(KbName('UpArrow'))
       trialData.choice = 1;
   elseif keyisdown && keycode(KbName('DownArrow'))

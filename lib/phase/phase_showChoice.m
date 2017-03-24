@@ -28,7 +28,7 @@ if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
   % Allow the execution of a actionFnHandle if passed
   trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
 else
-  % Deprecated: Display choice for blockSettings.game.durations.showChoice
+  % Deprecated: Display choice for blockSettings.trial.legacyPhases.showChoice.duration
   trialData = timeChoice(trialData, blockSettings);
 end
 end
@@ -38,7 +38,7 @@ end
 function trialData = timeChoice(trialData, blockSettings)
   % Extract to local variables now because struct field access costs time
   trialStart = trialData.choiceStartTime;
-  trialDur = blockSettings.game.durations.showChoice;
+  trialDur = blockSettings.trial.legacyPhases.showChoice.duration;
 
   elapsedTime = etime(datevec(now), trialStart);
   while elapsedTime < trialDur

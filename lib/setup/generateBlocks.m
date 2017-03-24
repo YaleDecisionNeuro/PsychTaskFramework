@@ -54,8 +54,9 @@ for k = 1:length(endIndices)
   trialTbl = allTrials(startIdx : endIdx, :);
 
   % Insert ITIs here, before the catch trial. and randomize
-  if isfield(blockSettings.game.durations, 'ITIs')
-    ITIs = cutArrayToSize(blockSettings.game.durations.ITIs(:), blockLen);
+  % FIXME: Check for in-phase definition?
+  if isfield(blockSettings.trial.generate, 'ITIs')
+    ITIs = cutArrayToSize(blockSettings.trial.generate.ITIs(:), blockLen);
     trialTbl.ITIs = ITIs(randperm(length(ITIs)));
   end
 
