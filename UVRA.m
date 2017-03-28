@@ -50,11 +50,9 @@ end
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   blocks = generateBlocks(settings);
   numBlocks = settings.task.numBlocks;
-  Data.plannedBlocks = cell(numBlocks, 1);
-  Data.blocks.recorded = cell(0);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
-    Data.plannedBlocks{blockIdx} = struct('trials', blocks{blockIdx});
+    Data = addGeneratedBlock(Data, blocks{blockIdx}, settings);
   end
 end
 
@@ -62,25 +60,20 @@ end
 % Strategy: Run each block with separate settings; define its trials by
 % subsetting them; handle any prompts / continuations here, or pass different
 % callbacks
-firstBlockIdx = Data.numFinishedBlocks + 1;
-if firstBlockIdx > 3
-  lastBlockIdx = 6;
-else
-  lastBlockIdx = 3;
-end
+[ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    settings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
-    Data = runBlock(Data, settings);
+    Data = runNthBlock(Data, blockIdx);
   end
 else
-  % Run practice -- random `numSelect` trials of a random block
+  % Run practice -- only first n trials of first two blocks?
   numSelect = 3;
-  blockIdx = randi(settings.task.numBlocks);
-  randomIdx = randperm(settings.task.blockLength, numSelect);
-  settings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
-  Data = runBlock(Data, settings);
+  practiceBlocks = randi(settings.task.numBlocks);
+  Data = preparePractice(Data, practiceBlocks, numSelect);
+  for blockIdx = 1:length(practiceBlocks)
+    Data = runNthBlock(Data, blockIdx);
+  end
 end
 
 unloadPTB(settings);

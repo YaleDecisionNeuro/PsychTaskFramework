@@ -1,7 +1,6 @@
 function [ beneficiary ] = SODM_extractBeneficiary(blockSettings)
   try
-    blockKind = strsplit(blockSettings.runSetup.blockName, ' ');
-    beneficiary = blockKind{end};
+    beneficiary = blockSettings.runSetup.conditions.beneficiary;
   catch
     beneficiary = '';
   end

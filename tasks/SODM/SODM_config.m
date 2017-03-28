@@ -25,9 +25,11 @@ s.task.constantBlockDuration = false; % Early choice won't add to ITI
 %% Block properties
 s.task.taskName = 'SODM';
 s.task.blockLength = 19;
+s.task.blocksPerSession = 8;
+s.task.numBlocks = 8;
 
 s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
-s.task.fnHandles.preBlockFn = @preBlock;
+s.task.fnHandles.preBlockFn = @SODM_preBlock;
 s.trial.legacyPhases.showChoice.phaseScript = @SODM_showChoice;
 s.trial.legacyPhases.showChoice.action = @action_collectResponse;
 s.trial.legacyPhases.response.phaseScript = NaN;
