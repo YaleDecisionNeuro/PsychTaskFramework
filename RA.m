@@ -98,11 +98,8 @@ else
   % Run practice -- only first n trials of first two blocks?
   numSelect = 3;
   practiceBlocks = 6:7; % Known to be two different blocks
-  Data.blocks = Data.blocks(practiceBlocks);
+  Data = preparePractice(Data, practiceBlocks, numSelect);
   for blockIdx = 1:length(practiceBlocks)
-    blockLength = height(Data.blocks{blockIdx}.trials);
-    randomIdx = randperm(blockLength, numSelect);
-    Data.blocks{blockIdx}.trials = Data.blocks{blockIdx}.trials(randomIdx, :);
     Data = runNthBlock(Data, blockIdx);
   end
 end
