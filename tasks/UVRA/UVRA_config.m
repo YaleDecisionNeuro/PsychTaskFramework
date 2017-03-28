@@ -8,9 +8,12 @@ function s = UVRA_config()
 
   % Meta
   s.task.taskName = 'UVRA';
+  % This block name will be displayed in pre-block screen.
   s.runSetup.blockName = 'Gains';
-  % This marks the default block name, will be displayed in pre-block screen,
-  %   and marks the block in data export.
+  % This condition, as well as other conditions you might define for per-block
+  %   configurations, will be present in the data export.
+  s.runSetup.conditions.domain = 'Gains';
+  s.runSetup.conditions.payoffKind = 'Monetary';
 
   % Set durations of choice & intertrial period
   s.trial.legacyPhases = legacyPhaseStruct;
@@ -21,7 +24,7 @@ function s = UVRA_config()
   % Fitting trials into blocks and blocks into sessions
   s.task.blockLength = 20; % trials per block
   s.task.numBlocks = 6; % blocks per game
-  s.task.blocksPerSession = 2;
+  s.task.blocksPerSession = 3;
 
   % Winning pay-offs
   s.trial.generate.stakes = [5, 8, 12, 17, 25];

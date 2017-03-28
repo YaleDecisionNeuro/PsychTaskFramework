@@ -7,6 +7,7 @@ function s = SODM_config_medical(initial_config)
   end
 
   s.runSetup.blockName = 'Medical';
+  s.runSetup.conditions.payoffKind = 'Medical';
 
   s.objects.lottery.stakes.fontSize = 24;
   s.objects.reference.fontSize = s.objects.lottery.stakes.fontSize;

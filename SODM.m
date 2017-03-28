@@ -85,81 +85,44 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   % Repeat the order for the second round
   selfIdx = repmat(selfIdx, 1, 2);
   medIdx = repmat(medIdx, 1, 2);
+  beneficiaryLookup = {'Friend', 'Self'};
 
   % Logic: Do mon/med blocks first, pass self/other to them depending on selfIdx
-  numBlocks = 8; % TODO: Derive from settings?
-  Data.plannedBlocks = cell(numBlocks, 1);
-  Data.blocks.recorded = cell(0);
+  numBlocks = length(selfIdx);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = medIdx(blockIdx);
     beneficiaryKind = selfIdx(blockIdx);
+    beneficiaryStr = beneficiaryLookup{beneficiaryKind + 1};
     withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
 
     if blockKind == 1
-      Data.plannedBlocks{blockIdx} = struct('trials', ...
-        medBlocks{withinKindIdx}, 'blockKind', blockKind, ...
-        'beneficiaryKind', beneficiaryKind);
+      medSettings.runSetup.conditions.beneficiary = beneficiaryStr;
+      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medSettings);
     else
-      Data.plannedBlocks{blockIdx} = struct('trials', ...
-        monBlocks{withinKindIdx}, 'blockKind', blockKind, ...
-        'beneficiaryKind', beneficiaryKind);
+      monSettings.runSetup.conditions.beneficiary = beneficiaryStr;
+      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monSettings);
     end
   end
 end
 
 % Display blocks
-firstBlockIdx = Data.numFinishedBlocks + 1;
-lastBlockIdx = 8; % FIXME: Derive from settings
+[ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    % Determine monetary or medical
-    if Data.plannedBlocks{blockIdx}.blockKind == 0
-      blockSettings = monSettings;
-    else
-      blockSettings = medSettings;
-    end
-
-    % Determine self or other
-    if Data.plannedBlocks{blockIdx}.beneficiaryKind == 0
-      blockSettings.game.block.beneficiaryKind = 0;
-      blockSettings.game.block.beneficiaryText = 'Friend';
-    else
-      blockSettings.game.block.beneficiaryKind = 1;
-      blockSettings.game.block.beneficiaryText = 'Myself';
-    end
-    blockSettings.runSetup.blockName = [blockSettings.runSetup.blockName ' / ' ...
-      blockSettings.game.block.beneficiaryText];
-
-    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
-    Data = runBlock(Data, blockSettings);
+    % TODO: Write own pre-block function that retrieves this
+    % blockSettings.runSetup.blockName = [blockSettings.runSetup.blockName ' / ' ...
+    %   blockSettings.runSetup.conditions.beneficiary];
+    Data = runNthBlock(Data, blockIdx);
   end
 else
-  % Run practice -- only first n trials of first two blocks?
+  % Run practice
   numSelect = 3;
-  for blockIdx = 1:4
-    % Determine medical or monetary
-    if Data.plannedBlocks{blockIdx}.blockKind == 0
-      blockSettings = monSettings;
-    else
-      blockSettings = medSettings;
-    end
-
-    % Determine self or other
-    if Data.plannedBlocks{blockIdx}.beneficiaryKind == 0
-      blockSettings.game.block.beneficiaryKind = 0;
-      blockSettings.game.block.beneficiaryText = 'Friend';
-    else
-      blockSettings.game.block.beneficiaryKind = 1;
-      blockSettings.game.block.beneficiaryText = 'Myself';
-    end
-    blockSettings.runSetup.blockName = [blockSettings.runSetup.blockName ' / ' ...
-      blockSettings.game.block.beneficiaryText];
-
-    randomIdx = randperm(blockSettings.task.blockLength, numSelect);
-    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
-    Data = runBlock(Data, blockSettings);
+  practiceBlocks = 1:4; % Known to be two different blocks
+  Data = preparePractice(Data, practiceBlocks, numSelect);
+  for blockIdx = 1:length(practiceBlocks)
+    Data = runNthBlock(Data, blockIdx);
   end
 end
 

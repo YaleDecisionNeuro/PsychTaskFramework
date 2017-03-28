@@ -11,6 +11,7 @@ function s = SODM_config_monetary(initial_config)
   addpath('./tasks/RA'); % borrowing RA functions for now
 
   s.runSetup.blockName = 'Monetary';
+  s.runSetup.conditions.payoffKind = 'Monetary';
 
   %% Lookup tables
   s.runSetup.lookups.txt = {'$0'; '$5'; '$8'; '$12'; '$25'};
