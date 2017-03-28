@@ -15,7 +15,11 @@ s.task.constantBlockDuration = true; % This is fMRI, so intertrial compensates f
 %% Game settings
 s.task.taskName = 'MonetaryRA';
 s.runSetup.blockName = 'Gains';
+s.runSetup.conditions.payoffKind = 'Monetary';
+s.runSetup.conditions.domain = 'Gains';
 s.task.blockLength = 31; % Useful for generation purposes
+s.task.numBlocks = 8;
+s.task.blocksPerSession = 4;
 
 s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
 s.trial.legacyPhases = legacyPhaseStruct;
