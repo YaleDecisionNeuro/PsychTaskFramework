@@ -71,19 +71,15 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
     gainsIdx = 1 - gainsIdx; % flip
   end
 
-  numBlocks = 8;
-  Data.plannedBlocks = cell(numBlocks, 1);
-  Data.blocks.recorded = cell(0);
+  numBlocks = settings.task.numBlocks;
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = gainsIdx(blockIdx);
     withinKindIdx = sum(gainsIdx(1 : blockIdx) == blockKind);
     if blockKind == 1
-      Data.plannedBlocks{blockIdx} = struct('trials', ...
-        gainBlocks{withinKindIdx}, 'blockKind', blockKind);
+      Data = addGeneratedBlock(Data, gainBlocks{withinKindIdx}, gainSettings);
     else
-      Data.plannedBlocks{blockIdx} = struct('trials', ...
-        lossBlocks{withinKindIdx}, 'blockKind', blockKind);
+      Data = addGeneratedBlock(Data, lossBlocks{withinKindIdx}, lossSettings);
     end
   end
 end
@@ -92,37 +88,22 @@ end
 % Strategy: Run each block with separate settings; define its trials by
 % subsetting them; handle any prompts / continuations here, or pass different
 % callbacks
-firstBlockIdx = Data.numFinishedBlocks + 1;
-if firstBlockIdx > 4
-  lastBlockIdx = 8;
-else
-  lastBlockIdx = 4;
-end
-% NOTE: Incidentally, this takes care of an attempt to run more than 8 blocks -
-%   9:8 is empty, so the for loop will not run if firstBlockIdx > lastBlockIdx
+[ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    if Data.plannedBlocks{blockIdx}.blockKind == 0
-      blockSettings = lossSettings;
-    else
-      blockSettings = gainSettings;
-    end
-    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
-    Data = runBlock(Data, blockSettings);
+    Data = runNthBlock(Data, blockIdx);
   end
 else
   % Run practice -- only first n trials of first two blocks?
   numSelect = 3;
-  for blockIdx = 6:7 % Known to be two different blocks
-    if Data.plannedBlocks{blockIdx}.blockKind == 0
-      blockSettings = lossSettings;
-    else
-      blockSettings = gainSettings;
-    end
-    randomIdx = randperm(blockSettings.task.blockLength, numSelect);
-    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
-    Data = runBlock(Data, blockSettings);
+  practiceBlocks = 6:7; % Known to be two different blocks
+  Data.blocks = Data.blocks(practiceBlocks);
+  for blockIdx = 1:length(practiceBlocks)
+    blockLength = height(Data.blocks{blockIdx}.trials);
+    randomIdx = randperm(blockLength, numSelect);
+    Data.blocks{blockIdx}.trials = Data.blocks{blockIdx}.trials(randomIdx, :);
+    Data = runNthBlock(Data, blockIdx);
   end
 end
 

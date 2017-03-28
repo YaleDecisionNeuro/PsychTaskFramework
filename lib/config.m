@@ -295,11 +295,24 @@ s.runSetup.lookups.img = cell.empty;
 % at a point in your task master script when PTB is already loaded.
 s.runSetup.textures = cell.empty;
 
-%% Trials to run
-% As a rule, these will be set by the master task script. Do *not* set them in
-% your task config.
+%% Conditions
+% PTF allows you to define arbitrary conditions. The conditions are used *in
+% addition to*, rather than instead of, block-specific configuration;
+% primarily, they allow for readable data export. It is heavily recommended
+% that you label your conditions in your per-block configs.
+%
+% PTF uses a struct to store the conditions. While you can store any value in
+% each struct field, it is recommended that you stick to numbers and strings.
+% Here's an example set of conditions:
+%
+% s.runSetup.conditions.domain = 'Gains';
+% s.runSetup.conditions.payoffKind = 'Monetary';
+%
+% As default, PTF will set an empty `payoffKind` condition that you should
+% change in your task/block config file:
+s.runSetup.conditions.payoffKind = char.empty;
 
-%% Changes
+% %% Changes
 % FIXME: This fails with sub-subfields, or rather, replaces them wholesale
 % TODO: Make recursive
 % TODO: Scream when changes contains a field that the skeleton doesn't

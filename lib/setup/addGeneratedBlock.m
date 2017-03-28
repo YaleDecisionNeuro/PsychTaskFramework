@@ -9,11 +9,15 @@ if ~istable(blockTrials)
   error('`blockTrials must be a table, but is %s!`', class(blockTrials));
 end
 if exist('conditions', 'var')
-  if ~isa(conditions, 'containers.Map')
-    warning('Warning: `conditions` should be a containers.Map structure.');
+  if ~isstruct(conditions)
+    warning('Warning: `conditions` should be a structure.');
   end
 else
-  conditions = containers.Map;
+  if isfield(config.runSetup, 'conditions')
+    conditions = config.runSetup.conditions;
+  else
+    conditions = struct.empty;
+  end
 end
 
 % 2. Put arguments in the correct place in DataObject

@@ -7,6 +7,7 @@ function s = HLFF_config_LF(initial_config)
   end
 
   s.runSetup.blockName = 'Food';
+  s.runSetup.conditions.payoffKind = 'Pretzels';
 
   s.objects.lottery.stakes.fontSize = 24;
   s.objects.reference.fontSize = s.objects.lottery.stakes.fontSize;
