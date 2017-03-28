@@ -295,6 +295,10 @@ s.runSetup.lookups.img = cell.empty;
 % at a point in your task master script when PTB is already loaded.
 s.runSetup.textures = cell.empty;
 
+%% Trials to run
+% As a rule, these will be set by the master task script. Do *not* set them in
+% your task config.
+
 %% Changes
 % FIXME: This fails with sub-subfields, or rather, replaces them wholesale
 % TODO: Make recursive
