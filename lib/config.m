@@ -108,9 +108,10 @@ s.objects.intertrial.shape = 'Oval';
 s.objects.intertrial.dims = [40 40];
 
 %% Settings for the task as a whole
-% Obligatory: set it to identify the task for the datafiles
+% Obligatory: set it to identify the task for the datafiles and load images
 s.task.taskName = char.empty;
 s.task.taskPath = char.empty;
+s.task.imgPath = char.empty;
 
 % Should the intertrial period be extended to last as long as the sum of each
 % phase's maximum durations? In other words, should the ITI display duration
