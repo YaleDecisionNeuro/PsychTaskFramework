@@ -8,8 +8,6 @@ function s = SODM_config_monetary(initial_config)
     s = config();
   end
 
-  addpath('./tasks/RA'); % borrowing RA functions for now
-
   s.runSetup.blockName = 'Monetary';
   s.runSetup.conditions.payoffKind = 'Monetary';
 
