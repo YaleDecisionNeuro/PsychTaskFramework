@@ -7,6 +7,8 @@ s = initial_config;
 
 %% Block properties
 s.runSetup.blockName = 'Monetary';
+s.runSetup.conditions.payoffKind = 'Monetary';
+s.runSetup.conditions.domain = 'Gains';
 
 %% Lookup tables
 s.runSetup.lookups.txt = {'$0'; '$5'; '$8'; '$12'; '$25'};

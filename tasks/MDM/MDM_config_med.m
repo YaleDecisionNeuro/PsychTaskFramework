@@ -7,6 +7,8 @@ s = initial_config;
 
 %% Block properties
 s.runSetup.blockName = 'Medical';
+s.runSetup.conditions.payoffKind = 'Medical';
+s.runSetup.conditions.domain = char.empty;
 
 %% Font size of payoff text
 s.objects.lottery.stakes.fontSize = 24;

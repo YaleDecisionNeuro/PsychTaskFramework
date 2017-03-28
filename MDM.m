@@ -93,48 +93,32 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   end
 
   numBlocks = length(medIdx);
-  Data.plannedBlocks = cell(numBlocks, 1);
-  Data.blocks.recorded = cell(0);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = medIdx(blockIdx);
     withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
     if blockKind == 1
-      Data.plannedBlocks{blockIdx} = struct('trials', ...
-        medBlocks{withinKindIdx}, 'blockKind', blockKind);
+      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medSettings);
     else
-      Data.plannedBlocks{blockIdx} = struct('trials', ...
-        monBlocks{withinKindIdx}, 'blockKind', blockKind);
+      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monSettings);
     end
   end
 end
 
 % Display blocks
-firstBlockIdx = Data.numFinishedBlocks + 1;
-lastBlockIdx = 4; % FIXME: Derive from settings
+[ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    if Data.plannedBlocks{blockIdx}.blockKind == 0
-      blockSettings = monSettings;
-    else
-      blockSettings = medSettings;
-    end
-    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
-    Data = runBlock(Data, blockSettings);
+    Data = runNthBlock(Data, blockIdx);
   end
 else
   % Run practice -- only first n trials of first two blocks?
   numSelect = 3;
-  for blockIdx = 2:3 % Known to be two different blocks
-    if Data.plannedBlocks{blockIdx}.blockKind == 0
-      blockSettings = monSettings;
-    else
-      blockSettings = medSettings;
-    end
-    randomIdx = randperm(blockSettings.task.blockLength, numSelect);
-    blockSettings.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
-    Data = runBlock(Data, blockSettings);
+  practiceBlocks = 2:3; % Known to be two different blocks
+  Data = preparePractice(Data, practiceBlocks, numSelect);
+  for blockIdx = 1:length(practiceBlocks)
+    Data = runNthBlock(Data, blockIdx);
   end
 end
 
