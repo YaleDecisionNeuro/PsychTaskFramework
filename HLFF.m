@@ -48,11 +48,9 @@ settingsLF.runSetup.textures = loadTexturesFromConfig(settingsLF);
 if ~isfield(Data, 'planned')
   blocks = generateBlocks(settingsLF);
   numBlocks = settingsLF.task.numBlocks;
-  Data.plannedBlocks = cell(numBlocks, 1);
-  Data.blocks.recorded = cell(0);
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
-    Data.plannedBlocks{blockIdx} = struct('trials', blocks{blockIdx});
+    Data = addGeneratedBlock(Data, blocks{blockIdx}, settingsLF);
   end
 end
 
@@ -62,16 +60,14 @@ lastBlockIdx = 2; % FIXME: Derive from settings
 
 if exist('subjectId', 'var')
   for blockIdx = firstBlockIdx:lastBlockIdx
-    settingsLF.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials;
-    Data = runBlock(Data, settingsLF);
+    Data = runNthBlock(Data, blockIdx);
   end
 else
   % Run practice -- random `numSelect` trials of a random block
   numSelect = 3;
-  blockIdx = randi(settingsLF.task.numBlocks);
   randomIdx = randperm(settingsLF.task.blockLength, numSelect);
-  settingsLF.runSetup.trialsToRun = Data.plannedBlocks{blockIdx}.trials(randomIdx, :);
-  Data = runBlock(Data, settingsLF);
+  Data.blocks{1}.trials = Data.blocks{1}.trials(randomIdx, :);
+  Data = runNthBlock(Data, 1);
 end
 
 unloadPTB(settingsLF);
