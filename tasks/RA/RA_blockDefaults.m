@@ -5,7 +5,7 @@ function s = RA_blockDefaults()
 % Only small modifications are necessary, as `config` caters to this paradigm
 
 % Load defaults
-s = config();
+s = configDefaults();
 
 %% Machine settings
 s.task.taskPath = ['tasks' filesep 'RA'];

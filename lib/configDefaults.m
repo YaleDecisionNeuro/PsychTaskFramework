@@ -1,14 +1,23 @@
-function s = config(changes)
+function s = configDefaults(changes)
 % Default documented settings for all tasks in a freely modifiable struct.
-%
-% Although `config` contains task-wide settings, it is typically modified with
-% block-specific settings right before being passed to `runBlock` or
-% equivalent.
 %
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %
 % The defaults used here err on the side of catering to LevyLab's R&A paradigm.
 % If you're not using it, nuke s.objects from high orbit.
+%
+% Although the resulting structure contains task-wide settings, it is typically
+% modified with block-specific settings right before being passed to `runBlock`
+% or equivalent. For example, RA_blockDefaults(configDefaults) would modify
+% these defaults to serve all RA block kinds. RA_lossConfig would then modify
+% the result of *that* call for loss-domain blocks, like so:
+%
+%   config = RA_blockDefaults(configDefaults);
+%   lossConfig = RA_lossConfig(config);
+%
+% Most often, `XYZ_blockDefaults` will use `configDefaults` as a starting point
+% without an argument. That is a useful option if you don't expect making any
+% modifications to configDefaults for all your tasks.
 %
 % TODO: Implement `changes` to bring some order to post-return alterations.
 

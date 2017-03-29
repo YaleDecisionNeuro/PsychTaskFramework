@@ -3,7 +3,7 @@ function c = SODM_medicalConfig(initial_config)
 if exist('initial_config', 'var')
   c = initial_config;
 else
-  c = config();
+  c = configDefaults();
 end
 
 c.runSetup.blockName = 'Medical';

@@ -1,10 +1,10 @@
 function s = UVRA_blockDefaults()
-  s = config(); % Get defaults from lib/config
+  s = configDefaults(); % Get defaults from lib/configDefaults
 
   s.task.taskPath = fullfile('tasks', 'UVRA');
   s.device.breakKeys = {'Space', '5%'};
   s.device.choiceKeys = {'UpArrow', 'DownArrow'};
-  % See lib/config for other things that s.device can contain
+  % See lib/configDefaults for other things that s.device can contain
 
   % Meta
   s.task.taskName = 'UVRA';
