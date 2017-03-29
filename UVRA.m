@@ -11,7 +11,7 @@ addpath(genpath('./tasks/UVRA'));
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
-settings = UVRA_config();
+settings = UVRA_blockDefaults();
 settings = loadPTB(settings);
 
 if exist('subjectId', 'var') % Running actual trials -> record

@@ -5,7 +5,7 @@ function [ Data ] = HLFF(subjectId)
 addpath(genpath('./lib'));
 addpath(genpath('./tasks/HLFF'));
 
-settings = HLFF_config();
+settings = HLFF_blockDefaults();
 settings = loadPTB(settings);
 
 if exist('subjectId', 'var') % Running actual trials -> record

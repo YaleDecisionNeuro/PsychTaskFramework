@@ -52,7 +52,7 @@ If you wish to record the data for a subject, run the task script with a numeric
 You might wish to run the `PsychDebugWindowConfiguration` command before you run any of the scripts above. This will make the task display transparent, so you'll be able to see what and where you're typing if you choose to abort the task before its finish. (You should do this with `Ctrl-C`. Then, when you see that you can write in the MATLAB command window, run the command `sca`, which is short for PsychToolBox's `Screen('CloseAll')`.)
 
 ### Changing the existing tasks
-The configuration for task `XYZ` is in `tasks/XYZ/XYZ_config.m`. If there are two kinds of blocks, `A` and `B`, the convention is that these are in `tasks/XYZ/XYZ_config_A.m` and `tasks/XYZ/XYZ_config_B.m`. If you wish to see the configurable values, please take a look at `lib/config.m`, from which all task configurations inherit default values.
+The configuration for task `XYZ` is in `tasks/XYZ/XYZ_blockDefaults.m`. If there are two kinds of blocks, `A` and `B`, the convention is that these are in `tasks/XYZ/XYZ_blockDefaults_A.m` and `tasks/XYZ/XYZ_blockDefaults_B.m`. If you wish to see the configurable values, please take a look at `lib/config.m`, from which all task configurations inherit default values.
 
 ### Writing your own tasks
 A cookbook and proper documentation is forthcoming. If you need to do this now, I recommend taking a look at one of the tasks and walking through the call stack. (MATLAB's "Set breakpoint" feature allows the execution to stop at an arbitrary point. Other debugging features -- especially "Step", "Step in" and "Step out" -- can take you through the code execution one step at a time.)

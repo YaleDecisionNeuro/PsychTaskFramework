@@ -9,7 +9,7 @@ addpath(genpath('./tasks/MDM'));
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
-settings = MDM_config();
+settings = MDM_blockDefaults();
 settings = loadPTB(settings);
 
 if exist('subjectId', 'var') % Running actual trials -> record

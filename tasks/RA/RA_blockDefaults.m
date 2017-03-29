@@ -1,4 +1,4 @@
-function s = RA_config()
+function s = RA_blockDefaults()
 % CONFIG_RA Return general block settings for the monetary risk & ambiguity
 %   task by modifying the default ones from `config`.
 

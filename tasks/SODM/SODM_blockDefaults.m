@@ -1,4 +1,4 @@
-function s = SODM_config()
+function s = SODM_blockDefaults()
 % SODM_CONFIG Return general block settings for the medical decision-making
 %   task by modifying the default ones from `config`.
 

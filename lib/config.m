@@ -189,7 +189,7 @@ s.task.fnHandles.referenceDrawFn = @drawRef;
 % Each cell defines what phase function oversees the execution of the
 % phase, what action should be taken at the end of the phase, how long the
 % phase should last and, optionally, what draw scripts should be invoked.
-% See tasks/HLFF/HLFF_config for an example.
+% See tasks/HLFF/HLFF_blockDefaults for an example.
 s.trial.phases = cell.empty;
 
 % %% Legacy phase scripts
@@ -282,7 +282,7 @@ s.runSetup.blockName = char.empty;
 
 %% Lookup tables
 % If you're using any images or map your payoff values to a textual label,
-% you'd define the lookup tables here! For an example, see MDM_config. For an
+% you'd define the lookup tables here! For an example, see MDM_blockDefaults. For an
 % explanation, see the README.
 s.runSetup.lookups.txt = cell.empty;
 s.runSetup.lookups.img = cell.empty;
