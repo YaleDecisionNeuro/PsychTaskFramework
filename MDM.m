@@ -44,8 +44,8 @@ else % Running practice
 end
 
 % Disambiguate settings here
-monSettings = MDM_config_monetary(settings);
-medSettings = MDM_config_med(settings);
+monSettings = MDM_monetaryConfig(settings);
+medSettings = MDM_medicalConfig(settings);
 medSettings.runSetup.textures = loadTexturesFromConfig(medSettings);
 monSettings.runSetup.textures = loadTexturesFromConfig(monSettings);
 

@@ -52,7 +52,7 @@ end
 
 % Disambiguate settings here
 gainSettings = settings;
-lossSettings = RA_Loss_config(gainSettings);
+lossSettings = RA_lossConfig(gainSettings);
 
 %% Generate trials/blocks - if they haven't been generated before
 if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')

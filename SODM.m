@@ -46,8 +46,8 @@ else % Running practice
 end
 
 % Disambiguate settings here
-monSettings = SODM_config_monetary(settings);
-medSettings = SODM_config_medical(settings);
+monSettings = SODM_monetaryConfig(settings);
+medSettings = SODM_medicalConfig(settings);
 medSettings.runSetup.textures = loadTexturesFromConfig(medSettings);
 monSettings.runSetup.textures = loadTexturesFromConfig(monSettings);
 
