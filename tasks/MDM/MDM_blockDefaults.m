@@ -3,7 +3,7 @@ function s = MDM_blockDefaults()
 %   task by modifying the default ones from `config`.
 
 % Load defaults
-s = config();
+s = configDefaults();
 
 %% Machine settings
 s.task.taskPath = ['tasks' filesep 'MDM'];

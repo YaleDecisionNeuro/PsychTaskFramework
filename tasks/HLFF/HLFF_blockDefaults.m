@@ -3,7 +3,7 @@ function s = HLFF_blockDefaults()
 %   designed by Sarah Healy by modifying the default ones from `config`.
 
 % Load defaults
-s = config();
+s = configDefaults();
 
 %% Machine settings
 s.task.taskPath = ['tasks' filesep 'HLFF'];

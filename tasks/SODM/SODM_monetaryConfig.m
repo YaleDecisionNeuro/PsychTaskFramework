@@ -3,7 +3,7 @@ function c = SODM_monetaryConfig(initial_config)
 if exist('initial_config', 'var')
   c = initial_config;
 else
-  c = config();
+  c = configDefaults();
 end
 
 c.runSetup.blockName = 'Monetary';

@@ -1,6 +1,6 @@
 function Data = runNthBlock(Data, n)
   % RunNthBlock runs Data.blocks{n}.trials using Data.blocks{n}.config and
-  % saves the collected results to Data.blocks{n}.data. See lib/config.m for
+  % saves the collected results to Data.blocks{n}.data. See lib/configDefaults.m for
   % the parameters that a block can have.
   %
   % If `Data.filename` does not exist, it will not know how to save the trial
