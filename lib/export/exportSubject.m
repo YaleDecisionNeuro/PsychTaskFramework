@@ -11,26 +11,30 @@ if ~isfield(DataObject, 'blocks')
   return;
 end
 
-src = DataObject.blocks;
-if ~isfield(src, 'recorded') || numel(src.recorded) == 0
+blocks = DataObject.blocks;
+n = numel(blocks);
+if ~iscell(blocks) || n == 0
   warning('DataObject for %d contains no recorded blocks.', subjId);
   return;
 end
 
 % Basic approach: Iterate through recorded blocks, concatenating the tables.
-blocks = src.recorded;
-n = numel(blocks);
-
 for blockId = 1:n
   blk = blocks{blockId};
+  finalRecords = blk.data;
 
   % Add task name, block name and block id as columns
-  % FIXME: Generally, which fields should get extracted from the `settings`
+  % FIXME: Generally, which fields should get extracted from the `config`
   % struct? Should this be user-definable in some way, shape, or form?
-  taskName = blk.settings.task.taskName;
-  blockName = blk.settings.runSetup.blockName;
+  taskName = blk.config.task.taskName;
+  blockName = blk.config.runSetup.blockName;
+  conds = blk.conditions;
+  cond_names = fieldnames(conds);
+  for k = 1:numel(cond_names)
+    cond_name = cond_names{k};
+    finalRecords = addConstantColumnToTable(finalRecords, sprintf('condition_%s', cond_name), conds.(cond_name));
+  end
 
-  finalRecords = blk.records;
   finalRecords = addConstantColumnToTable(finalRecords, 'taskName', taskName);
   finalRecords = addConstantColumnToTable(finalRecords, 'blockName', blockName);
   finalRecords = addConstantColumnToTable(finalRecords, 'blockId', blockId);
