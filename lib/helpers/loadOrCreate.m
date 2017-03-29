@@ -12,9 +12,17 @@ existed = exist(fname, 'file');
 if existed
   temp = load(fname, 'Data');
   Data = temp.Data;
+  Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
 else
   Data.subjectId = subjectId;
-  Data.filename = fname;
-  save(fname, 'Data');
+  Data.blocks = cell.empty;
+  Data.numFinishedBlocks = 0;
+
+  if ~isnan(subjectId) % actual subject
+    Data.created = datestr(now, 'yyyymmddTHHMMSS');
+    Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
+    Data.filename = fname;
+    save(fname, 'Data');
+  end
 end
 end

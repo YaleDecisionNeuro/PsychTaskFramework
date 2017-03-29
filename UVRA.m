@@ -13,41 +13,36 @@ addpath(genpath('./tasks/UVRA'));
 %% Setup
 settings = UVRA_blockDefaults();
 settings = loadPTB(settings);
+if ~exist('subjectId', 'var') % Practice
+  subjectId = NaN;
+  settings = setupPracticeConfig(settings);
+end
 
-if exist('subjectId', 'var') % Running actual trials -> record
-  % Find-or-create subject data file *in appropriate location*
-  fname = [num2str(subjectId) '.mat'];
-  folder = fullfile(settings.task.taskPath, 'data');
-  fname = [folder filesep fname];
-  [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
+% Find-or-create subject data file *in appropriate location*
+fname = [num2str(subjectId) '.mat'];
+folder = fullfile(settings.task.taskPath, 'data');
+fname = [folder filesep fname];
+[ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
-  if subjectExisted
-    disp('Subject file exists, reusing...')
-  else
-    disp('Subject has no file, creating...')
-    Data.date = datestr(now, 'yyyymmddTHHMMSS');
-  end
+% TODO: Prompt experimenter if this is correct
+if subjectExisted
+  disp('Subject file exists, reusing...')
+elseif ~isnan(subjectId)
+  disp('Subject has no file, creating...')
+end
 
-  % Save subject ID + date
-  % TODO: Prompt for correctness before launching PTB?
-  Data.subjectId = subjectId;
-  Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
+if ~isnan(subjectId)
   if mod(subjectId, 2) == 0
-      settings.runSetup.refSide = 1;
+    settings.runSetup.refSide = 1;
   else
-      settings.runSetup.refSide = 2;
+    settings.runSetup.refSide = 2;
   end
-else % Running practice
-  Data.subjectId = NaN;
-  settings.runSetup.refSide = randi(2);
-  settings.device.saveAfterBlock = false;
-  settings.device.saveAfterTrial = false;
 end
 
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, settings.task.numBlocks
 %   will need to be changed to an integer that divides the generated trial count.
-if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
+if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   blocks = generateBlocks(settings);
   numBlocks = settings.task.numBlocks;
   Data.numFinishedBlocks = 0;
@@ -57,23 +52,20 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
 end
 
 %% Display blocks
-% Strategy: Run each block with separate settings; define its trials by
-% subsetting them; handle any prompts / continuations here, or pass different
-% callbacks
-[ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
-
-if exist('subjectId', 'var')
-  for blockIdx = firstBlockIdx:lastBlockIdx
-    Data = runNthBlock(Data, blockIdx);
-  end
+% Select which blocks to run
+if ~isnan(subjectId)
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 else
-  % Run practice -- only first n trials of first two blocks?
+  % Gut the generated blocks to be limited to practice
+  % TODO: Set this in settings
+  practiceBlocks = 1;
   numSelect = 3;
-  practiceBlocks = randi(settings.task.numBlocks);
   Data = preparePractice(Data, practiceBlocks, numSelect);
-  for blockIdx = 1:length(practiceBlocks)
-    Data = runNthBlock(Data, blockIdx);
-  end
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks);
+end
+
+for blockIdx = firstBlockIdx:lastBlockIdx
+  Data = runNthBlock(Data, blockIdx);
 end
 
 unloadPTB(settings);

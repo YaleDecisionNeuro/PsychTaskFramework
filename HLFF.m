@@ -7,36 +7,30 @@ addpath(genpath('./tasks/HLFF'));
 
 settings = HLFF_blockDefaults();
 settings = loadPTB(settings);
+if ~exist('subjectId', 'var') % Practice
+  subjectId = NaN;
+  settings = setupPracticeConfig(settings);
+end
 
-if exist('subjectId', 'var') % Running actual trials -> record
-  % Find-or-create subject data file *in appropriate location*
-  fname = [num2str(subjectId) '.mat'];
-  folder = fullfile(settings.task.taskPath, 'data');
-  fname = [folder filesep fname];
-  [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
+% Find-or-create subject data file *in appropriate location*
+fname = [num2str(subjectId) '.mat'];
+folder = fullfile(settings.task.taskPath, 'data');
+fname = [folder filesep fname];
+[ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
-  % TODO: Prompt experimenter if this is correct
-  if subjectExisted
-    disp('Subject file exists, reusing...')
-  else
-    disp('Subject has no file, creating...')
-    Data.date = datestr(now, 'yyyymmddTHHMMSS');
-  end
+% TODO: Prompt experimenter if this is correct
+if subjectExisted
+  disp('Subject file exists, reusing...')
+elseif ~isnan(subjectId)
+  disp('Subject has no file, creating...')
+end
 
-  % Save subject ID + date
-  % TODO: Prompt for correctness before launching PTB?
-  Data.subjectId = subjectId;
-  Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
+if ~isnan(subjectId)
   if mod(subjectId, 2) == 0
       settings.runSetup.refSide = 1;
   else
       settings.runSetup.refSide = 2;
   end
-else % Running practice
-  Data.subjectId = NaN;
-  settings.runSetup.refSide = randi(2);
-  settings.device.saveAfterBlock = false;
-  settings.device.saveAfterTrial = false;
 end
 
 settingsLF = HLFF_LFConfig(settings);
@@ -45,7 +39,7 @@ settingsLF.runSetup.textures = loadTexturesFromConfig(settingsLF);
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, settings.task.numBlocks
 %   will need to be changed to an integer that divides the generated trial count.
-if ~isfield(Data, 'planned')
+if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   blocks = generateBlocks(settingsLF);
   numBlocks = settingsLF.task.numBlocks;
   Data.numFinishedBlocks = 0;
@@ -55,19 +49,18 @@ if ~isfield(Data, 'planned')
 end
 
 % Display blocks
-firstBlockIdx = Data.numFinishedBlocks + 1;
-lastBlockIdx = 2; % FIXME: Derive from settings
-
-if exist('subjectId', 'var')
-  for blockIdx = firstBlockIdx:lastBlockIdx
-    Data = runNthBlock(Data, blockIdx);
-  end
+if ~isnan(subjectId)
+  firstBlockIdx = Data.numFinishedBlocks + 1;
+  lastBlockIdx = 2; % FIXME: Derive from settings
 else
-  % Run practice -- random `numSelect` trials of a random block
+  practiceBlocks = 1;
   numSelect = 3;
-  randomIdx = randperm(settingsLF.task.blockLength, numSelect);
-  Data.blocks{1}.trials = Data.blocks{1}.trials(randomIdx, :);
-  Data = runNthBlock(Data, 1);
+  Data = preparePractice(Data, practiceBlocks, numSelect);
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks);
+end
+
+for blockIdx = firstBlockIdx:lastBlockIdx
+  Data = runNthBlock(Data, blockIdx);
 end
 
 unloadPTB(settingsLF);

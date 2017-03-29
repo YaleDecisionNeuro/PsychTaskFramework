@@ -11,36 +11,30 @@ addpath(genpath('./tasks/MDM'));
 %% Setup
 settings = MDM_blockDefaults();
 settings = loadPTB(settings);
+if ~exist('subjectId', 'var') % Practice
+  subjectId = NaN;
+  settings = setupPracticeConfig(settings);
+end
 
-if exist('subjectId', 'var') % Running actual trials -> record
-  % Find-or-create subject data file *in appropriate location*
-  fname = [num2str(subjectId) '.mat'];
-  folder = fullfile(settings.task.taskPath, 'data');
-  fname = [folder filesep fname];
-  [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
+% Find-or-create subject data file *in appropriate location*
+fname = [num2str(subjectId) '.mat'];
+folder = fullfile(settings.task.taskPath, 'data');
+fname = [folder filesep fname];
+[ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
-  % TODO: Prompt experimenter if this is correct
-  if subjectExisted
-    disp('Subject file exists, reusing...')
-  else
-    disp('Subject has no file, creating...')
-    Data.date = datestr(now, 'yyyymmddTHHMMSS');
-  end
+% TODO: Prompt experimenter if this is correct
+if subjectExisted
+  disp('Subject file exists, reusing...')
+elseif ~isnan(subjectId)
+  disp('Subject has no file, creating...')
+end
 
-  % Save subject ID + date
-  % TODO: Prompt for correctness before launching PTB?
-  Data.subjectId = subjectId;
-  Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
+if ~isnan(subjectId)
   if mod(subjectId, 2) == 0
       settings.runSetup.refSide = 1;
   else
       settings.runSetup.refSide = 2;
   end
-else % Running practice
-  Data.subjectId = NaN;
-  settings.runSetup.refSide = randi(2);
-  settings.device.saveAfterBlock = false;
-  settings.device.saveAfterTrial = false;
 end
 
 % Disambiguate settings here
@@ -50,7 +44,7 @@ medSettings.runSetup.textures = loadTexturesFromConfig(medSettings);
 monSettings.runSetup.textures = loadTexturesFromConfig(monSettings);
 
 %% Generate trials if not generated already
-if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
+if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   % MDM uses a particular set of trials, so we have to generate some trials
   % manually. Luckily, these can be shared across both kinds of blocks two
   % tasks, as their value range is equal. If that were not the case, they would
@@ -105,21 +99,21 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   end
 end
 
-% Display blocks
-[ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
-
-if exist('subjectId', 'var')
-  for blockIdx = firstBlockIdx:lastBlockIdx
-    Data = runNthBlock(Data, blockIdx);
-  end
+%% Display blocks
+% Select which blocks to run
+if ~isnan(subjectId)
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 else
-  % Run practice -- only first n trials of first two blocks?
+  % Gut the generated blocks to be limited to practice
+  % TODO: Set this in settings
+  practiceBlocks = 2:3;
   numSelect = 3;
-  practiceBlocks = 2:3; % Known to be two different blocks
   Data = preparePractice(Data, practiceBlocks, numSelect);
-  for blockIdx = 1:length(practiceBlocks)
-    Data = runNthBlock(Data, blockIdx);
-  end
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks);
+end
+
+for blockIdx = firstBlockIdx:lastBlockIdx
+  Data = runNthBlock(Data, blockIdx);
 end
 
 % Close window
