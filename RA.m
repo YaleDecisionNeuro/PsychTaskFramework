@@ -16,7 +16,7 @@ addpath(genpath('./tasks/RA'));
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
-settings = RA_config();
+settings = RA_blockDefaults();
 settings = loadPTB(settings);
 
 if exist('subjectId', 'var') % Running actual trials -> record

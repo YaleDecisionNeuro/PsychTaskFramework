@@ -1,4 +1,4 @@
-function s = UVRA_config()
+function s = UVRA_blockDefaults()
   s = config(); % Get defaults from lib/config
 
   s.task.taskPath = fullfile('tasks', 'UVRA');

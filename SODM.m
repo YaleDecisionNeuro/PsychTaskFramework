@@ -11,7 +11,7 @@ addpath('./tasks/MDM');
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Load settings
-settings = SODM_config();
+settings = SODM_blockDefaults();
 settings = loadPTB(settings);
 
 if exist('subjectId', 'var') % Running actual trials -> record

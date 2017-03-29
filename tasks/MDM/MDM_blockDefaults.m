@@ -1,4 +1,4 @@
-function s = MDM_config()
+function s = MDM_blockDefaults()
 % MDM_CONFIG Return general block settings for the medical decision-making
 %   task by modifying the default ones from `config`.
 
