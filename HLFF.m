@@ -39,7 +39,7 @@ else % Running practice
   settings.device.saveAfterTrial = false;
 end
 
-settingsLF = HLFF_config_LF(settings);
+settingsLF = HLFF_LFConfig(settings);
 settingsLF.runSetup.textures = loadTexturesFromConfig(settingsLF);
 
 %% Generate trials/blocks - if they haven't been generated before
