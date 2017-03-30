@@ -1,10 +1,10 @@
 # Generalized framework for risk-and-ambiguity tasks in PsychToolBox
-This README contains the basic instructions. For more detailed stuff, [see the wiki](https://git.yale.edu/levylab/RNA_PTB_task/wiki/Advanced-features).
+This README contains the basic instructions. For more detailed stuff, [see the Advanced features document](https://github.com/YaleDecisionNeuro/PsychTaskFramework/blob/master/docs/Advanced-features.md).
 
 ## Installation
 The framework was tested with MATLAB 2016b and Psychophysics Toolbox v3.0.12. The oldest version of MATLAB that it can work with is 2013b, but **do use the latest version of both MATLAB and PsychToolBox available to you**. The installation process of PsychToolBox is a little involved, so please [follow the instructions here](http://psychtoolbox.org/download).
 
-To use the framework, either [download the `master` branch as a zip file](https://git.yale.edu/levylab/RNA_PTB_task/archive/master.zip) and unzip wherever you need, or -- if you want to take advantage of upstream changes -- fork it and then clone it on your local setup. [The process is described here.](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/) (If you wish to make it easy for me to provide support, please use the fork-and-clone approach -- that way, I'll be able to see what changes you've made, and you'll be able to pull my general improvements to your instance.)
+To use the framework, either [download the `master` branch as a zip file](https://github.com/YaleDecisionNeuro/PsychTaskFramework/archive/master.zip) and unzip wherever you need, or -- if you want to take advantage of upstream changes -- fork it and then clone it on your local setup. [The process is described here.](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/) (If you wish to make it easy for me to provide support, please use the fork-and-clone approach -- that way, I'll be able to see what changes you've made, and you'll be able to pull my general improvements to your instance.)
 
 ## Getting started
 ### Moving around
@@ -57,11 +57,11 @@ The configuration for task `XYZ` is in `tasks/XYZ/XYZ_blockDefaults.m`. If there
 ### Writing your own tasks
 A cookbook and proper documentation is forthcoming. If you need to do this now, I recommend taking a look at one of the tasks and walking through the call stack. (MATLAB's "Set breakpoint" feature allows the execution to stop at an arbitrary point. Other debugging features -- especially "Step", "Step in" and "Step out" -- can take you through the code execution one step at a time.)
 
-A look at [advanced-features documentation](https://git.yale.edu/levylab/RNA_PTB_task/wiki/Advanced-features) could be helpful.
+A look at [advanced-features documentation](https://github.com/YaleDecisionNeuro/PsychTaskFramework/blob/master/docs/Advanced-features.md) could be helpful.
 
 ## This is a beta
 This repository is still in the process of being re-written. The most prominent result is that some config aren't clearly defined except by their practical use; some config are intertwined with others without a clear indication of this; and some things (most prominently, object positioning) have not been refactored into config at all.
 
-In my defense, most functions are well-commented and the modular design means that each file should be a self-contained chunk of code that shouldn't be difficult to understand. Nonetheless, if you find yourself struggling, [file an issue and tag it as `question`](https://git.yale.edu/levylab/RNA_PTB_task/issues/new).
+In my defense, most functions are well-commented and the modular design means that each file should be a self-contained chunk of code that shouldn't be difficult to understand. Nonetheless, if you find yourself struggling, [file an issue and tag it as `question`](https://github.com/YaleDecisionNeuro/PsychTaskFramework/issues/new).
 
 This `README` is a work in progress as well. Please let me know how I can improve it -- or, better still, improve it yourself!
