@@ -113,3 +113,8 @@ In the latter case of the subliminal reference display, you could have left out 
 ## ...add a special phase, but only for the last trial of the session?
 You could write your custom post-block function and set it in `s.task.fnHandles.postBlockFn`.
 
+## Where are the results saved?
+The results are saved in the `data/` folder within the task folder, which is defined in `config.task.taskPath`.
+
+## How can I split a task into multiple sessions?
+Use `config.task.blocksPerSession` alongside `config.task.numBlocks`. The function `getBlocksForSession` will automatically select a terminating point. (It will also automatically resume an interrupted session.)
