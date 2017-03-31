@@ -40,3 +40,16 @@ The `drawLotto` function can handle this, but `generateTrials` currently assumes
 
 ### How can we make all combinations with the reference values?
 Currently, we can't -- multiple reference values would merely get evenly distributed among the combinations of stakes, probabilities and ambiguities. As of now, if you need this to happen, you'll need to modify the `generateTrials` script. Alternately, you can run multiple generations for one reference value each.
+
+# Generating blocks
+`generateBlocks` is a convenience function that uses a couple of other config properties to sort out your trials into blocks and insert any catch trials.
+
+Let's say that you wanted to separate the trials you're about to generate into four blocks.
+
+(...)
+
+(The initial versions used `.task.blockLength`, and required that the number of generated trials be evenly divisible by it.)
+
+If you had to do any "weird" advanced things, `generateBlocks` allows you to mix in previously generated trials as the fourth argument. `MDM` does it, like this:
+
+(...)
