@@ -1,5 +1,5 @@
 function unloadPTB(varargin)
-% Closes windows & textures from the passed config(s). Resets Screen settings.
+% Closes windows & textures from the passed config(s). Resets Screen config.
 %
 % closeScreen accepts arbitrarily many config structs.
 
@@ -13,7 +13,7 @@ Screen('Close', windowIds);
 % 2. Close all textures
 Screen('Close', textureIds);
 
-% 3. Clear Screen settings (see PsychDebugWindowConfiguration for details)
+% 3. Clear Screen config (see PsychDebugWindowConfiguration for details)
 clear Screen
 end
 

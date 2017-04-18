@@ -1,19 +1,19 @@
-function [ settings ] = loadPTB(settings)
-% Start PsychToolBox; return settings struct with display info.
+function [ config ] = loadPTB(config)
+% Start PsychToolBox; return config struct with display info.
 %
-% Most importantly, the display info is in settings.device; the essential one
+% Most importantly, the display info is in config.device; the essential one
 %   is s.device.windowPtr.
 
 %% Set random seed -- if already set, continue using that one
 if exist('RandStream', 'var') % Not on Octave
-  if ~isfield(settings.device, 'rngAlgorithm')
-    settings.device.rngAlgorithm = 'mt19937ar'; % MATLAB default
+  if ~isfield(config.device, 'rngAlgorithm')
+    config.device.rngAlgorithm = 'mt19937ar'; % MATLAB default
   end
-  if ~isfield(settings.device, 'rngSeed')
-    settings.device.rngSeed = sum(100 * clock);
+  if ~isfield(config.device, 'rngSeed')
+    config.device.rngSeed = sum(100 * clock);
   end
-  seed = RandStream.create(settings.device.rngAlgorithm, ...
-    'seed', settings.device.rngSeed);
+  seed = RandStream.create(config.device.rngAlgorithm, ...
+    'seed', config.device.rngSeed);
   RandStream.setGlobalStream(seed);
 end
 
@@ -21,31 +21,31 @@ end
 KbName('UnifyKeyNames');
 
 %% Invoke PTB debug configuration if debug mode is set
-if isfield(settings, 'debug') && settings.debug == true
+if isfield(config, 'debug') && config.debug == true
   PsychDebugWindowConfiguration();
 end
 
 %% Open the window
-if ~isfield(settings.device, 'screenId')
-  settings.device.screenId = max(Screen('Screens'));
+if ~isfield(config.device, 'screenId')
+  config.device.screenId = max(Screen('Screens'));
 end
-if ~isfield(settings.graphicDefault, 'bgrColor')
-  settings.device.bgrColor = [0 0 0];
+if ~isfield(config.graphicDefault, 'bgrColor')
+  config.device.bgrColor = [0 0 0];
 end
 
-if isfield(settings.device, 'screenDims') && ...
-   numel(settings.device.screenDims(:)) == 4
+if isfield(config.device, 'screenDims') && ...
+   numel(config.device.screenDims(:)) == 4
   % Only open a partial screen
-  [settings.device.windowPtr, settings.device.screenDims] = ...
-    Screen('OpenWindow', settings.device.screenId, ...
-    settings.graphicDefault.bgrColor, settings.device.screenDims);
+  [config.device.windowPtr, config.device.screenDims] = ...
+    Screen('OpenWindow', config.device.screenId, ...
+    config.graphicDefault.bgrColor, config.device.screenDims);
 else
-  [settings.device.windowPtr, settings.device.screenDims] = ...
-    Screen('OpenWindow', settings.device.screenId, ...
-    settings.graphicDefault.bgrColor);
+  [config.device.windowPtr, config.device.screenDims] = ...
+    Screen('OpenWindow', config.device.screenId, ...
+    config.graphicDefault.bgrColor);
 end
 
-windowRect = settings.device.screenDims;
-settings.device.windowWidth  = windowRect(3) - windowRect(1);
-settings.device.windowHeight = windowRect(4) - windowRect(2);
+windowRect = config.device.screenDims;
+config.device.windowWidth  = windowRect(3) - windowRect(1);
+config.device.windowHeight = windowRect(4) - windowRect(2);
 end

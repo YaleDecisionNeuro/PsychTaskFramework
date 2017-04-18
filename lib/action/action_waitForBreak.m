@@ -1,8 +1,8 @@
-function [ trialData ] = action_waitForBreak(trialData, blockSettings, phaseSettings)
-[ startTimestamp, found ] = findPTBTimestamp(trialData, phaseSettings);
+function [ trialData ] = action_waitForBreak(trialData, blockConfig, phaseConfig)
+[ startTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig);
 if ~found
-  warning('In phase %s, phaseSettings.startTimestamp was not provided.', ...
-    phaseSettings.name)
+  warning('In phase %s, phaseConfig.startTimestamp was not provided.', ...
+    phaseConfig.name)
 end
-waitForKey(blockSettings.device.breakKeys, phaseSettings.duration - (GetSecs() - startTimestamp));
+waitForKey(blockConfig.device.breakKeys, phaseConfig.duration - (GetSecs() - startTimestamp));
 end

@@ -1,18 +1,18 @@
 function s = HLFF_blockDefaults()
-% HLFF_CONFIG Return general block settings for the high-/low-fat food task
+% HLFF_CONFIG Return general block config for the high-/low-fat food task
 %   designed by Sarah Healy by modifying the default ones from `config`.
 
 % Load defaults
 s = configDefaults();
 
-%% Machine settings
+%% Machine config
 s.task.taskPath = ['tasks' filesep 'HLFF'];
 s.task.imgPath = [s.task.taskPath filesep 'img'];
 
 %% Features of objects that your task displays
 % Inheriting all objects from `config`
 
-%% Non-display settings for the game
+%% Non-display config for the game
 % (Maximum) durations of the various stages, in seconds
 % s.trial.legacyPhases.showChoice.duration = 10;
 % s.trial.legacyPhases.response.duration = 0;

@@ -1,5 +1,5 @@
 function s = RA_blockDefaults()
-% CONFIG_RA Return general block settings for the monetary risk & ambiguity
+% CONFIG_RA Return general block config for the monetary risk & ambiguity
 %   task by modifying the default ones from `config`.
 
 % Only small modifications are necessary, as `config` caters to this paradigm
@@ -7,12 +7,12 @@ function s = RA_blockDefaults()
 % Load defaults
 s = configDefaults();
 
-%% Machine settings
+%% Machine config
 s.task.taskPath = ['tasks' filesep 'RA'];
 s.task.constantBlockDuration = true; % This is fMRI, so intertrial compensates for any fast responses in order to make each trial last a constant amount of time
 % FIXME: Add durations
 
-%% Game settings
+%% Game config
 s.task.taskName = 'MonetaryRA';
 s.runSetup.blockName = 'Gains';
 s.runSetup.conditions.payoffKind = 'Monetary';

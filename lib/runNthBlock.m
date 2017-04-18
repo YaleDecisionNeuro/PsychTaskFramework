@@ -30,10 +30,10 @@ function Data = runNthBlock(Data, n)
   runTrialFn = blockConfig.task.fnHandles.trialFn;
   if ~isFunction(runTrialFn)
     error(['Function to draw trials not supplied! Make sure that you''ve set' ...
-      ' settings.task.fnHandles.trialFn = @your_function_to_draw_trials']);
+      ' config.task.fnHandles.trialFn = @your_function_to_draw_trials']);
   end
 
-  % 2a. If settings say so, run pre-block callback (e.g. display title)
+  % 2a. If config say so, run pre-block callback (e.g. display title)
   if isfield(blockConfig.task.fnHandles, 'preBlockFn') && ...
      isFunction(blockConfig.task.fnHandles.preBlockFn)
     blockConfig.task.fnHandles.preBlockFn(Data, blockConfig);
@@ -58,7 +58,7 @@ function Data = runNthBlock(Data, n)
     saveData(Data);
   end
 
-  %% 4. If settings say so, run post-block callback
+  %% 4. If config say so, run post-block callback
   if isfield(blockConfig.task.fnHandles, 'postBlockFn') && ...
      isFunction(blockConfig.task.fnHandles.postBlockFn)
     blockConfig.task.fnHandles.postBlockFn(Data, blockConfig);

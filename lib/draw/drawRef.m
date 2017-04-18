@@ -1,18 +1,18 @@
-function drawRef(blockSettings, trialData)
+function drawRef(blockConfig, trialData)
 % DRAWREF Draws the stable reference value on screen.
 
 %% 1. Obtain values
-[ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockSettings);
+[ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockConfig);
 
 %% 2. Calculate position
-W = blockSettings.device.windowWidth;
-H = blockSettings.device.windowHeight;
-windowPtr = blockSettings.device.windowPtr;
+W = blockConfig.device.windowWidth;
+H = blockConfig.device.windowHeight;
+windowPtr = blockConfig.device.windowPtr;
 
 %% 3. Display textual reference
 % FIXME: This could use refactoring & matrix algebra
-if isfield(blockSettings.objects.lottery, 'verticalLayout') && ...
-  blockSettings.objects.lottery.verticalLayout == true
+if isfield(blockConfig.objects.lottery, 'verticalLayout') && ...
+  blockConfig.objects.lottery.verticalLayout == true
   % Flip it around vertically
   if referenceSide == 1
     refDims.y = 0.25 * H;
@@ -30,20 +30,20 @@ else
   refDims.y = H/4;
 end
 
-Screen('TextSize', windowPtr, blockSettings.objects.reference.fontSize);
+Screen('TextSize', windowPtr, blockConfig.objects.reference.fontSize);
 
-if ~configHasLookups(blockSettings)
+if ~configHasLookups(blockConfig)
   % 1, Prepare text (and nothing else)
   displayText = dollarFormatter(referenceValue);
   textDims = getTextDims(windowPtr, displayText);
 else
   % 1. Prepare text
-  lookupTbl = blockSettings.runSetup.lookups.txt;
+  lookupTbl = blockConfig.runSetup.lookups.txt;
   [ displayText, textDims ] = textLookup(referenceValue, lookupTbl, windowPtr);
 
   % 2. Draw the reference image underneath
-  imgLookupTbl = blockSettings.runSetup.lookups.img;
-  textureBank = blockSettings.runSetup.textures;
+  imgLookupTbl = blockConfig.runSetup.lookups.img;
+  textureBank = blockConfig.runSetup.textures;
   [ img, imgDims ] = imgLookup(referenceValue, imgLookupTbl, textureBank);
   Screen('DrawTexture', windowPtr, img, [], ...
     xyAndDimsToRect([refDims.x - imgDims(1)/2, refDims.y], imgDims));
@@ -52,23 +52,23 @@ end
 % 3. Draw text
 textPos = [refDims.x - textDims(1)/2, refDims.y - textDims(2)/2];
 DrawFormattedText(windowPtr, displayText, textPos(1), ...
-  textPos(2), blockSettings.graphicDefault.fontColor);
+  textPos(2), blockConfig.graphicDefault.fontColor);
 end
 
 %% Helper function
-function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockSettings)
+function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockConfig)
 % Check if there is any specific reference side & value defined for this trial,
 % or for this block. If reference side is unavailable, generate it at random.
 
 % Approach: Start from general options and overwrite with more specific ones
 
-% a. Check in blockSettings
-if isfield(blockSettings, 'runSetup') && isfield(blockSettings.runSetup, 'refSide')
-  referenceSide = blockSettings.runSetup.refSide;
+% a. Check in blockConfig
+if isfield(blockConfig, 'runSetup') && isfield(blockConfig.runSetup, 'refSide')
+  referenceSide = blockConfig.runSetup.refSide;
 end
 
-if isfield(blockSettings.trial.generate, 'reference')
-  referenceValue = blockSettings.trial.generate.reference;
+if isfield(blockConfig.trial.generate, 'reference')
+  referenceValue = blockConfig.trial.generate.reference;
 end
 
 % b. check in trialData
@@ -93,6 +93,6 @@ if ~exist('referenceSide', 'var')
 end
 
 if ~exist('referenceValue', 'var')
-  error('Reference value not set in either blockSettings or trialData!');
+  error('Reference value not set in either blockConfig or trialData!');
 end
 end

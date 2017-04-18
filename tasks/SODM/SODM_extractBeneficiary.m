@@ -1,6 +1,6 @@
-function [ beneficiary ] = SODM_extractBeneficiary(blockSettings)
+function [ beneficiary ] = SODM_extractBeneficiary(blockConfig)
   try
-    beneficiary = blockSettings.runSetup.conditions.beneficiary;
+    beneficiary = blockConfig.runSetup.conditions.beneficiary;
   catch
     beneficiary = '';
   end

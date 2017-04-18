@@ -1,4 +1,4 @@
-function [ phaseSettings ] = phaseConfig(name, varargin)
+function [ phaseConfig ] = phaseConfig(name, varargin)
 % Prepares a uniform structure for the definition of a phase.
 
 defaultDuration = Inf;
@@ -13,5 +13,5 @@ addOptional(p, 'action', defaultAction, @isFunctionOrFunctionArray);
 addOptional(p, 'drawCmds', {}, @isFunctionOrFunctionArray);
 
 parse(p, name, varargin{:});
-phaseSettings = p.Results;
+phaseConfig = p.Results;
 end

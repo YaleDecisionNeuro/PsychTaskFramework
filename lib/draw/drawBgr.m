@@ -1,29 +1,29 @@
-function drawBgr(blockSettings, callback)
+function drawBgr(blockConfig, callback)
 % DRAWBGR Draws default background and sets default drawing properties (e.g.
 %   fontName and fontSize). To draw task-specific things, you can supply a
 %   callback function that does them. (For instance, you can supply the
 %   task-relevant drawRef function.)
 %
-% NOTE: Unlike other draw functions, it only takes `blockSettings`, not
+% NOTE: Unlike other draw functions, it only takes `blockConfig`, not
 % `trialData`, and does not allow access to or modification of `trialData`.
 % (FIXME?)
 
-if ~isfield(blockSettings.device, 'windowPtr')
-  error('Device blockSettings contain no designated draw screen');
+if ~isfield(blockConfig.device, 'windowPtr')
+  error('Device blockConfig contain no designated draw screen');
 end
 
-windowPtr = blockSettings.device.windowPtr;
+windowPtr = blockConfig.device.windowPtr;
 HideCursor(windowPtr);
 
-Screen('FillRect', windowPtr, blockSettings.graphicDefault.bgrColor);
-Screen('TextFont', windowPtr, blockSettings.graphicDefault.fontName);
-Screen('TextSize', windowPtr, blockSettings.graphicDefault.fontSize);
+Screen('FillRect', windowPtr, blockConfig.graphicDefault.bgrColor);
+Screen('TextFont', windowPtr, blockConfig.graphicDefault.fontName);
+Screen('TextSize', windowPtr, blockConfig.graphicDefault.fontSize);
 
-if isfield(blockSettings.task.fnHandles, 'bgrDrawCallbackFn') && ...
-    isFunction(blockSettings.task.fnHandles.bgrDrawCallbackFn)
-  blockSettings.task.fnHandles.bgrDrawCallbackFn(blockSettings);
+if isfield(blockConfig.task.fnHandles, 'bgrDrawCallbackFn') && ...
+    isFunction(blockConfig.task.fnHandles.bgrDrawCallbackFn)
+  blockConfig.task.fnHandles.bgrDrawCallbackFn(blockConfig);
 end
 if exist('callback', 'var') && isFunction(callback)
-  callback(blockSettings);
+  callback(blockConfig);
 end
 end

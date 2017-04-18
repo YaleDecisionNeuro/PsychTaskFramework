@@ -1,13 +1,13 @@
-function [ trialData ] = action_display(trialData, blockSettings, phaseSettings)
-% For duration specified in phaseSettings.duration, maintain the phase
-[ startTimestamp, found ] = findPTBTimestamp(trialData, phaseSettings);
+function [ trialData ] = action_display(trialData, blockConfig, phaseConfig)
+% For duration specified in phaseConfig.duration, maintain the phase
+[ startTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig);
 if ~found
-  warning('In phase %s, phaseSettings.startTimestamp was not provided.', ...
-    phaseSettings.name)
+  warning('In phase %s, phaseConfig.startTimestamp was not provided.', ...
+    phaseConfig.name)
 end
-endTimestamp = startTimestamp + phaseSettings.duration;
+endTimestamp = startTimestamp + phaseConfig.duration;
 
 while GetSecs() < endTimestamp
-  WaitSecs(blockSettings.device.sleepIncrements);
+  WaitSecs(blockConfig.device.sleepIncrements);
 end
 end

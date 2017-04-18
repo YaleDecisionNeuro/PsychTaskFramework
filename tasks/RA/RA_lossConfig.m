@@ -1,5 +1,5 @@
 function c = RA_lossConfig(gains_config)
-% RA_LOSS_CONFIG Returns loss block settings for the monetary R&A task by
+% RA_LOSS_CONFIG Returns loss block config for the monetary R&A task by
 %   modifying the ones created for the gains block.
   c = gains_config;
 
