@@ -1,13 +1,13 @@
-function Data = runBlock(Data, blockSettings)
+function Data = runBlock(Data, blockConfig)
   % RUNBLOCK Scaffolds multiple trial calls of the same kind and saves the file
   %   after al of them have run.
   %
-  % The main thing `runBlock` needs from blockSettings is for `.task.fnHandles.trialFn`
-  % to be a function handle to which it can pass Data, trial #, and blockSettings.
+  % The main thing `runBlock` needs from blockConfig is for `.task.fnHandles.trialFn`
+  % to be a function handle to which it can pass Data, trial #, and blockConfig.
   %
-  % If `blockSettings.game` includes fields `preBlockFn` and/or `postBlockFn`,
+  % If `blockConfig.game` includes fields `preBlockFn` and/or `postBlockFn`,
   % it will assume they are callable functions and call them with `Data` and
-  % `blockSettings` as arguments. (This means they can display block beginning
+  % `blockConfig` as arguments. (This means they can display block beginning
   % / end and wait for keypress, or check if requisite values exist and fail
   % gracefully, or any number of other things.)
   %
@@ -17,42 +17,42 @@ function Data = runBlock(Data, blockSettings)
   %% 0. Validate the DataObject
   Data = prepForRecording(Data);
 
-  %% 1. If settings say so, run pre-block callback (e.g. display title)
-  if isfield(blockSettings.task.fnHandles, 'preBlockFn') && ...
-     isa(blockSettings.task.fnHandles.preBlockFn, 'function_handle')
-    blockSettings.task.fnHandles.preBlockFn(Data, blockSettings);
+  %% 1. If config say so, run pre-block callback (e.g. display title)
+  if isfield(blockConfig.task.fnHandles, 'preBlockFn') && ...
+     isa(blockConfig.task.fnHandles.preBlockFn, 'function_handle')
+    blockConfig.task.fnHandles.preBlockFn(Data, blockConfig);
   end
 
   %% 2. Iterate through trials
-  trials = blockSettings.runSetup.trialsToRun;
+  trials = blockConfig.runSetup.trialsToRun;
   numTrials = size(trials, 1);
   firstTrial = getFirstTrial(Data);
 
-  runTrialFn = blockSettings.task.fnHandles.trialFn;
+  runTrialFn = blockConfig.task.fnHandles.trialFn;
   if ~isa(runTrialFn, 'function_handle')
     error(['Function to draw trials not supplied! Make sure that you''ve set' ...
-      ' settings.task.fnHandles.trialFn = @your_function_to_draw_trials']);
+      ' config.task.fnHandles.trialFn = @your_function_to_draw_trials']);
   end
 
   for k = firstTrial : numTrials
     trialData = trials(k, :);
-    trialData = runTrialFn(trialData, blockSettings);
-    Data = addTrial(Data, trialData, blockSettings);
-    if blockSettings.device.saveAfterTrial
+    trialData = runTrialFn(trialData, blockConfig);
+    Data = addTrial(Data, trialData, blockConfig);
+    if blockConfig.device.saveAfterTrial
       saveData(Data);
     end
   end
 
   %% 3. Save subject file after block
   Data = finishBlock(Data);
-  if blockSettings.device.saveAfterBlock || blockSettings.device.saveAfterTrial
+  if blockConfig.device.saveAfterBlock || blockConfig.device.saveAfterTrial
     saveData(Data);
   end
 
-  %% 4. If settings say so, run post-block callback
-  if isfield(blockSettings.task.fnHandles, 'postBlockFn') && ...
-     isa(blockSettings.task.fnHandles.postBlockFn, 'function_handle')
-    blockSettings.task.fnHandles.postBlockFn(Data, blockSettings);
+  %% 4. If config say so, run post-block callback
+  if isfield(blockConfig.task.fnHandles, 'postBlockFn') && ...
+     isa(blockConfig.task.fnHandles.postBlockFn, 'function_handle')
+    blockConfig.task.fnHandles.postBlockFn(Data, blockConfig);
   end
 end
 
@@ -67,7 +67,7 @@ function [ tbl ] = appendRow(row, tbl)
   end
 end
 
-function [ DataObject ] = addTrial(DataObject, trialData, blockSettings)
+function [ DataObject ] = addTrial(DataObject, trialData, blockConfig)
 % Appends `trialData` to the latest incomplete block record in DataObject.
 %
 % Assumes that prepForRecording already ran on the DataObject.
@@ -75,10 +75,10 @@ function [ DataObject ] = addTrial(DataObject, trialData, blockSettings)
 % Get the index of the current block being recorded
 currentBlockIdx = DataObject.numFinishedBlocks + 1;
 
-% If the block is new, set it up with current settings
+% If the block is new, set it up with current config
 if numel(DataObject.blocks.recorded) < currentBlockIdx
   DataObject.blocks.recorded{currentBlockIdx} = struct;
-  DataObject.blocks.recorded{currentBlockIdx}.settings = blockSettings;
+  DataObject.blocks.recorded{currentBlockIdx}.config = blockConfig;
   DataObject.blocks.recorded{currentBlockIdx}.records  = [];
 end
 

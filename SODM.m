@@ -10,17 +10,17 @@ addpath(genpath('./tasks/SODM'));
 addpath('./tasks/MDM');
 % NOTE: genpath gets the directory and all its subdirectories
 
-%% Load settings
-settings = SODM_blockDefaults();
-settings = loadPTB(settings);
+%% Load config
+config = SODM_blockDefaults();
+config = loadPTB(config);
 if ~exist('subjectId', 'var') % Practice
   subjectId = NaN;
-  settings = setupPracticeConfig(settings);
+  config = setupPracticeConfig(config);
 end
 
 % Find-or-create subject data file *in appropriate location*
 fname = [num2str(subjectId) '.mat'];
-folder = fullfile(settings.task.taskPath, 'data');
+folder = fullfile(config.task.taskPath, 'data');
 fname = [folder filesep fname];
 [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
@@ -33,30 +33,30 @@ end
 
 if ~isnan(subjectId)
   if mod(subjectId, 2) == 0
-      settings.runSetup.refSide = 1;
+      config.runSetup.refSide = 1;
   else
-      settings.runSetup.refSide = 2;
+      config.runSetup.refSide = 2;
   end
 end
 
-% Disambiguate settings here
-monSettings = SODM_monetaryConfig(settings);
-medSettings = SODM_medicalConfig(settings);
-medSettings.runSetup.textures = loadTexturesFromConfig(medSettings);
-monSettings.runSetup.textures = loadTexturesFromConfig(monSettings);
+% Disambiguate config here
+monConfig = SODM_monetaryConfig(config);
+medConfig = SODM_medicalConfig(config);
+medConfig.runSetup.textures = loadTexturesFromConfig(medConfig);
+monConfig.runSetup.textures = loadTexturesFromConfig(monConfig);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   % NOTE: Generating each one separately with two repeats, so that there isn't
   % a cluster of high values in self vs. other
-  medSelfBlocks = generateBlocks(medSettings, medSettings.trial.generate.catchTrial, ...
-    medSettings.trial.generate.catchIdx);
-  medOtherBlocks = generateBlocks(medSettings, medSettings.trial.generate.catchTrial, ...
-    medSettings.trial.generate.catchIdx);
-  monSelfBlocks = generateBlocks(monSettings, monSettings.trial.generate.catchTrial, ...
-    monSettings.trial.generate.catchIdx);
-  monOtherBlocks = generateBlocks(monSettings, monSettings.trial.generate.catchTrial, ...
-    monSettings.trial.generate.catchIdx);
+  medSelfBlocks = generateBlocks(medConfig, medConfig.trial.generate.catchTrial, ...
+    medConfig.trial.generate.catchIdx);
+  medOtherBlocks = generateBlocks(medConfig, medConfig.trial.generate.catchTrial, ...
+    medConfig.trial.generate.catchIdx);
+  monSelfBlocks = generateBlocks(monConfig, monConfig.trial.generate.catchTrial, ...
+    monConfig.trial.generate.catchIdx);
+  monOtherBlocks = generateBlocks(monConfig, monConfig.trial.generate.catchTrial, ...
+    monConfig.trial.generate.catchIdx);
 
   medBlocks = [medSelfBlocks; medOtherBlocks];
   monBlocks = [monSelfBlocks; monOtherBlocks];
@@ -91,11 +91,11 @@ if ~isfield(Data, 'blocks') || isempty(Data.blocks)
     withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
 
     if blockKind == 1
-      medSettings.runSetup.conditions.beneficiary = beneficiaryStr;
-      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medSettings);
+      medConfig.runSetup.conditions.beneficiary = beneficiaryStr;
+      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medConfig);
     else
-      monSettings.runSetup.conditions.beneficiary = beneficiaryStr;
-      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monSettings);
+      monConfig.runSetup.conditions.beneficiary = beneficiaryStr;
+      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monConfig);
     end
   end
 end
@@ -105,7 +105,7 @@ if ~isnan(subjectId)
   [ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 else
   % Gut the generated blocks to be limited to practice
-  % TODO: Set this in settings
+  % TODO: Set this in config
   practiceBlocks = 1:4;
   numSelect = 3;
   Data = preparePractice(Data, practiceBlocks, numSelect);
@@ -118,5 +118,5 @@ for blockIdx = firstBlockIdx:lastBlockIdx
 end
 
 % Close window
-unloadPTB(monSettings, medSettings);
+unloadPTB(monConfig, medConfig);
 end

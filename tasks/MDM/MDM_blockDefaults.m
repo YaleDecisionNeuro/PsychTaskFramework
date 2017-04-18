@@ -1,18 +1,18 @@
 function s = MDM_blockDefaults()
-% MDM_CONFIG Return general block settings for the medical decision-making
+% MDM_CONFIG Return general block config for the medical decision-making
 %   task by modifying the default ones from `config`.
 
 % Load defaults
 s = configDefaults();
 
-%% Machine settings
+%% Machine config
 s.task.taskPath = ['tasks' filesep 'MDM'];
 s.task.imgPath = [s.task.taskPath filesep 'img'];
 
 %% Features of objects that your task displays
 % Inheriting all objects from `config`
 
-%% Non-display settings for the game
+%% Non-display config for the game
 % (Maximum) durations of the various stages, in seconds
 s.task.constantBlockDuration = true;
 s.trial.legacyPhases = legacyPhaseStruct;

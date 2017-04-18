@@ -1,6 +1,6 @@
-function [ Data, blockSettings ] = preBlock(Data, blockSettings)
+function [ Data, blockConfig ] = preBlock(Data, blockConfig)
   % PREBLOCK Display "Block N: (BLOCKNAME)" and wait for press of any of
-  %   blockSettings.device.breakKeys.
+  %   blockConfig.device.breakKeys.
 
   % Check if there are any recorded blocks yet
   if isfield(Data, 'blocks') && isfield(Data, 'numFinishedBlocks')
@@ -12,7 +12,7 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
 
   % Check if the name of the block is defined
   try
-    block_name = sprintf(' (%s)', blockSettings.runSetup.blockName);
+    block_name = sprintf(' (%s)', blockConfig.runSetup.blockName);
   catch
     block_name = '';
   end
@@ -21,13 +21,13 @@ function [ Data, blockSettings ] = preBlock(Data, blockSettings)
 
   % Display
   % TODO: Factor out the "display text in the center of the screen" logic
-  windowPtr = blockSettings.device.windowPtr;
-  if isfield(blockSettings.task.fnHandles, 'bgrDrawFn') && ...
-      isa(blockSettings.task.fnHandles.bgrDrawFn, 'function_handle')
-    blockSettings.task.fnHandles.bgrDrawFn(blockSettings);
+  windowPtr = blockConfig.device.windowPtr;
+  if isfield(blockConfig.task.fnHandles, 'bgrDrawFn') && ...
+      isa(blockConfig.task.fnHandles.bgrDrawFn, 'function_handle')
+    blockConfig.task.fnHandles.bgrDrawFn(blockConfig);
   end
   DrawFormattedText(windowPtr, block_text, ...
-    'center', 'center', blockSettings.graphicDefault.fontColor);
+    'center', 'center', blockConfig.graphicDefault.fontColor);
   Screen('flip', windowPtr); % NOTE: Necessary to display screen
-  waitForKey(blockSettings.device.breakKeys);
+  waitForKey(blockConfig.device.breakKeys);
 end

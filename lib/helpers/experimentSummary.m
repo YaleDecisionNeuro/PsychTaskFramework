@@ -51,15 +51,15 @@ bag = bagMap.bagNumber(mask);
 if ismember('choseLottery', trial.Properties.VariableNames)
   choseLottery = trial.choseLottery;
 else
-  choseLottery = keyToChoice(trial.choice, block.settings.runSetup.refSide);
+  choseLottery = keyToChoice(trial.choice, block.config.runSetup.refSide);
 end
 
 % Is there a look-up table for stakes? If so, use it!
-settings = block.settings;
-if configHasLookups(blockSettings) && ...
-    isfield(settings.runSetup.lookups, 'txt') && ...
-    numel(settings.runSetup.lookups.txt) > 0
-  lookupTable = settings.runSetup.lookups.txt;
+config = block.config;
+if configHasLookups(blockConfig) && ...
+    isfield(config.runSetup.lookups, 'txt') && ...
+    numel(config.runSetup.lookups.txt) > 0
+  lookupTable = config.runSetup.lookups.txt;
   w = textLookup(trial.stakes, lookupTable);
   l = textLookup(trial.stakes_loss, lookupTable);
   r = textLookup(trial.reference, lookupTable);
@@ -70,7 +70,7 @@ else
 end
 
 Summary.bagNumber = bag;
-Summary.winningColor = block.settings.objects.lottery.box.colorKey{c};
+Summary.winningColor = block.config.objects.lottery.box.colorKey{c};
 Summary.lotteryWin = w;
 Summary.lotteryLoss = l;
 switch choseLottery

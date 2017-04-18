@@ -1,6 +1,6 @@
-function [ Data, blockSettings ] = SODM_preBlock(Data, blockSettings)
+function [ Data, blockConfig ] = SODM_preBlock(Data, blockConfig)
 % Insert beneficiary condition into blockName, then call preBlock with it
-blockSettings.runSetup.blockName = [blockSettings.runSetup.blockName ' / ' ...
-  SODM_extractBeneficiary(blockSettings)];
-[ Data, blockSettings ] = preBlock(Data, blockSettings);
+blockConfig.runSetup.blockName = [blockConfig.runSetup.blockName ' / ' ...
+  SODM_extractBeneficiary(blockConfig)];
+[ Data, blockConfig ] = preBlock(Data, blockConfig);
 end

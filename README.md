@@ -60,7 +60,7 @@ A cookbook and proper documentation is forthcoming. If you need to do this now, 
 A look at [advanced-features documentation](https://git.yale.edu/levylab/RNA_PTB_task/wiki/Advanced-features) could be helpful.
 
 ## This is a beta
-This repository is still in the process of being re-written. The most prominent result is that some settings aren't clearly defined except by their practical use; some settings are intertwined with others without a clear indication of this; and some things (most prominently, object positioning) have not been refactored into settings at all.
+This repository is still in the process of being re-written. The most prominent result is that some config aren't clearly defined except by their practical use; some config are intertwined with others without a clear indication of this; and some things (most prominently, object positioning) have not been refactored into config at all.
 
 In my defense, most functions are well-commented and the modular design means that each file should be a self-contained chunk of code that shouldn't be difficult to understand. Nonetheless, if you find yourself struggling, [file an issue and tag it as `question`](https://git.yale.edu/levylab/RNA_PTB_task/issues/new).
 

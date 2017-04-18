@@ -1,6 +1,6 @@
-function [ trialTbl ] = generateTrials(levelSettings)
+function [ trialTbl ] = generateTrials(levelConfig)
 % GENERATETRIALS Generates a table of risk&ambiguity trials that contain all
-%   combinations of `levelSettings` struct subfields.
+%   combinations of `levelConfig` struct subfields.
 %
 % NOTE: The generator is specific to the risk/ambiguity task. It expects that %
 % the struct will contain `stakes` and at least one of (`probs`, `ambigs`)
@@ -18,13 +18,13 @@ function [ trialTbl ] = generateTrials(levelSettings)
 % task is substantially different, you might have to roll your own.
 
 %% 1. Generate the basics -- assuming field names contain well-defined content
-allStakes = levelSettings.stakes;
-allProbs = existingValueOrDefault(levelSettings, 'probs', []);
-allAmbigs = existingValueOrDefault(levelSettings, 'ambigs', []);
-trialRepeats = existingValueOrDefault(levelSettings, 'repeats', 1);
+allStakes = levelConfig.stakes;
+allProbs = existingValueOrDefault(levelConfig, 'probs', []);
+allAmbigs = existingValueOrDefault(levelConfig, 'ambigs', []);
+trialRepeats = existingValueOrDefault(levelConfig, 'repeats', 1);
 
 if trialRepeats == 0
-  warning('As repeats in levelSettings were set to 0, no trials were generated.');
+  warning('As repeats in levelConfig were set to 0, no trials were generated.');
   return
 end
 
@@ -52,12 +52,12 @@ trialTbl = table(stakes, probs, ambigs);
 %% 2. If other values exist, generate them and add as columns
 numTrials = height(trialTbl);
 excludeFields = {'stakes', 'probs', 'ambigs', 'repeats', 'catchTrial', 'catchIdx'};
-allFields = fieldnames(levelSettings);
+allFields = fieldnames(levelConfig);
 getFields = allFields(~ismember(allFields, excludeFields));
 
 for k = 1:numel(getFields)
   varName = getFields{k};
-  varVals = levelSettings.(varName);
+  varVals = levelConfig.(varName);
   varVals = varVals(:); % get rid of dimensionality
 
   % Extend the field to length of numTrials

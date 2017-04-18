@@ -1,13 +1,13 @@
 function s = configDefaults(changes)
-% Default documented settings for all tasks in a freely modifiable struct.
+% Default documented config for all tasks in a freely modifiable struct.
 %
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %
 % The defaults used here err on the side of catering to LevyLab's R&A paradigm.
 % If you're not using it, nuke s.objects from high orbit.
 %
-% Although the resulting structure contains task-wide settings, it is typically
-% modified with block-specific settings right before being passed to `runBlock`
+% Although the resulting structure contains task-wide config, it is typically
+% modified with block-specific config right before being passed to `runBlock`
 % or equivalent. For example, RA_blockDefaults(configDefaults) would modify
 % these defaults to serve all RA block kinds. RA_lossConfig would then modify
 % the result of *that* call for loss-domain blocks, like so:
@@ -29,14 +29,14 @@ function s = configDefaults(changes)
 % You should turn it off when your task is ready.
 s.debug = true;
 
-%% Machine settings
+%% Machine config
 % This is where you set properties important for PsychToolBox to function
 % properly. Consult PTB manual if these are unclear.
 s.device.screenId = max(Screen('Screens'));
 s.device.windowPtr = NaN; % Must get filled in with Screen('Open')
 s.device.screenDims = NaN; % Screen('Open') will open in this `rect`. If not set, will be set by Screen('Open').
 
-% Machine / MATLAB settings
+% Machine / MATLAB config
 s.device.sleepIncrements = 0.01; % In seconds, how often do we check for keyboard presses, or whether enough time elapsed in a period? 0 for as often as possible
 s.device.rngAlgorithm = 'mt19937ar'; % see RandStream.list for other options
 s.device.rngSeed = sum(100 * clock);
@@ -55,7 +55,7 @@ s.device.breakKeys = {'5%'};
 s.device.choiceKeys = {'1!', '2@'};
 
 %% Graphics defaults
-% To prevent yourself from having to change many settings in many places, use
+% To prevent yourself from having to change many config in many places, use
 % `s.graphicDefault.X` to define property `X` for a particular display feature. This
 % way, you'll only have to change it in one spot,
 s.graphicDefault.fontName = 'Arial';
@@ -65,13 +65,13 @@ s.graphicDefault.bgrColor = [0 0 0];
 s.graphicDefault.padding = 10; % px to leave between objects
 
 %% Features of objects that your task displays
-% This is the Wild West portion of property settings. s.(object) should contain
+% This is the Wild West portion of property config. s.(object) should contain
 % whatever properties your drawX script will require to properly draw them. By
 % current convention, this does not have to include specific coordinates, which
 % your display script might calculate on the basis of specific device
 % properties (like screen width & height). However, only the draw scripts you
 % write will rely on these values; the way you choose to encode them in the
-% settings is up to you. (This might change in future versions.)
+% config is up to you. (This might change in future versions.)
 %
 % The defaults pertain to R&A task objects. This chiefly means the lottery
 % box and associated labels; the reference value (i.e. alternative to the
@@ -116,7 +116,7 @@ s.objects.intertrial.color = [255 255 255];
 s.objects.intertrial.shape = 'Oval';
 s.objects.intertrial.dims = [40 40];
 
-%% Settings for the task as a whole
+%% Config for the task as a whole
 % Obligatory: set it to identify the task for the datafiles and load images
 s.task.taskName = char.empty;
 s.task.taskPath = char.empty;
@@ -165,7 +165,7 @@ s.task.fnHandles.trialFn = @runRATrial;
 
 % %% Event functions
 % Functions that are automatically executed before and after every block these
-% settings are applied to.
+% config are applied to.
 
 % @preBlock is a helpful default in `lib/phase` - displays block number before
 % every block, waits for the press of `breakKeys` button to start first trial.
@@ -177,20 +177,20 @@ s.task.fnHandles.postBlockFn = NaN;
 % background and font properties back to default. You might wish to alter it
 % to, e.g., to make sure that the reference is drawn at all times.
 %
-% By convention, the background draw script only takes block settings and a
+% By convention, the background draw script only takes block config and a
 % potential callback function as an argument, and does not access nor modify
 % collected data. Optionally, you can specify the callback function in
-% s.task.fnHandles.bgrDrawCallbackFn(blockSettings).
+% s.task.fnHandles.bgrDrawCallbackFn(blockConfig).
 s.task.fnHandles.bgrDrawFn = @drawBgr;
 s.task.fnHandles.bgrDrawCallbackFn = NaN;
 
 % %% Reference draw script
 % Reference draw script defines how the "reference" (value alternative to the
 % gamble) will be drawn. It is specific to the kind of choices you present. Its
-% default arguments are drawRef(blockSettings, trialData).
+% default arguments are drawRef(blockConfig, trialData).
 s.task.fnHandles.referenceDrawFn = @drawRef;
 
-%%% Trial-specific settings
+%%% Trial-specific config
 % Configure what values your trials will be generated with, and what functions
 % and actions each trial's phases should use.
 
@@ -203,9 +203,9 @@ s.trial.phases = cell.empty;
 
 % %% Legacy phase scripts
 % NOTE: This section only applies if you're using @runRATrial as your trial
-% script. @runGenericTrial does not check these settings.
+% script. @runGenericTrial does not check these config.
 %
-% If you wish to run "old-school" Levylab R&A task with legacy settings,
+% If you wish to run "old-school" Levylab R&A task with legacy config,
 % you should fill `s.legacyPhases` with a call to `legacyPhaseStruct`. (You can,
 % and should, run the task with the new phase architecture, but this will
 % remain an option.) Check out lib/phase/legacyPhaseStruct.m for details.
@@ -278,8 +278,8 @@ s.trial.generate.repeats = 1;
 s.trial.generate.catchTrial = table.empty;
 s.trial.generate.catchIdx = NaN;
 
-%%% Run settings
-% This will be specific to each block that you run. None of these settings have
+%%% Run config
+% This will be specific to each block that you run. None of these config have
 % a default, although default is suggested.
 
 %% Block properties
@@ -300,7 +300,7 @@ s.runSetup.lookups.img = cell.empty;
 % As a rule, if your lookups contain any images, you will need to generate
 % PsychToolBox textures. This framework expects you to do this by populating
 %
-%   settings.runSetup.textures = loadTexturesFromConfig(settings);
+%   config.runSetup.textures = loadTexturesFromConfig(config);
 %
 % at a point in your task master script when PTB is already loaded.
 s.runSetup.textures = cell.empty;

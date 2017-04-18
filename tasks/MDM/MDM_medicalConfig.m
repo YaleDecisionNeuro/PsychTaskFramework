@@ -1,5 +1,5 @@
 function c = MDM_medicalConfig(initial_config)
-  % MDM_CONFIG Return settings specific to the medical portion of MDM by
+  % MDM_CONFIG Return config specific to the medical portion of MDM by
   %   modifying the general MDM_blockDefaults pass as argument.
 
   % Load defaults

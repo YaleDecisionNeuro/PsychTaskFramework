@@ -1,16 +1,16 @@
 function [ phases_RA ] = legacyPhaseStruct
-% Default phase settings for R&A-based tasks. Deprecated.
+% Default phase config for R&A-based tasks. Deprecated.
 %
 % If you're only changing some element of a phase, but you're happy with the
 % standard order of phases (i.e. choice display, response prompt, feedback,
 % intertrial), you can substitute a function here. It should take, and return,
 % the same arguments that the phase function in lib/phase does. (In general,
-% this is `sampleFn(trialData, blockSettings, phaseSettings)`.)
+% this is `sampleFn(trialData, blockConfig, phaseConfig)`.)
 %
 % By design, showChoicePhaseFn is left blank. `runRATrial` will complain if it is
 % not set, or if any of the phase function handles below are unset. While you
 % might avoid setting it by writing your own trial script, it is recommended
-% that you still leverage these settings; it will make your task easier to
+% that you still leverage these config; it will make your task easier to
 % maintain and understand for your collaborators.
 %
 % By design, s.game.responsePhaseFn is set to @phase_response; however, if your

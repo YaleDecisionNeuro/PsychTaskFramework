@@ -9,16 +9,16 @@ addpath(genpath('./tasks/MDM'));
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
-settings = MDM_blockDefaults();
-settings = loadPTB(settings);
+config = MDM_blockDefaults();
+config = loadPTB(config);
 if ~exist('subjectId', 'var') % Practice
   subjectId = NaN;
-  settings = setupPracticeConfig(settings);
+  config = setupPracticeConfig(config);
 end
 
 % Find-or-create subject data file *in appropriate location*
 fname = [num2str(subjectId) '.mat'];
-folder = fullfile(settings.task.taskPath, 'data');
+folder = fullfile(config.task.taskPath, 'data');
 fname = [folder filesep fname];
 [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
@@ -31,17 +31,17 @@ end
 
 if ~isnan(subjectId)
   if mod(subjectId, 2) == 0
-      settings.runSetup.refSide = 1;
+      config.runSetup.refSide = 1;
   else
-      settings.runSetup.refSide = 2;
+      config.runSetup.refSide = 2;
   end
 end
 
-% Disambiguate settings here
-monSettings = MDM_monetaryConfig(settings);
-medSettings = MDM_medicalConfig(settings);
-medSettings.runSetup.textures = loadTexturesFromConfig(medSettings);
-monSettings.runSetup.textures = loadTexturesFromConfig(monSettings);
+% Disambiguate config here
+monConfig = MDM_monetaryConfig(config);
+medConfig = MDM_medicalConfig(config);
+medConfig.runSetup.textures = loadTexturesFromConfig(medConfig);
+monConfig.runSetup.textures = loadTexturesFromConfig(monConfig);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || isempty(Data.blocks)
@@ -51,14 +51,14 @@ if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   % need to be disambiguated.
 
   % 1. Generate 1 repeat of reference level trials, all possible P/A values
-  tempLevels = medSettings.trial.generate;
+  tempLevels = medConfig.trial.generate;
   tempLevels.stakes = tempLevels.reference;
   tempLevels.repeats = 1;
   fillTrials = generateTrials(tempLevels);
   % fillTrials = fillTrials(randperm(height(fillTrials), 4), :)
 
   % 2. Generate 2 additional trials with reference payoff
-  tempLevels = medSettings.trial.generate;
+  tempLevels = medConfig.trial.generate;
   tempLevels.stakes = tempLevels.reference;
   tempLevels.probs = 0.25;
   tempLevels.ambigs = 0.5;
@@ -68,15 +68,15 @@ if ~isfield(Data, 'blocks') || isempty(Data.blocks)
 
   % 3. Have generateBlocks create the standard number of repeats with
   %    non-reference values
-  tempMedSettings = medSettings;
-  tempMedSettings.trial.generate.stakes = medSettings.trial.generate.stakes(2:end);
-  medBlocks = generateBlocks(tempMedSettings, medSettings.trial.generate.catchTrial, ...
-    medSettings.trial.generate.catchIdx, fillTrials);
+  tempMedConfig = medConfig;
+  tempMedConfig.trial.generate.stakes = medConfig.trial.generate.stakes(2:end);
+  medBlocks = generateBlocks(tempMedConfig, medConfig.trial.generate.catchTrial, ...
+    medConfig.trial.generate.catchIdx, fillTrials);
 
-  tempMonSettings = monSettings;
-  tempMonSettings.trial.generate.stakes = monSettings.trial.generate.stakes(2:end);
-  monBlocks = generateBlocks(tempMonSettings, monSettings.trial.generate.catchTrial, ...
-    monSettings.trial.generate.catchIdx, fillTrials);
+  tempMonConfig = monConfig;
+  tempMonConfig.trial.generate.stakes = monConfig.trial.generate.stakes(2:end);
+  monBlocks = generateBlocks(tempMonConfig, monConfig.trial.generate.catchTrial, ...
+    monConfig.trial.generate.catchIdx, fillTrials);
 
   % 4. Determine and save the order of blocks
   lastDigit = mod(Data.subjectId, 10);
@@ -92,9 +92,9 @@ if ~isfield(Data, 'blocks') || isempty(Data.blocks)
     blockKind = medIdx(blockIdx);
     withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
     if blockKind == 1
-      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medSettings);
+      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medConfig);
     else
-      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monSettings);
+      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monConfig);
     end
   end
 end
@@ -105,7 +105,7 @@ if ~isnan(subjectId)
   [ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 else
   % Gut the generated blocks to be limited to practice
-  % TODO: Set this in settings
+  % TODO: Set this in config
   practiceBlocks = 2:3;
   numSelect = 3;
   Data = preparePractice(Data, practiceBlocks, numSelect);

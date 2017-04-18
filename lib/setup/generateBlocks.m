@@ -1,15 +1,15 @@
-function plannedBlocks = generateBlocks(blockSettings, ...
+function plannedBlocks = generateBlocks(blockConfig, ...
     catchTrial, catchIdx, adHocTrials)
 % GENERATEBLOCKS Returns a cell array of trial tables generated with
-%   `generateTrials` from blockSettings.trial.generate, separated into blocks with
-%   a fixed number of rows (defined in blockSettings.task.blockLength). If
+%   `generateTrials` from blockConfig.trial.generate, separated into blocks with
+%   a fixed number of rows (defined in blockConfig.task.blockLength). If
 %   given further arguments, it will also add to the final trial table the
 %   table `catchTrial` at per-block indices passed in `catchIdx`. If
 %   `adHocTrials` are provided, they are mixed in with the generated trials
 %   prior to randomizationand separation into blocks.
 %
 % NOTE: catchTrial must include all the columns that `generateTrials` will
-% create based on `blockSettings.trial.generate`. An easy way to find what these
+% create based on `blockConfig.trial.generate`. An easy way to find what these
 % are is to run this function without catchTrial or catchIdx.
 %
 % If catchIdx is not provided, the catch trial will be placed randomly
@@ -21,7 +21,7 @@ function plannedBlocks = generateBlocks(blockSettings, ...
 % defined in the column `ITIs`.)
 
 %% Step 1: Generate all trials for this kind of a block & randomize
-levels = blockSettings.trial.generate;
+levels = blockConfig.trial.generate;
 allTrials = generateTrials(levels);
 if exist('adHocTrials', 'var')
   allTrials = [allTrials; adHocTrials];
@@ -37,7 +37,7 @@ if exist('catchTrial', 'var')
 else
   minusTrials = 0;
 end
-blockLen = blockSettings.task.blockLength - minusTrials;
+blockLen = blockConfig.task.blockLength - minusTrials;
 
 if rem(numTrials, blockLen) ~= 0
   error('%d trials cannot be divided into even blocks of length %d', ...
@@ -55,8 +55,8 @@ for k = 1:length(endIndices)
 
   % Insert ITIs here, before the catch trial. and randomize
   % FIXME: Check for in-phase definition?
-  if isfield(blockSettings.trial.generate, 'ITIs')
-    ITIs = cutArrayToSize(blockSettings.trial.generate.ITIs(:), blockLen);
+  if isfield(blockConfig.trial.generate, 'ITIs')
+    ITIs = cutArrayToSize(blockConfig.trial.generate.ITIs(:), blockLen);
     trialTbl.ITIs = ITIs(randperm(length(ITIs)));
   end
 
@@ -73,13 +73,13 @@ end
 end
 
 % Helper function
-function tbl = injectRowAtIndex(tbl, row, rowIndex, levelSettings)
+function tbl = injectRowAtIndex(tbl, row, rowIndex, levelConfig)
   % INJECTROWATINDEX Put a constant `row` at all indices in `rowIndex`.
   %   Assumes that the row can be concatenated with the output of `trialTbl`.
-  %   If any of the named fields is NaN and levelSettings is provided,
+  %   If any of the named fields is NaN and levelConfig is provided,
   %   generate a value from that field from levels.
-  if exist('levelSettings', 'var')
-    row = generateValuesForMissing(row, levelSettings);
+  if exist('levelConfig', 'var')
+    row = generateValuesForMissing(row, levelConfig);
   end
 
   rowIndex = sort(rowIndex);
@@ -91,11 +91,11 @@ function tbl = injectRowAtIndex(tbl, row, rowIndex, levelSettings)
   end
 end
 
-function tbl = generateValuesForMissing(tbl, levelSettings)
+function tbl = generateValuesForMissing(tbl, levelConfig)
   % GENERATEVALUESFORMISSING If any of the columns in `tbl` have NaN in row,
-  %   it will insert a random value from corresponding field of `levelSettings`.
+  %   it will insert a random value from corresponding field of `levelConfig`.
   tblCols = tbl.Properties.VariableNames;
-  knownLevels = fieldnames(levelSettings);
+  knownLevels = fieldnames(levelConfig);
 
   for k = 1:numel(tblCols)
     colName = tblCols{k};
@@ -106,9 +106,9 @@ function tbl = generateValuesForMissing(tbl, levelSettings)
     changable = isnan(col);
     changableIdx = find(changable); % Get non-zero values
     if sum(changable) > 0
-      numOptions = length(levelSettings.(colName));
+      numOptions = length(levelConfig.(colName));
       for l = 1:length(changableIdx)
-        tbl(changableIdx(l), k) = {levelSettings.(colName)(randi(numOptions))};
+        tbl(changableIdx(l), k) = {levelConfig.(colName)(randi(numOptions))};
       end
     end
   end

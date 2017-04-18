@@ -1,13 +1,13 @@
-function trialData = runGenericTrial(trialData, blockSettings)
+function trialData = runGenericTrial(trialData, blockConfig)
 % RunGenericTrial Fully generalized workhorse function to display any phases of
 %   an individual trial, as defined using PhaseConfig objects in
-%   blockSettings.trial.phases.
+%   blockConfig.trial.phases.
 
 % Record the properties of this trial to trialData
 trialData.trialStartTime = datevec(now);
 
 % Create convenience variables
-s = blockSettings.trial;
+s = blockConfig.trial;
 phases = s.phases;
 phaseCount = numel(phases);
 if phaseCount == 0
@@ -17,8 +17,8 @@ end
 
 % Run through all phases
 for k = 1:numel(phases)
-  phaseSettings = phases{k};
-  trialData = runPhase(trialData, blockSettings, phaseSettings);
+  phaseConfig = phases{k};
+  trialData = runPhase(trialData, blockConfig, phaseConfig);
 end
 
 % Print choice to stdout

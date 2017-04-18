@@ -1,4 +1,4 @@
-function [ trialData ] = runPhase(trialData, blockSettings, phaseSettings)
+function [ trialData ] = runPhase(trialData, blockConfig, phaseConfig)
 % Run a phase defined with a phaseConfig construct
-trialData = phaseSettings.phaseScript(trialData, blockSettings, phaseSettings);
+trialData = phaseConfig.phaseScript(trialData, blockConfig, phaseConfig);
 end

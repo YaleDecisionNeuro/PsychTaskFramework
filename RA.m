@@ -1,5 +1,5 @@
 function [ Data ] = RA(subjectId)
-% RA Main task script for the monetary risk and ambiguity task. Loads settings,
+% RA Main task script for the monetary risk and ambiguity task. Loads config,
 %   executes requisite blocks, and records data for the subject whose ID is
 %   passed as an argument.
 %
@@ -16,16 +16,16 @@ addpath(genpath('./tasks/RA'));
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
-settings = RA_blockDefaults();
-settings = loadPTB(settings);
+config = RA_blockDefaults();
+config = loadPTB(config);
 if ~exist('subjectId', 'var') % Practice
   subjectId = NaN;
-  settings = setupPracticeConfig(settings);
+  config = setupPracticeConfig(config);
 end
 
 % Find-or-create subject data file *in appropriate location*
 fname = [num2str(subjectId) '.mat'];
-folder = fullfile(settings.task.taskPath, 'data');
+folder = fullfile(config.task.taskPath, 'data');
 fname = [folder filesep fname];
 [ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
 
@@ -38,25 +38,25 @@ end
 
 if ~isnan(subjectId)
   if mod(subjectId, 2) == 0
-      settings.runSetup.refSide = 1;
+      config.runSetup.refSide = 1;
   else
-      settings.runSetup.refSide = 2;
+      config.runSetup.refSide = 2;
   end
 end
 
-% Disambiguate settings here
-gainSettings = settings;
-lossSettings = RA_lossConfig(gainSettings);
+% Disambiguate config here
+gainConfig = config;
+lossConfig = RA_lossConfig(gainConfig);
 
 %% Generate trials/blocks - if they haven't been generated before
 if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   % Gains
-  gainBlocks = generateBlocks(gainSettings, gainSettings.trial.generate.catchTrial, ...
-    gainSettings.trial.generate.catchIdx);
+  gainBlocks = generateBlocks(gainConfig, gainConfig.trial.generate.catchTrial, ...
+    gainConfig.trial.generate.catchIdx);
 
   % Losses
-  lossBlocks = generateBlocks(lossSettings, lossSettings.trial.generate.catchTrial, ...
-    lossSettings.trial.generate.catchIdx);
+  lossBlocks = generateBlocks(lossConfig, lossConfig.trial.generate.catchTrial, ...
+    lossConfig.trial.generate.catchIdx);
 
   lastDigit = mod(Data.subjectId, 10);
   gainsFirst = ismember(lastDigit, [1, 2, 5, 6, 9]);
@@ -65,15 +65,15 @@ if ~isfield(Data, 'blocks') || isempty(Data.blocks)
     gainsIdx = 1 - gainsIdx; % flip
   end
 
-  numBlocks = settings.task.numBlocks;
+  numBlocks = config.task.numBlocks;
   Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = gainsIdx(blockIdx);
     withinKindIdx = sum(gainsIdx(1 : blockIdx) == blockKind);
     if blockKind == 1
-      Data = addGeneratedBlock(Data, gainBlocks{withinKindIdx}, gainSettings);
+      Data = addGeneratedBlock(Data, gainBlocks{withinKindIdx}, gainConfig);
     else
-      Data = addGeneratedBlock(Data, lossBlocks{withinKindIdx}, lossSettings);
+      Data = addGeneratedBlock(Data, lossBlocks{withinKindIdx}, lossConfig);
     end
   end
 end
@@ -84,7 +84,7 @@ if ~isnan(subjectId)
   [ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 else
   % Gut the generated blocks to be limited to practice
-  % TODO: Set this in settings
+  % TODO: Set this in config
   practiceBlocks = 6:7;
   numSelect = 3;
   Data = preparePractice(Data, practiceBlocks, numSelect);
@@ -96,7 +96,7 @@ for blockIdx = firstBlockIdx:lastBlockIdx
   Data = runNthBlock(Data, blockIdx);
 end
 
-unloadPTB(lossSettings, gainSettings);
-% NOTE: could also just use settings, because neither windowPtr nor textures
+unloadPTB(lossConfig, gainConfig);
+% NOTE: could also just use config, because neither windowPtr nor textures
 %   were opened by the configs separately
 end

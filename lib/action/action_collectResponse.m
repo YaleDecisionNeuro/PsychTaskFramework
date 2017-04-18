@@ -1,14 +1,14 @@
-function [ trialData ] = action_collectResponse(trialData, blockSettings, phaseSettings)
-% For duration specified in phaseSettings.duration, wait for a keypress specified
-%   in phaseSettings.responseKeys
-[ startTimestamp, found ] = findPTBTimestamp(trialData, phaseSettings);
+function [ trialData ] = action_collectResponse(trialData, blockConfig, phaseConfig)
+% For duration specified in phaseConfig.duration, wait for a keypress specified
+%   in phaseConfig.responseKeys
+[ startTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig);
 if ~found
-  warning('In phase %s, phaseSettings.startTimestamp was not provided.', ...
-    phaseSettings.name)
+  warning('In phase %s, phaseConfig.startTimestamp was not provided.', ...
+    phaseConfig.name)
 end
 
-adjustedDuration = phaseSettings.duration - (GetSecs() - startTimestamp);
-keys = blockSettings.device.choiceKeys;
+adjustedDuration = phaseConfig.duration - (GetSecs() - startTimestamp);
+keys = blockConfig.device.choiceKeys;
 
 [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
   waitForKey(keys, adjustedDuration);
@@ -21,5 +21,5 @@ else % non-press
   trialData.rt = NaN;
 end
 trialData.choseLottery = keyToChoice(trialData.choice, ...
-  blockSettings.runSetup.refSide);
+  blockConfig.runSetup.refSide);
 end
