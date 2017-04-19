@@ -11,8 +11,8 @@ function c = MDM_medicalConfig(initial_config)
   c.runSetup.conditions.domain = char.empty;
 
   %% Font size of payoff text
-  c.objects.lottery.stakes.fontSize = 24;
-  c.objects.reference.fontSize = c.objects.lottery.stakes.fontSize;
+  c.draw.lottery.stakes.fontSize = 24;
+  c.draw.reference.fontSize = c.draw.lottery.stakes.fontSize;
 
   %% Lookup tables
   c.runSetup.lookups.txt = {'no effect'; ...

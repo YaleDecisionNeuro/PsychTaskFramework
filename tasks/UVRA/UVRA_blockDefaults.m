@@ -48,7 +48,7 @@ function s = UVRA_blockDefaults()
   s.trial.legacyPhases.feedback.action = @action_display;
 
   % Graphical adjustments
-  s.objects.lottery.offCenterByPx = [0 200]; % refSide switches this around
-  s.objects.lottery.verticalLayout = true;
-  % s.objects.reference.offCenterByPx = [0 -200];
+  s.draw.lottery.offCenterByPx = [0 200]; % refSide switches this around
+  s.draw.lottery.verticalLayout = true;
+  % s.draw.reference.offCenterByPx = [0 -200];
 end

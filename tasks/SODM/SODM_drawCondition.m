@@ -5,8 +5,8 @@ function SODM_drawCondition(blockConfig)
 %   function.
 
 % FIXME: Extract position into config
-xCoord = blockConfig.objects.condition.position(1);
-yCoord = blockConfig.objects.condition.position(2);
+xCoord = blockConfig.draw.condition.position(1);
+yCoord = blockConfig.draw.condition.position(2);
 DrawFormattedText(blockConfig.device.windowPtr, ...
   SODM_extractBeneficiary(blockConfig), ...
   xCoord, yCoord, ...
