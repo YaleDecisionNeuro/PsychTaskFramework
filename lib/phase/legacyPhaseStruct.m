@@ -47,6 +47,6 @@ phases_RA.intertrial.duration = NaN;
 %
 % However, current method of shuffling ITIs will work as long as their number
 % divides the number of trials within a block without remainder.
-% Color indices. Currently, they refer to `s.objects.lottery.box.probColors`
-% and `s.objects.lottery.box.colorKey`.
+% Color indices. Currently, they refer to `s.draw.lottery.box.probColors`
+% and `s.draw.lottery.box.colorKey`.
 end

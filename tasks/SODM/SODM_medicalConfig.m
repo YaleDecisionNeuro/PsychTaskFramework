@@ -9,8 +9,8 @@ end
 c.runSetup.blockName = 'Medical';
 c.runSetup.conditions.payoffKind = 'Medical';
 
-c.objects.lottery.stakes.fontSize = 24;
-c.objects.reference.fontSize = c.objects.lottery.stakes.fontSize;
+c.draw.lottery.stakes.fontSize = 24;
+c.draw.reference.fontSize = c.draw.lottery.stakes.fontSize;
 
 %% Lookup tables
 c.runSetup.lookups.txt = {'no effect'; ...

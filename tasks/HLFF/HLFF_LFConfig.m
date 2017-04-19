@@ -9,8 +9,8 @@ function c = HLFF_LFConfig(initial_config)
   c.runSetup.blockName = 'Food';
   c.runSetup.conditions.payoffKind = 'Pretzels';
 
-  c.objects.lottery.stakes.fontSize = 24;
-  c.objects.reference.fontSize = c.objects.lottery.stakes.fontSize;
+  c.draw.lottery.stakes.fontSize = 24;
+  c.draw.reference.fontSize = c.draw.lottery.stakes.fontSize;
 
   %% Lookup tables
   c.runSetup.lookups.txt = {'No pretzels', '10 pretzels', '15 pretzels', ...

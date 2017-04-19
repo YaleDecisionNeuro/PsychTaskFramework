@@ -4,7 +4,7 @@ function s = configDefaults(changes)
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %
 % The defaults used here err on the side of catering to LevyLab's R&A paradigm.
-% If you're not using it, nuke s.objects from high orbit.
+% If you're not using it, nuke s.draw from high orbit.
 %
 % Although the resulting structure contains task-wide config, it is typically
 % modified with block-specific config right before being passed to `runBlock`
@@ -79,42 +79,42 @@ s.graphicDefault.padding = 10; % px to leave between objects
 % display, and intertrial-interval indicator.
 
 % R&A: Box properties
-s.objects.lottery.box.dims = [150 300];
-s.objects.lottery.box.probColors = [255 0 0; 0 0 255];
-s.objects.lottery.box.ambigColors = [127 127 127];
-s.objects.lottery.box.occluderWidth = 170;
+s.draw.lottery.box.dims = [150 300];
+s.draw.lottery.box.probColors = [255 0 0; 0 0 255];
+s.draw.lottery.box.ambigColors = [127 127 127];
+s.draw.lottery.box.occluderWidth = 170;
 
 % What are the "human" names of the lottery colors? These should be in the same
 % order as `.box.probColors` set above.
 %
 % Useful for contexts in which color indices need to be translated, especially
 % for a choice evaluation for the subject's eyes.
-s.objects.lottery.box.colorKey = {'blue', 'red'};
+s.draw.lottery.box.colorKey = {'blue', 'red'};
 
-s.objects.lottery.stakes.fontSize = s.graphicDefault.fontSize;
-s.objects.lottery.stakes.fontColor = s.graphicDefault.fontColor;
+s.draw.lottery.stakes.fontSize = s.graphicDefault.fontSize;
+s.draw.lottery.stakes.fontColor = s.graphicDefault.fontColor;
 
-s.objects.lottery.probLabels.fontSize = 20;
-s.objects.lottery.probLabels.fontColor = s.graphicDefault.fontColor;
+s.draw.lottery.probLabels.fontSize = 20;
+s.draw.lottery.probLabels.fontColor = s.graphicDefault.fontColor;
 
 % R&A: Reference properties
-s.objects.reference.fontSize = s.graphicDefault.fontSize;
-s.objects.reference.fontColor = s.graphicDefault.fontColor;
+s.draw.reference.fontSize = s.graphicDefault.fontSize;
+s.draw.reference.fontColor = s.graphicDefault.fontColor;
 
 % R&A: Indicator properties
-s.objects.prompt.dims = [40 40];
-s.objects.prompt.color = [0 255 0];
-s.objects.prompt.pos = 'center'; % TODO: This should be a special value
-s.objects.prompt.shape = 'Oval';
+s.draw.prompt.dims = [40 40];
+s.draw.prompt.color = [0 255 0];
+s.draw.prompt.pos = 'center'; % TODO: This should be a special value
+s.draw.prompt.shape = 'Oval';
 
-s.objects.feedback.colorNoAnswer = [255 255 255];
-s.objects.feedback.colorAnswer = [255 255 0];
-s.objects.feedback.dims = [40 40];
-s.objects.feedback.shape = 'Rect';
+s.draw.feedback.colorNoAnswer = [255 255 255];
+s.draw.feedback.colorAnswer = [255 255 0];
+s.draw.feedback.dims = [40 40];
+s.draw.feedback.shape = 'Rect';
 
-s.objects.intertrial.color = [255 255 255];
-s.objects.intertrial.shape = 'Oval';
-s.objects.intertrial.dims = [40 40];
+s.draw.intertrial.color = [255 255 255];
+s.draw.intertrial.shape = 'Oval';
+s.draw.intertrial.dims = [40 40];
 
 %% Config for the task as a whole
 % Obligatory: set it to identify the task for the datafiles and load images
@@ -257,8 +257,8 @@ s.trial.generate.ITIs = 5;
 % NOTE: Values for the fMRI R&A task are
 %   [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 
-% Color indices. Currently, they refer to `s.objects.lottery.box.probColors`
-% and `s.objects.lottery.box.colorKey`.
+% Color indices. Currently, they refer to `s.draw.lottery.box.probColors`
+% and `s.draw.lottery.box.colorKey`.
 s.trial.generate.colors = [1 2];
 
 % How many times should a unique stakes-prob-ambig combination be repeated in

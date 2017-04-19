@@ -14,7 +14,7 @@ end
 
 % Determine off-centering
 if blockConfig.runSetup.refSide == 2
-  blockConfig.objects.lottery.offCenterByPx = -1 * blockConfig.objects.lottery.offCenterByPx;
+  blockConfig.draw.lottery.offCenterByPx = -1 * blockConfig.draw.lottery.offCenterByPx;
 end
 
 % Draw the lottery box

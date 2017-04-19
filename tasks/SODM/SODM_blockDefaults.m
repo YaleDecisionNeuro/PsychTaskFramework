@@ -41,7 +41,7 @@ s.task.fnHandles.bgrDrawFn = @drawBgr;
 s.task.fnHandles.bgrDrawCallbackFn = @SODM_drawCondition;
 
 %% Graphical setup for the condition
-s.objects.condition.position = [100 100];
+s.draw.condition.position = [100 100];
 
 %% Available trial values
 s.trial.generate.probs = [.25 .5 .75];

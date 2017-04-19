@@ -37,7 +37,7 @@ switch trial.choseLottery
   case 1
     % Determine message to display
     msg = 'You chose the gamble. Random draw got you a ';
-    msg = [msg config.objects.lottery.box.colorKey{outcomeColorIdx} ' marble.'];
+    msg = [msg config.draw.lottery.box.colorKey{outcomeColorIdx} ' marble.'];
     %  (3. Re-paint lottery with true probability layout
 
     if trial.ambigs > 0

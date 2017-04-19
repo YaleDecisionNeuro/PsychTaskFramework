@@ -11,8 +11,8 @@ windowPtr = blockConfig.device.windowPtr;
 
 %% 3. Display textual reference
 % FIXME: This could use refactoring & matrix algebra
-if isfield(blockConfig.objects.lottery, 'verticalLayout') && ...
-  blockConfig.objects.lottery.verticalLayout == true
+if isfield(blockConfig.draw.lottery, 'verticalLayout') && ...
+  blockConfig.draw.lottery.verticalLayout == true
   % Flip it around vertically
   if referenceSide == 1
     refDims.y = 0.25 * H;
@@ -30,7 +30,7 @@ else
   refDims.y = H/4;
 end
 
-Screen('TextSize', windowPtr, blockConfig.objects.reference.fontSize);
+Screen('TextSize', windowPtr, blockConfig.draw.reference.fontSize);
 
 if ~configHasLookups(blockConfig)
   % 1, Prepare text (and nothing else)
