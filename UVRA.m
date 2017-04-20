@@ -59,7 +59,7 @@ else
   % Gut the generated blocks to be limited to practice
   % TODO: Set this in config
   practiceBlocks = 1;
-  numSelect = 3;
+  numSelect = 8;
   Data = preparePractice(Data, practiceBlocks, numSelect);
   [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks);
 end
