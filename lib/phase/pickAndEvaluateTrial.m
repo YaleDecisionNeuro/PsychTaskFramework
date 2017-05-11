@@ -1,4 +1,4 @@
-function pickAndEvaluateTrial(DataObject, config)
+function [ outcomeKind, outcomeLevel ] = pickAndEvaluateTrial(DataObject, config)
 % Picks a recorded trial at random, evaluates it, and displays the outcome.
 %
 % This can be run as a post-block callback. To do this, include
@@ -9,9 +9,22 @@ function pickAndEvaluateTrial(DataObject, config)
 
 %% 1. Pick an available trial at random
 blockIdx = randi(DataObject.numFinishedBlocks);
-block = DataObject.blocks.recorded{blockIdx};
-trialIdx = randi(height(block.records));
-trial = block.records(trialIdx, :);
+block = DataObject.blocks{blockIdx};
+trialIdx = randi(height(block.data));
+trial = block.data(trialIdx, :);
+trial.refSide = 1; % Fix the display
+
+% Grab config from the block if it hadn't been passed
+% FIXME: This will not work if (a) there are multiple block kinds, (b) there
+%   are multiple sessions. We might get the wrong blockConfig and think that
+%   it has the right `screenId` / doesn't need `loadPTB`.
+if ~exist('config', 'var')
+  if ~isempty(Screen('Windows'))
+    warning(['PTB seems to be running, but you didn''t pass in the config ', ...
+      'argument to use. If you observe unexpected behavior, this might be why.'])
+  end
+  config = block.config;
+end
 
 %% 2. Evaluate the trial
 % summary = experimentSummary(DataObject, blockIdx, trialIdx);
@@ -24,6 +37,7 @@ if isempty(Screen('Windows'))
   standalone = true;
   config = loadPTB(config);
 end
+
 % 1. Use drawLotto and drawRef to show the lotto
 drawLotto(trial, config);
 config.task.fnHandles.referenceDrawFn(config, trial);
