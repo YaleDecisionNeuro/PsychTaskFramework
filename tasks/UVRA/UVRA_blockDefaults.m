@@ -33,6 +33,7 @@ function s = UVRA_blockDefaults()
   s.trial.generate.probs = [.25 .5 .75];
   s.trial.generate.ambigs = [.24 .5 .74];
   s.trial.generate.colors = [1 2];
+  s.trial.generate.refSide = [1 2];
   s.trial.generate.repeats = 4;
   s.trial.generate.ITIs = s.trial.legacyPhases.intertrial.duration;
 

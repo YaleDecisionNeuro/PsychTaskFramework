@@ -31,14 +31,6 @@ elseif ~isnan(subjectId)
   disp('Subject has no file, creating...')
 end
 
-if ~isnan(subjectId)
-  if mod(subjectId, 2) == 0
-    config.runSetup.refSide = 1;
-  else
-    config.runSetup.refSide = 2;
-  end
-end
-
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, config.task.numBlocks
 %   will need to be changed to an integer that divides the generated trial count.
