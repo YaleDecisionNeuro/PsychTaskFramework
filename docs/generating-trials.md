@@ -1,4 +1,5 @@
-# Generating trials
+# Generating trials programmatically
+*(Note: A planned feature would allow importing trials from a CSV file. That might be simpler than and therefore preferable to the programmatic approach.)*
 
 You want your task to have particular payoffs, probabilities, ambiguities, and other features. You want them to be repeated a particular amount of times, and you want different catch trials for each of your blocks. How can you make this happen?
 
