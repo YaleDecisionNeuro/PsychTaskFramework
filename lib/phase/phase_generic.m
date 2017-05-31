@@ -1,36 +1,36 @@
-function [ trialData ] = phase_generic(trialData, blockSettings, phaseSettings)
+function [ trialData ] = phase_generic(trialData, blockConfig, phaseConfig)
 % Run a "run-of-the-mill" phase
 
-windowPtr = blockSettings.device.windowPtr;
+windowPtr = blockConfig.device.windowPtr;
 
 % Draw the background
-if isfield(blockSettings.game, 'bgrDrawFn') && ...
-    isa(blockSettings.game.bgrDrawFn, 'function_handle')
-  blockSettings.game.bgrDrawFn(blockSettings);
+if isfield(blockConfig.task.fnHandles, 'bgrDrawFn') && ...
+    isa(blockConfig.task.fnHandles.bgrDrawFn, 'function_handle')
+  blockConfig.task.fnHandles.bgrDrawFn(blockConfig);
 end
 
 % Iterate through drawCmds
-if isa(phaseSettings.drawCmds, 'function_handle')
-  phaseSettings.drawCmds = {phaseSettings.drawCmds};
+if isa(phaseConfig.drawCmds, 'function_handle')
+  phaseConfig.drawCmds = {phaseConfig.drawCmds};
 end
-numDrawCmds = numel(phaseSettings.drawCmds);
+numDrawCmds = numel(phaseConfig.drawCmds);
 for k = 1 : numDrawCmds
-  phaseSettings.drawCmds{k}(trialData, blockSettings);
+  phaseConfig.drawCmds{k}(trialData, blockConfig);
 end
 
 % Show all drawn objects and retrieve display timestamp
-[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+[~, ~, phaseConfig.startTimestamp, ~, ~] = Screen('flip', windowPtr);
 
 % Copy to trialData
-timestampName = sprintf('%sStartTS', phaseSettings.name);
-trialData.(timestampName) = phaseSettings.startTimestamp;
+timestampName = sprintf('%sStartTS', phaseConfig.name);
+trialData.(timestampName) = phaseConfig.startTimestamp;
 
 % Execute phase action(s)
-if isa(phaseSettings.action, 'function_handle')
-  phaseSettings.action = {phaseSettings.action};
+if isa(phaseConfig.action, 'function_handle')
+  phaseConfig.action = {phaseConfig.action};
 end
-numActions = numel(phaseSettings.action);
+numActions = numel(phaseConfig.action);
 for k = 1 : numActions
-  trialData = phaseSettings.action{k}(trialData, blockSettings, phaseSettings);
+  trialData = phaseConfig.action{k}(trialData, blockConfig, phaseConfig);
 end
 end

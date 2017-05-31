@@ -1,7 +1,6 @@
-function [ beneficiary ] = SODM_extractBeneficiary(blockSettings)
+function [ beneficiary ] = SODM_extractBeneficiary(blockConfig)
   try
-    blockKind = strsplit(blockSettings.game.block.name, ' ');
-    beneficiary = blockKind{end};
+    beneficiary = blockConfig.runSetup.conditions.beneficiary;
   catch
     beneficiary = '';
   end

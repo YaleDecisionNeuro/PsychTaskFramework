@@ -1,49 +1,48 @@
-function drawLotto(trialData, blockSettings)
-% DrawLotto Using an open PTB screen and other properties of blockSettings,
+function drawLotto(trialData, blockConfig)
+% DrawLotto Using an open PTB screen and other properties of blockConfig,
 %   draws a lottery with values specified in trialData in the center of
 %   the screen.
 %
-% If blockSettings.objects.lottery.offCenterByPx exists, drawLotto will shift
+% If blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
 % the lottery by the specified amount of pixels.
 
-%% 1. Extract settings
+%% 1. Extract config
 % Device
-windowPtr = blockSettings.device.windowPtr;
-W = blockSettings.device.windowWidth; % width
-H = blockSettings.device.windowHeight; % height
+windowPtr = blockConfig.device.windowPtr;
+W = blockConfig.device.windowWidth; % width
+H = blockConfig.device.windowHeight; % height
 screenCenter = W / 2; % NOTE: screenCenterX
 
 % Lottery box properties
-boxHeight = blockSettings.objects.lottery.figure.dims(2);
-halfBoxWidth = blockSettings.objects.lottery.figure.dims(1) / 2;
-if isfield(blockSettings.objects.lottery, 'occluderWidth')
-  halfOccluderWidth = blockSettings.objects.lottery.occluderWidth / 2;
+boxHeight = blockConfig.draw.lottery.box.dims(2);
+halfBoxWidth = blockConfig.draw.lottery.box.dims(1) / 2;
+if isfield(blockConfig.draw.lottery.box, 'occluderWidth')
+  halfOccluderWidth = blockConfig.draw.lottery.box.occluderWidth / 2;
 else
   halfOccluderWidth = halfBoxWidth;
 end
 
 % Shuffling lotto away from screen-center
 offCenterByPx = [0 0];
-if isfield(blockSettings.objects.lottery, 'offCenterByPx')
-  offCenterByPx = blockSettings.objects.lottery.offCenterByPx(:)';
+if isfield(blockConfig.draw.lottery, 'offCenterByPx')
+  offCenterByPx = blockConfig.draw.lottery.offCenterByPx(:)';
 else
   % Create a field so that it doesn't have to be passed to sub-functions
-  blockSettings.objects.lottery.offCenterByPx = offCenterByPx;
+  blockConfig.draw.lottery.offCenterByPx = offCenterByPx;
 end
 offCenterRect = repmat(offCenterByPx, [1 2]); % Useful for texture rect coords
 
 % Padding: how much space to leave between precise boundaries
-if isfield(blockSettings.default, 'padding')
-  padding = blockSettings.default.padding;
+if isfield(blockConfig.graphicDefault, 'padding')
+  padding = blockConfig.graphicDefault.padding;
 else
   padding = 10;
 end
 
 % Colors
 % NOTE: The order of colors remains the same: color(1, :) is on top
-colors = blockSettings.objects.lottery.figure.colors.prob;
-color_ambig = blockSettings.objects.lottery.figure.colors.ambig;
-color_bgr = blockSettings.default.bgrColor;
+colors = blockConfig.draw.lottery.box.probColors;
+ambigColor = blockConfig.draw.lottery.box.ambigColors;
 
 % Trial
 ambig = trialData.ambigs;
@@ -77,11 +76,11 @@ Screen('FillRect', windowPtr, colors(2, :), bottomBoxDims);
 % Paint occluder over probability boxes
 occluderDims = [screenCenter - halfOccluderWidth, Y2occ, ...
   screenCenter + halfOccluderWidth, Y3occ] + offCenterRect;
-Screen('FillRect', windowPtr, color_ambig, occluderDims);
+Screen('FillRect', windowPtr, ambigColor, occluderDims);
 
 %% 4. Draw the probabilities
 % Determine the dimensions
-Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.probLabels.fontSize);
+Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.probLabels.fontSize);
 topProbString = sprintf('%.f', displayProbNumbers(1) * 100);
 topProbTextDims = getTextDims(windowPtr, topProbString);
 bottomProbString = sprintf('%.f', displayProbNumbers(2) * 100);
@@ -103,14 +102,14 @@ botXY = [W/2 - bottomProbTextDims(1)/2, ...
 % Logic of `/3`: the text dimensions include some line-height, so `/2` shifts too much
 
 % Draw!
-probColor = blockSettings.objects.lottery.probLabels.fontColor;
+probColor = blockConfig.draw.lottery.probLabels.fontColor;
 DrawFormattedText(windowPtr, topProbString, topXY(1), topXY(2), probColor);
 DrawFormattedText(windowPtr, bottomProbString, botXY(1), botXY(2), probColor);
 
 %% 5. Draw the payoffs
 % Choose how to display the payoff (different function for monetary amounts,
 %   vs. for images with labels)
-if isfield(blockSettings, 'lookups')
+if configHasLookups(blockConfig)
   drawPayoffImageAndLabel(payoffs);
 else
   drawPayoffAmount(payoffs);
@@ -120,8 +119,8 @@ end
 % (as it's useful to separate the logic while accessing to prior computations)
 function drawPayoffImageAndLabel(payoffs)
   % 1. Draw labels
-  Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.stakes.fontSize);
-  lookupTbl = blockSettings.lookups.stakes.txt;
+  Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.stakes.fontSize);
+  lookupTbl = blockConfig.runSetup.lookups.txt;
   [ botLabel, botLabelDims ] = textLookup(payoffs(1), lookupTbl, windowPtr);
   [ topLabel, topLabelDims ] = textLookup(payoffs(2), lookupTbl, windowPtr);
 
@@ -130,13 +129,13 @@ function drawPayoffImageAndLabel(payoffs)
   botLabelXY = [W/2 - botLabelDims(1)/2, Y3 + botLabelDims(2)] ...
     + offCenterByPx;
 
-  payoffColor = blockSettings.objects.lottery.stakes.fontColor;
+  payoffColor = blockConfig.draw.lottery.stakes.fontColor;
   DrawFormattedText(windowPtr, topLabel, topLabelXY(1), topLabelXY(2), payoffColor);
   DrawFormattedText(windowPtr, botLabel, botLabelXY(1), botLabelXY(2), payoffColor);
 
   % 2. Draw images of stakes
-  imgLookupTbl = blockSettings.lookups.stakes.img;
-  textureBank = blockSettings.textures;
+  imgLookupTbl = blockConfig.runSetup.lookups.img;
+  textureBank = blockConfig.runSetup.textures;
   [ botImg, botImgDims ] = imgLookup(payoffs(1), imgLookupTbl, textureBank);
   [ topImg, topImgDims ] = imgLookup(payoffs(2), imgLookupTbl, textureBank);
 
@@ -154,7 +153,7 @@ end
 
 function drawPayoffAmount(payoffs)
   % 1. Get text dimensions & string
-  Screen(windowPtr, 'TextSize', blockSettings.objects.lottery.stakes.fontSize);
+  Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.stakes.fontSize);
   [ topPayoffString, topPayoffDims ] = dollarFormatter(payoffs(1), windowPtr);
   [ botPayoffString, botPayoffDims ] = dollarFormatter(payoffs(2), windowPtr);
 
@@ -166,7 +165,7 @@ function drawPayoffAmount(payoffs)
            Y1 - padding] + offCenterByPx;
 
   % 3. Draw!
-  payoffColor = blockSettings.objects.lottery.stakes.fontColor;
+  payoffColor = blockConfig.draw.lottery.stakes.fontColor;
   DrawFormattedText(windowPtr, topPayoffString, topXY(1), topXY(2), payoffColor);
   DrawFormattedText(windowPtr, botPayoffString, botXY(1), botXY(2), payoffColor);
 end

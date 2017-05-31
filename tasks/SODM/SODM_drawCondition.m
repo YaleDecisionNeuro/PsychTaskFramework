@@ -1,14 +1,14 @@
-function SODM_drawCondition(blockSettings)
+function SODM_drawCondition(blockConfig)
 % SODM_drawCondition Draw the designation of a self-rewarding vs.
 %   other-rewarding task. This can either be set in
-%   blockSettings.game.bgrDrawCallbackFn, or called directly from a draw
+%   blockConfig.task.fnHandles.bgrDrawCallbackFn, or called directly from a draw
 %   function.
 
-% FIXME: Extract position into settings
-xCoord = blockSettings.objects.condition.position(1);
-yCoord = blockSettings.objects.condition.position(2);
-DrawFormattedText(blockSettings.device.windowPtr, ...
-  SODM_extractBeneficiary(blockSettings), ...
+% FIXME: Extract position into config
+xCoord = blockConfig.draw.condition.position(1);
+yCoord = blockConfig.draw.condition.position(2);
+DrawFormattedText(blockConfig.device.windowPtr, ...
+  SODM_extractBeneficiary(blockConfig), ...
   xCoord, yCoord, ...
-  blockSettings.default.fontColor);
+  blockConfig.graphicDefault.fontColor);
 end

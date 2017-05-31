@@ -1,6 +1,6 @@
-function [ Data ] = SODM(observer)
+function [ Data ] = SODM(subjectId)
 % SODM Runs a self-other monetary and medical decision-making task and records
-%   its results for the participant whose subject number is passed in. Modeled
+%   its results for the subject whose subject number is passed in. Modeled
 %   on (and largely copy-pasted from) RA.m, to test out image implementation
 %   (#5).
 
@@ -10,64 +10,58 @@ addpath(genpath('./tasks/SODM'));
 addpath('./tasks/MDM');
 % NOTE: genpath gets the directory and all its subdirectories
 
-%% Load settings
-settings = SODM_config();
-settings = loadPTB(settings);
-
-if exist('observer', 'var') % Running actual trials -> record
-  % Find-or-create participant data file *in appropriate location*
-  fname = [num2str(observer) '.mat'];
-  folder = fullfile(settings.device.taskPath, 'data');
-  fname = [folder filesep fname];
-  [ Data, participantExisted ] = loadOrCreate(observer, fname);
-
-  % TODO: Prompt experimenter if this is correct
-  if participantExisted
-    disp('Participant file exists, reusing...')
-  else
-    disp('Participant has no file, creating...')
-    Data.date = datestr(now, 'yyyymmddTHHMMSS');
-  end
-
-  % Save participant ID + date
-  % TODO: Prompt for correctness before launching PTB?
-  Data.observer = observer;
-  Data.lastAccess = datestr(now, 'yyyymmddTHHMMSS');
-  if mod(observer, 2) == 0
-      settings.perUser.refSide = 1;
-  else
-      settings.perUser.refSide = 2;
-  end
-else % Running practice
-  Data.observer = NaN;
-  settings.perUser.refSide = randi(2);
-  settings.device.saveAfterBlock = false;
-  settings.device.saveAfterTrial = false;
+%% Load config
+config = SODM_blockDefaults();
+config = loadPTB(config);
+if ~exist('subjectId', 'var') % Practice
+  subjectId = NaN;
+  config = setupPracticeConfig(config);
 end
 
-% Disambiguate settings here
-monSettings = SODM_config_monetary(settings);
-medSettings = SODM_config_medical(settings);
-medSettings.textures = loadTexturesFromConfig(medSettings);
-monSettings.textures = loadTexturesFromConfig(monSettings);
+% Find-or-create subject data file *in appropriate location*
+fname = [num2str(subjectId) '.mat'];
+folder = fullfile(config.task.taskPath, 'data');
+fname = [folder filesep fname];
+[ Data, subjectExisted ] = loadOrCreate(subjectId, fname);
+
+% TODO: Prompt experimenter if this is correct
+if subjectExisted
+  disp('Subject file exists, reusing...')
+elseif ~isnan(subjectId)
+  disp('Subject has no file, creating...')
+end
+
+if ~isnan(subjectId)
+  if mod(subjectId, 2) == 0
+      config.runSetup.refSide = 1;
+  else
+      config.runSetup.refSide = 2;
+  end
+end
+
+% Disambiguate config here
+monConfig = SODM_monetaryConfig(config);
+medConfig = SODM_medicalConfig(config);
+medConfig.runSetup.textures = loadTexturesFromConfig(medConfig);
+monConfig.runSetup.textures = loadTexturesFromConfig(monConfig);
 
 %% Generate trials if not generated already
-if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
+if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   % NOTE: Generating each one separately with two repeats, so that there isn't
   % a cluster of high values in self vs. other
-  medSelfBlocks = generateBlocks(medSettings, medSettings.game.block.repeatRow, ...
-    medSettings.game.block.repeatIndex);
-  medOtherBlocks = generateBlocks(medSettings, medSettings.game.block.repeatRow, ...
-    medSettings.game.block.repeatIndex);
-  monSelfBlocks = generateBlocks(monSettings, monSettings.game.block.repeatRow, ...
-    monSettings.game.block.repeatIndex);
-  monOtherBlocks = generateBlocks(monSettings, monSettings.game.block.repeatRow, ...
-    monSettings.game.block.repeatIndex);
+  medSelfBlocks = generateBlocks(medConfig, medConfig.trial.generate.catchTrial, ...
+    medConfig.trial.generate.catchIdx);
+  medOtherBlocks = generateBlocks(medConfig, medConfig.trial.generate.catchTrial, ...
+    medConfig.trial.generate.catchIdx);
+  monSelfBlocks = generateBlocks(monConfig, monConfig.trial.generate.catchTrial, ...
+    monConfig.trial.generate.catchIdx);
+  monOtherBlocks = generateBlocks(monConfig, monConfig.trial.generate.catchTrial, ...
+    monConfig.trial.generate.catchIdx);
 
   medBlocks = [medSelfBlocks; medOtherBlocks];
   monBlocks = [monSelfBlocks; monOtherBlocks];
 
-  sortOrder = mod(Data.observer, 4);
+  sortOrder = mod(Data.subjectId, 4);
   selfIdx = [1 0 1 0]; % 0 is friend, 1 is self
   medIdx = [1 1 0 0];  % 0 is monetary, 1 is medical
 
@@ -85,84 +79,44 @@ if ~isfield(Data, 'blocks') || ~isfield(Data.blocks, 'planned')
   % Repeat the order for the second round
   selfIdx = repmat(selfIdx, 1, 2);
   medIdx = repmat(medIdx, 1, 2);
+  beneficiaryLookup = {'Friend', 'Self'};
 
   % Logic: Do mon/med blocks first, pass self/other to them depending on selfIdx
-  numBlocks = 8; % TODO: Derive from settings?
-  Data.blocks.planned = cell(numBlocks, 1);
-  Data.blocks.recorded = cell(0);
-  Data.blocks.numRecorded = 0;
+  numBlocks = length(selfIdx);
+  Data.numFinishedBlocks = 0;
   for blockIdx = 1:numBlocks
     blockKind = medIdx(blockIdx);
     beneficiaryKind = selfIdx(blockIdx);
+    beneficiaryStr = beneficiaryLookup{beneficiaryKind + 1};
     withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
 
     if blockKind == 1
-      Data.blocks.planned{blockIdx} = struct('trials', ...
-        medBlocks{withinKindIdx}, 'blockKind', blockKind, ...
-        'beneficiaryKind', beneficiaryKind);
+      medConfig.runSetup.conditions.beneficiary = beneficiaryStr;
+      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medConfig);
     else
-      Data.blocks.planned{blockIdx} = struct('trials', ...
-        monBlocks{withinKindIdx}, 'blockKind', blockKind, ...
-        'beneficiaryKind', beneficiaryKind);
+      monConfig.runSetup.conditions.beneficiary = beneficiaryStr;
+      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monConfig);
     end
   end
 end
 
-% Display blocks
-firstBlockIdx = Data.blocks.numRecorded + 1;
-lastBlockIdx = 8; % FIXME: Derive from settings
-
-if exist('observer', 'var')
-  for blockIdx = firstBlockIdx:lastBlockIdx
-    % Determine monetary or medical
-    if Data.blocks.planned{blockIdx}.blockKind == 0
-      blockSettings = monSettings;
-    else
-      blockSettings = medSettings;
-    end
-
-    % Determine self or other
-    if Data.blocks.planned{blockIdx}.beneficiaryKind == 0
-      blockSettings.game.block.beneficiaryKind = 0;
-      blockSettings.game.block.beneficiaryText = 'Friend';
-    else
-      blockSettings.game.block.beneficiaryKind = 1;
-      blockSettings.game.block.beneficiaryText = 'Myself';
-    end
-    blockSettings.game.block.name = [blockSettings.game.block.name ' / ' ...
-      blockSettings.game.block.beneficiaryText];
-
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials;
-    Data = runBlock(Data, blockSettings);
-  end
+% Select which blocks to run
+if ~isnan(subjectId)
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 else
-  % Run practice -- only first n trials of first two blocks?
+  % Gut the generated blocks to be limited to practice
+  % TODO: Set this in config
+  practiceBlocks = 1:4;
   numSelect = 3;
-  for blockIdx = 1:4
-    % Determine medical or monetary
-    if Data.blocks.planned{blockIdx}.blockKind == 0
-      blockSettings = monSettings;
-    else
-      blockSettings = medSettings;
-    end
+  Data = preparePractice(Data, practiceBlocks, numSelect);
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks);
+end
 
-    % Determine self or other
-    if Data.blocks.planned{blockIdx}.beneficiaryKind == 0
-      blockSettings.game.block.beneficiaryKind = 0;
-      blockSettings.game.block.beneficiaryText = 'Friend';
-    else
-      blockSettings.game.block.beneficiaryKind = 1;
-      blockSettings.game.block.beneficiaryText = 'Myself';
-    end
-    blockSettings.game.block.name = [blockSettings.game.block.name ' / ' ...
-      blockSettings.game.block.beneficiaryText];
-
-    randomIdx = randperm(blockSettings.game.block.length, numSelect);
-    blockSettings.game.trials = Data.blocks.planned{blockIdx}.trials(randomIdx, :);
-    Data = runBlock(Data, blockSettings);
-  end
+% Run the blocks
+for blockIdx = firstBlockIdx:lastBlockIdx
+  Data = runNthBlock(Data, blockIdx);
 end
 
 % Close window
-unloadPTB(monSettings, medSettings);
+unloadPTB(monConfig, medConfig);
 end

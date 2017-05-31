@@ -1,23 +1,23 @@
-function [ PTBTimestamp, found ] = findPTBTimestamp(trialData, phaseSettings)
+function [ PTBTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig)
 % Return the right timestamp from the (optional) structures, or getSecs() if
 %   nothing suitable is find.
 %
-% Suitable locations: `startTimestamp` field in `phaseSettings`,
+% Suitable locations: `startTimestamp` field in `phaseConfig`,
 % `${PHASENAME}Start` or `${PHASENAME}StartTS` in `trialData`.
 
 % If nothing is found, earlier timestamp is better than later
 PTBTimestamp = GetSecs();
 found = false;
 
-if exist('phaseSettings', 'var')
-  phaseName = phaseSettings.name;
-  if isfield(phaseSettings, 'startTimestamp')
-    PTBTimestamp = phaseSettings.startTimestamp;
+if exist('phaseConfig', 'var')
+  phaseName = phaseConfig.name;
+  if isfield(phaseConfig, 'startTimestamp')
+    PTBTimestamp = phaseConfig.startTimestamp;
     found = true;
     return;
   end
 
-  % Nested call because if phaseSettings isn't provided, no way to identify
+  % Nested call because if phaseConfig isn't provided, no way to identify
   % the right timestamp
   if exist('trialData', 'var')
     nameWithoutTS = sprintf('%sStart', phaseName);

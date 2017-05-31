@@ -1,31 +1,31 @@
-function [ trialData ] = phase_response(trialData, blockSettings, phaseSettings)
+function [ trialData ] = phase_response(trialData, blockConfig, phaseConfig)
 % PHASE_RESPONSE The response script that handles the display of the response
 %   prompt and the eventual response or non-response. Takes standard phase
 %   script arguments.
 
 %% Helper values
-windowPtr = blockSettings.device.windowPtr;
+windowPtr = blockConfig.device.windowPtr;
 
 %% Response prompt
-drawResponsePrompt(trialData, blockSettings);
+drawResponsePrompt(trialData, blockConfig);
 
 %% Draw
-[~, ~, phaseSettings.startTimestamp, ~, ~] = Screen('flip', windowPtr);
+[~, ~, phaseConfig.startTimestamp, ~, ~] = Screen('flip', windowPtr);
 trialData.responseStartTime = datevec(now);
-trialData.responseStartTS = phaseSettings.startTimestamp;
+trialData.responseStartTS = phaseConfig.startTimestamp;
 
 %% Handle housekeeping
-if exist('phaseSettings', 'var') && isfield(phaseSettings, 'action') ...
-    && isa(phaseSettings.action, 'function_handle')
-  trialData = phaseSettings.action(trialData, blockSettings, phaseSettings);
+if exist('phaseConfig', 'var') && isfield(phaseConfig, 'action') ...
+    && isa(phaseConfig.action, 'function_handle')
+  trialData = phaseConfig.action(trialData, blockConfig, phaseConfig);
 else
-  trialData = timeAndRecordResponse(trialData, blockSettings);
+  trialData = timeAndRecordResponse(trialData, blockConfig);
 end
 end
 
-function trialData = timeAndRecordResponse(trialData, blockSettings)
+function trialData = timeAndRecordResponse(trialData, blockConfig)
   [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
-    waitForKey({'1!', '2@'}, blockSettings.game.durations.response);
+    waitForKey({'1!', '2@'}, blockConfig.trial.legacyPhases.response.duration);
 
   %% Record choice & assign feedback color
   if keyisdown && keycode(KbName('1!'))
@@ -36,6 +36,6 @@ function trialData = timeAndRecordResponse(trialData, blockSettings)
       trialData.choice = 0;
       trialData.rt = NaN;
   end
-  trialData.choseLottery = keyToChoice(trialData.choice, ...
-    blockSettings.perUser.refSide);
+  [ refSide, ~ ] = getReferenceSideAndValue(trialData, blockConfig);
+  trialData.choseLottery = keyToChoice(trialData.choice, refSide);
 end
