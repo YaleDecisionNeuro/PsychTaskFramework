@@ -12,6 +12,8 @@ function c = HLFF_HFConfig(initial_config)
   c.draw.lottery.stakes.fontSize = 24;
   c.draw.reference.fontSize = c.draw.lottery.stakes.fontSize;
 
+  c.trial.importFile = [c.task.taskPath filesep 'trials' filesep 'trials_HF.csv'];
+
   %% Lookup tables
   c.runSetup.lookups.txt = {'No oreos', '4 oreos', '6 oreos', ...
     '9 oreos', '18 oreos'};
