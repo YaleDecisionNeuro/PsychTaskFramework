@@ -22,7 +22,12 @@ function plannedBlocks = generateBlocks(blockConfig, ...
 
 %% Step 1: Generate all trials for this kind of a block & randomize
 levels = blockConfig.trial.generate;
-allTrials = generateTrials(levels);
+if isempty(blockConfig.trial.importFile)
+  allTrials = generateTrials(levels);
+else
+  allTrials = importTrials(blockConfig.trial.importFile);
+end
+
 if exist('adHocTrials', 'var')
   allTrials = [allTrials; adHocTrials];
 end

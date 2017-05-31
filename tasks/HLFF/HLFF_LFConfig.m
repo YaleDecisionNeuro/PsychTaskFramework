@@ -9,6 +9,8 @@ function c = HLFF_LFConfig(initial_config)
   c.runSetup.blockName = 'Food';
   c.runSetup.conditions.payoffKind = 'Pretzels';
 
+  c.trial.importFile = [c.task.taskPath filesep 'trials' filesep 'trials_LF.csv'];
+
   c.draw.lottery.stakes.fontSize = 24;
   c.draw.reference.fontSize = c.draw.lottery.stakes.fontSize;
 

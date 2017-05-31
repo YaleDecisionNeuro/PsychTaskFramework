@@ -212,6 +212,14 @@ s.trial.phases = cell.empty;
 s.trial.legacyPhases = struct.empty;
 
 %% What values should the trial be generated with?
+% You can load the trial values from acc file, provided that it has all the
+% requisite values necessary to render the trial. See examples.
+s.trial.importFile = char.empty;
+
+% DEPRECATION NOTE: The following programmatic generation of trials might be a
+% sufficient headache that you might only want to do it once and then save the
+% results in `c.trial.importFile`.
+%
 % These values are R&A-centric in that generateTrials and generateBlocks only
 % knows how to generate different combinations of stakes, probs, and ambigs.
 % If you want to generate combinations beyond that, you might have to write

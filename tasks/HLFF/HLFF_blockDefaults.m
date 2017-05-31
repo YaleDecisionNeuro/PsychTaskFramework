@@ -32,15 +32,20 @@ s.trial.phases = { ...
 s.task.fnHandles.referenceDrawFn = @drawRef;
 
 % Useful for generation purposes
-s.task.blockLength = 12;
+s.task.blockLength = 20;
 s.task.numBlocks = 6;
 
 %% Available trial values
 s.trial.generate.probs = [.25 .5 .75];
 s.trial.generate.ambigs = [];
 s.trial.generate.colors = [1 2];
-s.trial.generate.repeats = 2;
+s.trial.generate.repeats = 4;
 s.trial.generate.stakes = 2:5;
 s.trial.generate.stakes_loss = 1;
 s.trial.generate.reference = 2;
+
+catchVals = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
+  'stakes_loss', 1, 'reference', 2, 'colors', NaN, 'ITIs', 5);
+s.trial.generate.catchTrial = generateTrials(catchVals);
+s.trial.generate.catchIdx = 1;
 end

@@ -44,15 +44,15 @@ configMon = HLFF_monetaryConfig(config);
 %   will need to be changed to an integer that divides the generated trial count.
 numBlocks = config.task.numBlocks;
 if ~isfield(Data, 'blocks') || isempty(Data.blocks)
-  blocksMon = generateBlocks(configMon);
-  blocksLF = generateBlocks(configLF);
-  blocksHF = generateBlocks(configHF);
-  
+  blocksMon = generateBlocks(configMon, configMon.trial.generate.catchTrial, configMon.trial.generate.catchIdx);
+  blocksLF =  generateBlocks(configLF, configLF.trial.generate.catchTrial, configLF.trial.generate.catchIdx);
+  blocksHF =  generateBlocks(configHF, configHF.trial.generate.catchTrial, configHF.trial.generate.catchIdx);
+
   % Record these blocks for manual alteration
   % writetable(vertcat(blocksHF{:}),  'tasks\HLFF\trials\trials_HF.csv');
   % writetable(vertcat(blocksLF{:}),  'tasks\HLFF\trials\trials_LF.csv');
   % writetable(vertcat(blocksMon{:}), 'tasks\HLFF\trials\trials_monetary.csv');
-  
+
   Data.numFinishedBlocks = 0;
   % Only counterbalance order for the food trials
   LFFirst = [1 1 0 0];
