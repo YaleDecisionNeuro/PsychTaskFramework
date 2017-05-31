@@ -47,7 +47,12 @@ if ~isfield(Data, 'blocks') || isempty(Data.blocks)
   blocksMon = generateBlocks(configMon);
   blocksLF = generateBlocks(configLF);
   blocksHF = generateBlocks(configHF);
-
+  
+  % Record these blocks for manual alteration
+  % writetable(vertcat(blocksHF{:}),  'tasks\HLFF\trials\trials_HF.csv');
+  % writetable(vertcat(blocksLF{:}),  'tasks\HLFF\trials\trials_LF.csv');
+  % writetable(vertcat(blocksMon{:}), 'tasks\HLFF\trials\trials_monetary.csv');
+  
   Data.numFinishedBlocks = 0;
   % Only counterbalance order for the food trials
   LFFirst = [1 1 0 0];
