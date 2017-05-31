@@ -34,26 +34,47 @@ if ~isnan(subjectId)
 end
 
 configLF = HLFF_LFConfig(config);
+configHF = HLFF_HFConfig(config);
+configHF.runSetup.textures = loadTexturesFromConfig(configHF);
 configLF.runSetup.textures = loadTexturesFromConfig(configLF);
+configMon = HLFF_monetaryConfig(config);
 
 %% Generate trials/blocks - if they haven't been generated before
 % NOTE: If the number of generated trials changes, config.task.numBlocks
 %   will need to be changed to an integer that divides the generated trial count.
+numBlocks = config.task.numBlocks;
 if ~isfield(Data, 'blocks') || isempty(Data.blocks)
-  blocks = generateBlocks(configLF);
-  numBlocks = configLF.task.numBlocks;
+  blocksMon = generateBlocks(configMon);
+  blocksLF = generateBlocks(configLF);
+  blocksHF = generateBlocks(configHF);
+
   Data.numFinishedBlocks = 0;
+  % Only counterbalance order for the food trials
+  LFFirst = [1 1 0 0];
+  if mod(subjectId, 2) == 0
+    LFFirst = 1 - LFFirst;
+  end
+
   for blockIdx = 1:numBlocks
-    Data = addGeneratedBlock(Data, blocks{blockIdx}, configLF);
+    if blockIdx <= 2
+      Data = addGeneratedBlock(Data, blocksMon{blockIdx}, configMon);
+    else
+      blockIsLF = LFFirst(blockIdx - 2);
+      addBlockIdx = mod(blockIdx, 2) + 1; % FIXME: ugly hack?
+      if blockIsLF
+        Data = addGeneratedBlock(Data, blocksLF{addBlockIdx}, configLF);
+      else
+        Data = addGeneratedBlock(Data, blocksHF{addBlockIdx}, configHF);
+      end
+    end
   end
 end
 
 % Display blocks
 if ~isnan(subjectId)
-  firstBlockIdx = Data.numFinishedBlocks + 1;
-  lastBlockIdx = 2; % FIXME: Derive from config
+  [ firstBlockIdx, lastBlockIdx ] = getBlocksForSession(Data);
 else
-  practiceBlocks = 1;
+  practiceBlocks = [2 4 6];
   numSelect = 3;
   Data = preparePractice(Data, practiceBlocks, numSelect);
   [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks);
@@ -63,5 +84,5 @@ for blockIdx = firstBlockIdx:lastBlockIdx
   Data = runNthBlock(Data, blockIdx);
 end
 
-unloadPTB(configLF);
+unloadPTB(configLF, configHF);
 end

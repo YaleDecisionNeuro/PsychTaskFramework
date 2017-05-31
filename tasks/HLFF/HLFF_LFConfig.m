@@ -1,5 +1,5 @@
 function c = HLFF_LFConfig(initial_config)
-% HLFF_CONFIG_LF Configure low-fat blocks of high-/low-fat food task
+% HLFF_LFConfig Configure low-fat blocks of high-/low-fat food task
   if exist('initial_config', 'var')
     c = initial_config;
   else
