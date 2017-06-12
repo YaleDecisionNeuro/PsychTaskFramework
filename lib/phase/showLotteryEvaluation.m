@@ -1,31 +1,9 @@
-function [ outcomeKind, outcomeLevel ] = pickAndEvaluateTrial(block, config)
-% Picks a recorded trial at random, evaluates it, and displays the outcome.
-%
-% This can be run as a post-block callback. To do this, include
-% `blockConfig.task.fnHandles.postBlockFn = @pickAndEvaluateTrial` in your
-% configuration file.
-%
-% FIXME: This was written in a hurry, and should at some point be refactored.
+function [outcomeKind, outcomeLevel] = showLotteryEvaluation(trial, config)
+% Allow users to call this function from wherever they want 
+% Be able to receive the trial specification, block configuration. 
 
-%% 1. Pick an available trial at random
-% blockIdx = randi(block.numFinishedBlocks);
-% block = block.blocks{blockIdx};
-trialIdx = randi(height(block.data));
-trial = block.data(trialIdx, :);
-trial.refSide = 1; % Fix the display
-
-% Grab config from the block if it hadn't been passed
-% FIXME: This will not work if (a) there are multiple block kinds, (b) there
-%   are multiple sessions. We might get the wrong blockConfig and think that
-%   it has the right `screenId` / doesn't need `loadPTB`.
-if ~exist('config', 'var')
-  if ~isempty(Screen('Windows'))
-    warning(['PTB seems to be running, but you didn''t pass in the config ', ...
-      'argument to use. If you observe unexpected behavior, this might be why.'])
-  end
-  config = block.config;
-end
-
+% Evaluate the trial: adapt lines 92-end of pickAndEvaluateTrial. For now,
+% below pasted: 
 %% 2. Evaluate the trial
 % summary = experimentSummary(block, blockIdx, trialIdx);
 [ outcomeKind, outcomeLevel, outcomeColorIdx, trueProb, randDraw ] = evaluateTrial(trial);
@@ -36,9 +14,11 @@ standalone = false;
 if isempty(Screen('Windows'))
   standalone = true;
   config = loadPTB(config);
+  config.runSetup.textures = loadTexturesFromConfig(config);
 end
 
 % 1. Use drawLotto and drawRef to show the lotto
+config.task.fnHandles.bgrDrawFn(config, trial);
 drawLotto(trial, config);
 config.task.fnHandles.referenceDrawFn(config, trial);
 Screen(config.device.windowPtr, 'Flip');
@@ -81,7 +61,7 @@ Screen(config.device.windowPtr, 'Flip');
 disp(randDraw);
 
 % 7. Wait for keypress
-waitForKey(config.device.breakKeys);
+waitForKey(config.device.breakKeys, 5);
 
 % 8. If this was a one-off show, close screen
 if standalone
@@ -120,3 +100,4 @@ else
   randomDraw = round(randomDraw, 2);
 end
 end
+

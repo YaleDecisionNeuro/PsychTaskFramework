@@ -117,6 +117,12 @@ for blockIdx = firstBlockIdx:lastBlockIdx
   Data = runNthBlock(Data, blockIdx);
 end
 
+% Display "Currently evaluating a [description] trial" (see preBlock.m)
+% disp('Currently Evaluating Random Trials')
+
+% Evaluate Lottery for randomly chosen trial
+SODM_pickTrials(Data)
+
 % Close window
 unloadPTB(monConfig, medConfig);
 end
