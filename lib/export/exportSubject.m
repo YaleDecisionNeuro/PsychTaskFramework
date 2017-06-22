@@ -22,6 +22,10 @@ end
 for blockId = 1:n
   blk = blocks{blockId};
   finalRecords = blk.data;
+  
+  if isempty(finalRecords)
+      continue;
+  end
 
   % Add task name, block name and block id as columns
   % FIXME: Generally, which fields should get extracted from the `config`
