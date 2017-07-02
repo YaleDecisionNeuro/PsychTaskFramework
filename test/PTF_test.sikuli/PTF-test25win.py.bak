@@ -1,0 +1,26 @@
+# What to look for:
+def chooseLotto(event):
+    sleep(0.5)
+    print('Success!')
+    type(Key.LEFT)
+
+# Focus existing Matlab window or open a new one
+matlab = App('MATLAB')
+matlab.focus()
+# wait("1498950754051.png", 60)
+sleep(3)
+
+# Focus to command window
+type('0', Key.CTRL)
+sleep(1)
+
+# Run test
+type(Key.ENTER)
+type('cd C:/Users/sp576/Documents/Coding/PsychTaskFramework' + Key.ENTER)
+# type('run_test(@testRA_25)' + Key.ENTER)
+type("addpath('./test'); testRA_25" + Key.ENTER)
+
+# Matlab / PTB will automatically project to largest screen ID -> check there
+with Region(Screen(getNumberScreens() - 1)):
+    onAppear("RA_monetary_USD10_25.png", chooseLotto)
+    observe(120)
