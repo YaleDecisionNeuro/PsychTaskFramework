@@ -2,6 +2,9 @@ function s = test_defaults()
   s = configDefaults(); % Get defaults from lib/configDefaults
   
   s.debug = false;
+  Screen('Preference', 'SkipSyncTests', 1);
+  s.device.screenId = 1; % min(1, max(Screen('Screens')));
+  
   s.device.breakKeys = {'Space', '5%'};
   s.device.choiceKeys = {'LeftArrow', 'RightArrow'};
   % See lib/configDefaults for other things that s.device can contain
