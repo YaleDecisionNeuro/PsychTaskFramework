@@ -1,9 +1,8 @@
-function [outcomeKind, outcomeLevel] = showLotteryEvaluation(trial, config)
+function [outcomeKind, outcomeLevel] = showTrialEvaluation(trial, config)
 % Allow users to call this function from wherever they want 
 % Be able to receive the trial specification, block configuration. 
 
-% Evaluate the trial: adapt lines 92-end of pickAndEvaluateTrial. For now,
-% below pasted: 
+% Evaluate the trial: adapted lines 92-end of pickAndEvaluateTrial.
 %% 2. Evaluate the trial
 % summary = experimentSummary(block, blockIdx, trialIdx);
 [ outcomeKind, outcomeLevel, outcomeColorIdx, trueProb, randDraw ] = evaluateTrial(trial);
@@ -17,6 +16,7 @@ if isempty(Screen('Windows'))
   config.runSetup.textures = loadTexturesFromConfig(config);
 end
 
+
 % 1. Use drawLotto and drawRef to show the lotto
 config.task.fnHandles.bgrDrawFn(config, trial);
 drawLotto(trial, config);
@@ -27,11 +27,28 @@ WaitSecs(5);
 switch trial.choseLottery
   case 0
     config.task.fnHandles.referenceDrawFn(config, trial);
-    msg = 'You have chosen the alternative to the gamble.';
+    msg = 'You chose the certain option.';
+  
   case 1
+  windowPtr = config.device.windowPtr;
     % Determine message to display
-    msg = 'You chose the gamble. Random draw got you a ';
-    msg = [msg config.draw.lottery.box.colorKey{outcomeColorIdx} ' marble.'];
+    
+    % For monetary gamble 
+    if strcmp(config.runSetup.blockName, "Monetary") == 1   
+        lookupTbl = config.runSetup.lookups.txt;
+        message = textLookup(outcomeLevel, lookupTbl, windowPtr);
+        msg = 'You chose the gamble. Random draw got you ';
+        msg = [msg message];
+    end 
+    
+    % For medical gamble
+    if strcmp(config.runSetup.blockName, "Medical") == 1   
+        lookupTbl = config.runSetup.lookups.txt;
+        message = textLookup(outcomeLevel, lookupTbl, windowPtr);
+        msg = 'You chose the experimental treatment. The final result was ';
+        msg = [msg message];
+    end 
+        
     %  (3. Re-paint lottery with true probability layout
 
     if trial.ambigs > 0
@@ -55,7 +72,7 @@ elseif trial.choseLottery == 1
 end
 txtDims = getTextDims(config.device.windowPtr, msg);
 xDim = config.device.screenDims(3)/2 - txtDims(1)/2;
-yDim = config.device.screenDims(4) - 20;
+yDim = config.device.screenDims(4) - 100; %moved text up from bottom of screen
 DrawFormattedText(config.device.windowPtr, msg, xDim, yDim, [200 200 200]);
 Screen(config.device.windowPtr, 'Flip');
 disp(randDraw);
