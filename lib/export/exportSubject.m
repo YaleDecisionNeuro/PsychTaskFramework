@@ -15,11 +15,26 @@ function [ exportTable ] = exportSubject(DataObject, fname)
 subjId = DataObject.subjectId;
 exportTable = table();
 if ~isfield(DataObject, 'blocks')
-  warning('DataObject for %d contains no planned or recorded blocks.', subjId)
+  warning('DataObject for %d contains no planned or recorded blocks.', subjId);
   return;
 end
 
-blocks = DataObject.blocks;
+if isLegacyDataObject(DataObject)
+  warning(['This file was collected using a legacy version of the toolbox.', ...
+      ' If you encounter any errors, attempt to export it using the version', ...
+      ' you collected the data with.']);
+  subjId = DataObject.observer;
+  src = DataObject.blocks;
+  if ~isfield(src, 'recorded') || numel(src.recorded) == 0
+    warning('DataObject for %d contains no recorded blocks.', subjId);
+    return;
+  end
+  blocks = src.recorded;
+else
+  subjId = DataObject.subjectId;
+  blocks = DataObject.blocks;
+end
+
 n = numel(blocks);
 if ~iscell(blocks) || n == 0
   warning('DataObject for %d contains no recorded blocks.', subjId);
@@ -29,18 +44,29 @@ end
 % Basic approach: Iterate through recorded blocks, concatenating the tables.
 for blockId = 1:n
   blk = blocks{blockId};
-  finalRecords = blk.data;
+  if isLegacyDataObject(DataObject)
+    finalRecords = blk.records;
+  else
+    finalRecords = blk.data;
+  end
   
   if isempty(finalRecords)
-      continue;
+    continue;
   end
 
   % Add task name, block name and block id as columns
   % FIXME: Generally, which fields should get extracted from the `config`
   % struct? Should this be user-definable in some way, shape, or form?
-  taskName = blk.config.task.taskName;
-  blockName = blk.config.runSetup.blockName;
-  conds = blk.conditions;
+  if isLegacyDataObject(DataObject)
+    taskName = blk.settings.game.name;
+    blockName = blk.settings.game.block.name;
+    conds.legacy = blockName; % duplication workaround
+  else
+    taskName = blk.config.task.taskName;
+    blockName = blk.config.runSetup.blockName;
+    conds = blk.conditions;
+  end
+  
   cond_names = fieldnames(conds);
   for k = 1:numel(cond_names)
     cond_name = cond_names{k};
