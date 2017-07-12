@@ -4,7 +4,7 @@
 New Matlab versions don't overwrite the old ones by default. Each versions toolboxes are separate, too. This means that if you install 2017a and run `DownloadPsychtoolbox(differentLocation)` ([see instructions](http://psychtoolbox.org/download/)), you can also have side-by-side non-interfering versions of PTB.
 
 ## ...know what things I can configure?
-Check out `lib/configDefaults.m`. It has a well-annotated list of settings that the framework recognizes.
+Check out `lib/configDefaults.m`. It has a well-annotated list of settings that the framework recognizes. See also [Configuring task](configuring-task.md).
 
 ## ...know *what config files* to configure?
 Here's the basic insight: **all config files configure task blocks**. In practice, though, we find it useful to have some settings in common between the blocks of a single task. Consequently, most tasks have:
@@ -17,6 +17,10 @@ Set `s.device.choiceKeys` and `s.device.breakKeys` in your task's `blockDefaults
 
 ## ...set `breakKeys` to accept any key?
 The current way is to set it to `KbName('KeyNames')` or equivalent. This will include all the keys. Simpler way is under development in issue #100.
+
+### ...determine when a key should be waited for?
+
+- Check out `lib/input/waitForKey.m`, which is a wrapper around PsychToolBox's `KbCheck`  with a time limit. If you wish to wait for the press of `5` and `Space` for five seconds, you should invoke `waitForKey({'5%', 'Space'}, 5)`.
 
 ## ...make the task display not transparent?
 This is the product of `c.debug`, which is `true` by default. Set it to `false`.
@@ -33,8 +37,8 @@ Here's the current approach:
 1. Add the images to a specific folder. List that folder in your task's config in the `.device.imgPath` subfield.
 2. List the image filenames in a cell array in `.runSetup.lookups.img`. You might find the `prependPath` helper function helpful.
 3. (If you do this, you currently also have to list the labels that will appear alongside the images in `.runSetup.lookups.txt`. This is a bug that will be addressed in #95.)
-3. Change the payoff values in `.trial.generate.stakes`, `.trial.generate.stakes_loss` and `.trial.generate.reference` to correspond to the *indices of the `runSetup.lookups.img` cell array*. That is to say, if your payoff images are `{'explosion.jpg', 'nothing.jpg', 'sprinkles.jpg'}`, and you want the safe reference to be `nothing.jpg` and the potential loss to be `explosion.jpg`, then you would set `stakes` to 3, `stakes_loss` to 1, and `reference` to 2.
-4. Use `loadTexturesFromConfig(blockConfig)` to load the images into PsychToolBox.
+4. Change the payoff values in `.trial.generate.stakes`, `.trial.generate.stakes_loss` and `.trial.generate.reference` to correspond to the *indices of the `runSetup.lookups.img` cell array*. That is to say, if your payoff images are `{'explosion.jpg', 'nothing.jpg', 'sprinkles.jpg'}`, and you want the safe reference to be `nothing.jpg` and the potential loss to be `explosion.jpg`, then you would set `stakes` to 3, `stakes_loss` to 1, and `reference` to 2.
+5. Use `loadTexturesFromConfig(blockConfig)` to load the images into PsychToolBox.
 
 ## ...add images as something else?
 Put you image file name(s) into any subfield named `.img`. `loadTexturesFromConfig` will actually attempt to load all subfields named `.img`. `.runSetup.lookups.img` is a special case only because the default draw scripts know to look in it.
@@ -114,7 +118,7 @@ In the latter case of the subliminal reference display, you could have left out 
 You could write your custom post-block function and set it in `s.task.fnHandles.postBlockFn`.
 
 ## Where are the results saved?
-The results are saved in the `data/` folder within the task folder, which is defined in `config.task.taskPath`.
+The results are saved in the `data/` folder within the task folder, which is defined in `config.task.taskPath`. See [Exporting data](exporting-data.md) for export to CSV.
 
 ## How can I split a task into multiple sessions?
 Use `config.task.blocksPerSession` alongside `config.task.numBlocks`. The function `getBlocksForSession` will automatically select a terminating point. (It will also automatically resume an interrupted session.)
