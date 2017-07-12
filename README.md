@@ -1,10 +1,10 @@
 # Generalized framework for risk-and-ambiguity tasks in PsychToolBox
-This README contains the basic instructions. For more detailed stuff, [see the Advanced features document](https://github.com/YaleDecisionNeuro/PsychTaskFramework/blob/master/docs/Advanced-features.md).
+This README only contains basic instructions. For more detailed stuff, [see the docs](https://github.com/YaleDecisionNeuro/PsychTaskFramework/blob/master/docs/).
 
 ## Installation
 The framework was tested with MATLAB 2016b and Psychophysics Toolbox v3.0.12. The oldest version of MATLAB that it can work with is 2013b, but **do use the latest version of both MATLAB and PsychToolBox available to you**. The installation process of PsychToolBox is a little involved, so please [follow the instructions here](http://psychtoolbox.org/download).
 
-To use the framework, either [download the `master` branch as a zip file](https://github.com/YaleDecisionNeuro/PsychTaskFramework/archive/master.zip) and unzip wherever you need, or -- if you want to take advantage of upstream changes -- fork it and then clone it on your local setup. [The process is described here.](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/) (If you wish to make it easy for me to provide support, please use the fork-and-clone approach -- that way, I'll be able to see what changes you've made, and you'll be able to pull my general improvements to your instance.)
+To use the framework, fork this repository and then clone it on your local setup. [The process is described here.](http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/) (If you wish to make it easy for me to provide support, please use this approach. That way, I'll be able to see what changes you've made and which version you're using, and you'll be able to pull my general improvements to your instance. Alternatively, though, you can [download the latest release](https://github.com/YaleDecisionNeuro/PsychTaskFramework/releases/latest) and unzip it wherever you need.)
 
 ## Getting started
 ### Moving around
@@ -22,15 +22,27 @@ This is the annotated directory structure of the project:
 ├── SODM.m
 ├── UVRA.m
 ├── lib
+│   ├── action
+│   │   └── (...functions for implementing per-phase action...)
 │   ├── draw
 │   │   └── (...functions for drawing individual display elements...)
+│   ├── export
+│   │   └── (...functions for data export...)
+│   ├── helpers
+│   │   └── (...miscellaneous...)
 │   ├── input
 │   │   └── (...functions for keyboard interaction...)
 │   ├── phase
 │   │   └── (...functions for each "phase" of a trial...)
+│   ├── setup
+│   │   └── (...functions for setting up your task and your run...)
 │   └── (...general-use functions...)
 └── tasks
     ├── MDM
+    │   ├── (...task-specific files...)
+    │   └── img
+    │       └── (...image files...)
+    ├── HLFF
     │   ├── (...task-specific files...)
     │   └── img
     │       └── (...image files...)
@@ -49,15 +61,17 @@ The scripts are written so that if you run them without an argument, they run a 
 
 If you wish to record the data for a subject, run the task script with a numeric argument that is the ID of the subject, e.g. `RA(116)` for subject 116. The script will automatically create a data file in `tasks/RA/116.mat`.
 
-You might wish to run the `PsychDebugWindowConfiguration` command before you run any of the scripts above. This will make the task display transparent, so you'll be able to see what and where you're typing if you choose to abort the task before its finish. (You should do this with `Ctrl-C`. Then, when you see that you can write in the MATLAB command window, run the command `sca`, which is short for PsychToolBox's `Screen('CloseAll')`.)
+Unless you set `config.debug` to `false` in your task configuration, your task will run in a debug mode. This makes task display transparent, so you'll be able to see what and where you're typing if you choose to abort the task before its finish. (You should do this with `Ctrl-C`. Then, when you see that you can write in the MATLAB command window, run the command `sca`, which is short for PsychToolBox's `Screen('CloseAll')`.)
 
-### Changing the existing tasks
+### Extending the existing tasks
 The configuration for task `XYZ` is in `tasks/XYZ/XYZ_blockDefaults.m`. If there are two kinds of blocks, `A` and `B`, the convention is that these are in `tasks/XYZ/XYZ_blockDefaults_A.m` and `tasks/XYZ/XYZ_blockDefaults_B.m`. If you wish to see the configurable values, please take a look at `lib/configDefaults.m`, from which all task configurations inherit default values.
+
+See: [Extending risk & ambiguity tasks](https://github.com/YaleDecisionNeuro/PsychTaskFramework/blob/62_docs/docs/extending-RA-tasks.md).
 
 ### Writing your own tasks
 A cookbook and proper documentation is forthcoming. If you need to do this now, I recommend taking a look at one of the tasks and walking through the call stack. (MATLAB's "Set breakpoint" feature allows the execution to stop at an arbitrary point. Other debugging features -- especially "Step", "Step in" and "Step out" -- can take you through the code execution one step at a time.)
 
-A look at [advanced-features documentation](https://github.com/YaleDecisionNeuro/PsychTaskFramework/blob/master/docs/Advanced-features.md) could be helpful.
+See: [Creating tasks.](https://github.com/YaleDecisionNeuro/PsychTaskFramework/blob/master/docs/creating-task.md)
 
 ## This is a beta
 This repository is still in the process of being re-written. The most prominent result is that some config aren't clearly defined except by their practical use; some config are intertwined with others without a clear indication of this; and some things (most prominently, object positioning) have not been refactored into config at all.
