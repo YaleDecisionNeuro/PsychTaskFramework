@@ -1,5 +1,9 @@
-function s = test_defaults()
-  s = configDefaults(); % Get defaults from lib/configDefaults
+function s = test_defaults(initial_config)
+  if exist('initial_config', 'var')
+    s = initial_config;
+  else
+    s = configDefaults(); % Get defaults from lib/configDefaults
+  end
   
   s.debug = false;
   Screen('Preference', 'SkipSyncTests', 1);
