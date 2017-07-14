@@ -121,8 +121,8 @@ function drawPayoffImageAndLabel(payoffs)
   % 1. Draw labels
   Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.stakes.fontSize);
   lookupTbl = blockConfig.runSetup.lookups.txt;
-  [ botLabel, botLabelDims ] = textLookup(payoffs(1), lookupTbl, windowPtr);
-  [ topLabel, topLabelDims ] = textLookup(payoffs(2), lookupTbl, windowPtr);
+  [ topLabel, topLabelDims ] = textLookup(payoffs(1), lookupTbl, windowPtr);
+  [ botLabel, botLabelDims ] = textLookup(payoffs(2), lookupTbl, windowPtr);
 
   topLabelXY = [W/2 - topLabelDims(1)/2, Y1 - topLabelDims(2)/2] ...
     + offCenterByPx;
@@ -136,8 +136,8 @@ function drawPayoffImageAndLabel(payoffs)
   % 2. Draw images of stakes
   imgLookupTbl = blockConfig.runSetup.lookups.img;
   textureBank = blockConfig.runSetup.textures;
-  [ botImg, botImgDims ] = imgLookup(payoffs(1), imgLookupTbl, textureBank);
-  [ topImg, topImgDims ] = imgLookup(payoffs(2), imgLookupTbl, textureBank);
+  [ topImg, topImgDims ] = imgLookup(payoffs(1), imgLookupTbl, textureBank);
+  [ botImg, botImgDims ] = imgLookup(payoffs(2), imgLookupTbl, textureBank);
 
   bottomXY = [screenCenter - botImgDims(1)/2, Y3 + botLabelDims(2) + padding];
   bottomCoords = xyAndDimsToRect(bottomXY, botImgDims) + offCenterRect;
@@ -160,9 +160,9 @@ function drawPayoffAmount(payoffs)
   % 2. Calculate text position
   padding = 20;
   topXY = [W/2 - topPayoffDims(1)/2, ...
-           Y3 + topPayoffDims(2)] + offCenterByPx;
-  botXY = [W/2 - botPayoffDims(1)/2, ...
            Y1 - padding] + offCenterByPx;
+  botXY = [W/2 - botPayoffDims(1)/2, ...
+           Y3 + botPayoffDims(2)] + offCenterByPx;
 
   % 3. Draw!
   payoffColor = blockConfig.draw.lottery.stakes.fontColor;
