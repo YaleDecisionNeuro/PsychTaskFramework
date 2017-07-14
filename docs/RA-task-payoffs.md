@@ -1,4 +1,4 @@
-# Defining payoffs in R&A tasks
+# Defining payoffs in R&A tasks *(outdated)*
 
 Default: dollar values
 
@@ -68,3 +68,12 @@ DrawFormattedText(windowPtr, txt2, ...
 
 Again, `amtOrder(1)` and `amtOrder(2)` are the top and bottom payoff. `blockSettings.lookups.stakes.txt` is the lookup table, and the window pointer is where we said it was. Finally, you display it with the PTB function for text display.
 
+# Other properties of R&A lotteries
+
+## Property definitions *(incomplete)*
+
+- `color` should really be `winColor`; it defines the color that is associated with the winning payoff. It can range from one to the number of rows of `s.draw.lottery.box.probColors`, which is an n-by-3 matrix that has an RGB color in each row. 
+  - By convention, the first color is the top of the lottery box in the second quarter is the bottom of the lottery box — there is no reversal.
+  - Optionally, `s.draw.lottery.box.colorKey` is a cell array of translations, in which i-th element of the array is  a translation of the RGB on the i-th row of the matrix. The levels of the colors are not authoritative.
+- `refSide`, or reference side, refers conventionally to the left or the top choice. 
+  - Ideally, it ranges from 1 to n, where n is the number of keys in `s.device.choiceKeys`.

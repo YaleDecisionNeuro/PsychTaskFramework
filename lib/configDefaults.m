@@ -89,7 +89,7 @@ s.draw.lottery.box.occluderWidth = 170;
 %
 % Useful for contexts in which color indices need to be translated, especially
 % for a choice evaluation for the subject's eyes.
-s.draw.lottery.box.colorKey = {'blue', 'red'};
+s.draw.lottery.box.colorKey = {'red', 'blue'};
 
 s.draw.lottery.stakes.fontSize = s.graphicDefault.fontSize;
 s.draw.lottery.stakes.fontColor = s.graphicDefault.fontColor;
@@ -285,6 +285,14 @@ s.trial.generate.repeats = 1;
 % field above.
 s.trial.generate.catchTrial = table.empty;
 s.trial.generate.catchIdx = NaN;
+
+% If you wish to display the reference value on different sides in
+% different trials, you might want to uncomment. 1 refers conventionally to 
+% the left or the top choice.
+% 
+% It ranges from 1 to n, where n is the number of keys in 
+% s.device.choiceKeys.
+% s.trial.generate.refSide = [1 2];
 
 %%% Run config
 % This will be specific to each block that you run. None of these config have
