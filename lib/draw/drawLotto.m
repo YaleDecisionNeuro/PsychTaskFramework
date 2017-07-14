@@ -126,7 +126,7 @@ function drawPayoffImageAndLabel(payoffs)
 
   topLabelXY = [W/2 - topLabelDims(1)/2, Y1 - topLabelDims(2)/2] ...
     + offCenterByPx;
-  botLabelXY = [W/2 - botLabelDims(1)/2, Y3 + botLabelDims(2)] ...
+  botLabelXY = [W/2 - botLabelDims(1)/2, Y3 + botLabelDims(2) + padding] ...
     + offCenterByPx;
 
   payoffColor = blockConfig.draw.lottery.stakes.fontColor;
@@ -139,12 +139,13 @@ function drawPayoffImageAndLabel(payoffs)
   [ topImg, topImgDims ] = imgLookup(payoffs(1), imgLookupTbl, textureBank);
   [ botImg, botImgDims ] = imgLookup(payoffs(2), imgLookupTbl, textureBank);
 
-  bottomXY = [screenCenter - botImgDims(1)/2, Y3 + botLabelDims(2) + padding];
+  bottomXY = [screenCenter - botImgDims(1)/2, ...
+              Y3 + botLabelDims(2) + 2 * padding];
   bottomCoords = xyAndDimsToRect(bottomXY, botImgDims) + offCenterRect;
 
   % y-dim: Dodge the image from both lottery and the text, and leave some space
   topXY = [screenCenter - topImgDims(1)/2, ...
-           Y1 - topImgDims(2) - topLabelDims(2) - padding];
+           Y1 - topImgDims(2) - topLabelDims(2) - 2 * padding];
   topCoords = xyAndDimsToRect(topXY, topImgDims) + offCenterRect;
 
   Screen('DrawTexture', windowPtr, topImg, [], topCoords);
@@ -158,12 +159,11 @@ function drawPayoffAmount(payoffs)
   [ botPayoffString, botPayoffDims ] = dollarFormatter(payoffs(2), windowPtr);
 
   % 2. Calculate text position
-  padding = 20;
   topXY = [W/2 - topPayoffDims(1)/2, ...
-           Y1 - padding] + offCenterByPx;
+           Y1 - topPayoffDims(2)/2] + offCenterByPx;
   botXY = [W/2 - botPayoffDims(1)/2, ...
-           Y3 + botPayoffDims(2)] + offCenterByPx;
-
+           Y3 + botPayoffDims(2) + padding] + offCenterByPx;
+  
   % 3. Draw!
   payoffColor = blockConfig.draw.lottery.stakes.fontColor;
   DrawFormattedText(windowPtr, topPayoffString, topXY(1), topXY(2), payoffColor);
