@@ -1,10 +1,26 @@
 function [ Data ] = MDM(subjectId)
-% MDM Runs a medical decision-making task and records its results for the
-%   subject whose subject number is passed in. Modeled on (and largely
-%   copy-pasted from) RA.m, to test out image implementation (#5).
+% Main task script for the medical & monetary decision-making task (MDM).
+%
+% Loads config and DataObject, generates and executes requisite blocks, and
+% records data for the subject whose `subjectId` is passed as an argument.
+%
+% If `subjectId` is not given, the task runs a shorter practice version of
+% itself.
+%
+% Args:
+%   subjectId (int, optional): A participant ID
+%
+% Returns:
+%   DataObject struct: A `DataObject` with a record of the participant's
+%   choices.
+%
+% Note:
+%   Like RA, MDM utilizes the risk-and-ambiguity framework; unlike RA, it
+%   displays symbols for its payoffs. (Historically, the task scripts developed
+%   together.)
+%
 
-%% Add subfolders we'll be using to path
-addpath(genpath('./lib'));
+addpath(genpath('./lib')); % Add subfolders we'll be using to path
 addpath(genpath('./tasks/MDM'));
 % NOTE: genpath gets the directory and all its subdirectories
 
