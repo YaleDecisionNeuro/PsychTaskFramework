@@ -14,3 +14,13 @@ Focus Matlab Command Window
     Click  matlab-command-window-symbol.png
     Sleep  1s
     Press Special Key  ENTER
+
+Display Correct Lottery With
+    [Arguments]   ${matlab_test_name}
+    Sleep   1s
+    Focus Matlab Command Window
+    Input Text   ${EMPTY}   ${matlab_test_name}
+    Press Special Key   ENTER
+    Wait Until Screen Contain   ${matlab_test_name}.png   15
+    Sleep   1s
+    Press Special Key   LEFT
