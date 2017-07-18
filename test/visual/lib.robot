@@ -24,3 +24,15 @@ Display Correct Lottery With
     Wait Until Screen Contain   ${matlab_test_name}.png   15
     Sleep   1s
     Press Special Key   LEFT
+
+Display Correct Lottery With Windows Legacy Renderer
+    [Documentation]   Compare instead to the references that use the Windows 
+    ...               legacy render rather than the cross-platform PTB render
+    [Arguments]   ${matlab_test_name}
+    Sleep   1s
+    Focus Matlab Command Window
+    Input Text   ${EMPTY}   ${matlab_test_name}
+    Press Special Key   ENTER
+    Wait Until Screen Contain   win_${matlab_test_name}.png   15
+    Sleep   1s
+    Press Special Key   LEFT
