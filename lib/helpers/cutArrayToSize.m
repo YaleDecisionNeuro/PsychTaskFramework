@@ -1,6 +1,13 @@
 function arr = cutArrayToSize(arr, n)
-% CUTARRAYTOSIZE Cuts, or extends, arr so that it has length n.
-
+% Cuts, or extends, arr so that it has length n.
+%
+% Args:
+%   arr: A cell array
+%   n: Length of desired array
+%
+% Return:
+%   arr: A cell array with desired length
+%
 % Fix: If this is a character array, make it into a cell array to ensure
 %   expected behavior.
 if ischar(arr)

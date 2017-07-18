@@ -1,5 +1,11 @@
 function [ bool ] = configHasLookups(config)
 % Checks if lookups exist and are non-empty.
+%
+% Args: 
+%   config: Block configuration
+%
+% Returns:
+%   bool: Boolean true if lookups field is present and contains content.
 bool = false;
 
 % Does the field even exist?

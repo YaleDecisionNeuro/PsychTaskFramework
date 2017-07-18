@@ -1,5 +1,11 @@
 function [ Data ] = HLFF(subjectId)
-% HLFF Runs the high-/low-fat food task designed by Sarah Healy.
+% Task script for the high-/low-fat food task designed by Sarah Healy.
+%
+% Args:
+%   subjectId (optional): A participant ID
+%
+% Returns:
+%   Data: A record of the participant's choices.
 
 %% 1. Add subfolders we'll be using to path
 addpath(genpath('./lib'));

@@ -1,7 +1,14 @@
 function [Data] = saveData(Data)
-% SAVEDATA Saves a subject data file to `Data.filename`. Ensures that it
-%   stores the struct Data correctly, such that `loadOrCreate` can load it
+% Saves a subject data file to `Data.filename`. 
+%
+% Ensures that it stores the struct Data correctly, such that `loadOrCreate` can load it
 %   properly.
+%
+% Args:
+%   Data: Saved participant information.
+%
+% Returns:
+%   Data: Saved participant information.
 %
 % (WARNING: The function assumes that the trial-handling functions haven't
 % overwritten previous records in Data, and as such, overwrites the file
