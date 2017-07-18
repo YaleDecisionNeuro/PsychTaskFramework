@@ -13,8 +13,8 @@ config = setupPracticeConfig(config);
 config.runSetup.textures = loadTexturesFromConfig(config);
 
 %% Set up catch trial
-trialProperties = struct('stakes', 4, 'probs', [], 'ambigs', 0.5, ...
-  'stakes_loss', 1, 'reference', 2, 'colors', 1, 'ITI', 1, 'refSide', 1);
+trialProperties = struct('stakes', 4, 'probs', 0.25, 'ambigs', [], ...
+  'stakes_loss', 1, 'reference', 2, 'colors', 2, 'ITI', 1, 'refSide', 1);
 trial = generateTrials(trialProperties);
 
 %% Run it
