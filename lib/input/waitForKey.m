@@ -1,6 +1,16 @@
 function [keyIsDown, responseTime, keyCode, deltaSecs] = waitForKey(keyName, seconds)
-% WaitForKey Wait until the key supplied by `keyName` is pressed
+% Wait until the key supplied by `keyName` is pressed
 %   (or, optionally, until `seconds` seconds elapse).
+%
+% Args:
+%   keyName: A defined key
+%   seconds: An amount of time to pause before continuing
+%
+% Returns:
+%   keyIsDown: A record that the key was pressed.
+%   responseTime: The time when the key was pressed.
+%   keyCode: A marker of the pressed key
+%   deltaSecs: The length of time it took for key to be pressed.
 %
 % NOTE: If you require precision, bear in mind that some time elapsed between
 % drawing your phase and calling this function. To that end, you should supply

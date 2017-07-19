@@ -1,6 +1,13 @@
 function report = choiceReport(trialData)
-% CHOICEREPORT Prints to stdout what the choice in `trialData` was and what
-%   the properties in `trialData` were.
+% Prints to stdout what the choice in `trialData` was and what the properties 
+%   in `trialData` were.
+%
+% Args:
+%   trialData: A table of trial information
+%
+% Returns:
+%   report: A summary of participant answers in the context of the
+%     question.
 
   choice = trialData.choice;
   if choice == 0

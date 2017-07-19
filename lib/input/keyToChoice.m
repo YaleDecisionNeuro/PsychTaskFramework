@@ -1,8 +1,19 @@
 function [ choseLottery ] = keyToChoice(recordedChoice, refSide)
-% KEYTOCHOICE Based on the choice recorded according to current rules (0 = no
+% Return how often subject chose to gamble (picked lottery over reference).
+%
+% Based on the choice recorded according to current rules (0 = no
 %   response, 1 = choice on left, 2 = choice on right) and the knowledge of
 %   which side has the reference, output whether the subject chose the
 %   gamble as true / false / NaN.
+%
+% Args:
+%   recordedChoice: A record of participant choice 
+%   refSide: A variable determining which option is a reference and which
+%     is a lottery.
+%
+% Returns:
+%   choseLottery: A dictionary of choice events related to how often
+%     subject gambled.
 
 % Strategy: build a dictionary for which recordedChoice will be an index.
 

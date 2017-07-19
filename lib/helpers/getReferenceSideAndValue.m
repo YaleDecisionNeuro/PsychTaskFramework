@@ -7,9 +7,8 @@ function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData,
 %   blockConfig: A block configuration
 %
 % Returns:
-%   referenceSide: A variable from the block, trial, or generated randomly.
-%   referenceValue: A value generated from a defined character array in the
-%     block or trial. 
+%   referenceSide: A side kept constant across choice events (not lottery).
+%   referenceValue: A set value, on reference side, kept constant across choice events. 
 
 % Approach: Start from general options and overwrite with more specific ones
 
