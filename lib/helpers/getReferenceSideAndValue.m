@@ -1,6 +1,15 @@
 function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockConfig)
 % Check if there is any specific reference side & value defined for this trial,
-% or for this block. If reference side is unavailable, generate it at random.
+%   or for this block. If reference side is unavailable, generate it at random.
+%
+% Args:
+%   trialData: A table of trial information
+%   blockConfig: A block configuration
+%
+% Returns:
+%   referenceSide: A variable from the block, trial, or generated randomly.
+%   referenceValue: A value generated from a defined character array in the
+%     block or trial. 
 
 % Approach: Start from general options and overwrite with more specific ones
 

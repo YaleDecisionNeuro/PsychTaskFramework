@@ -5,10 +5,10 @@ function [Data] = saveData(Data)
 %   properly.
 %
 % Args:
-%   Data: Saved participant information.
+%   Data: Participant information.
 %
 % Returns:
-%   Data: Saved participant information.
+%   Data: Participant information.
 %
 % (WARNING: The function assumes that the trial-handling functions haven't
 % overwritten previous records in Data, and as such, overwrites the file
