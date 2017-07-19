@@ -12,6 +12,12 @@ function [ config ] = loadPTB(config)
 
 0; % to prevent sphinx from thinking that the next comment is more docstring
 
+if ismember('refreshConfig', inmem)
+  % clear a function whose persistent variable could hold outdated 
+  % texture pointers, thus re-initializing the variable
+  clear('refreshConfig'); 
+end
+
 %% Set random seed -- if already set, continue using that one
 if exist('RandStream', 'var') % Not on Octave
   if ~isfield(config.device, 'rngAlgorithm')
