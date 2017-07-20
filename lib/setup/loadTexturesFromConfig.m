@@ -15,7 +15,7 @@ function [ textureMap ] = loadTexturesFromConfig(configStruct, textureMap)
 %   textureMap: A data structure of texture pointer and dimensions mapped to a
 %     filename.
 
-if ~exist('textureMap', 'var')
+if ~exist('textureMap', 'var') || ~isa(textureMap, 'containers.Map')
   textureMap = containers.Map;
 end
 

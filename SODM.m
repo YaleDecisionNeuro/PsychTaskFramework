@@ -11,7 +11,6 @@ addpath('./tasks/MDM');
 
 %% Load config
 config = SODM_blockDefaults();
-config = loadPTB(config);
 if ~exist('subjectId', 'var') % Practice
   subjectId = NaN;
   config = setupPracticeConfig(config);
@@ -41,8 +40,6 @@ end
 % Disambiguate config here
 monConfig = SODM_monetaryConfig(config);
 medConfig = SODM_medicalConfig(config);
-medConfig.runSetup.textures = loadTexturesFromConfig(medConfig);
-monConfig.runSetup.textures = loadTexturesFromConfig(monConfig);
 
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || isempty(Data.blocks)
