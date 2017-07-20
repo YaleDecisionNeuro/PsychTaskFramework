@@ -6,8 +6,10 @@ function [ Data, existed ] = loadOrCreate(subjectId, fname)
 %   fname: A filename
 %
 % Returns:
-%   Data: Participant information.
-%   existed: A recorded file of participant information.
+%   2-element tuple containing
+%
+%   - **Data**: Participant information.
+%   - **existed**: A recorded file of participant information.
 %
 % NOTE: Currently assumes that subject data is stored in a struct called Data,
 % and that the folders in the path to `fname` all exist.

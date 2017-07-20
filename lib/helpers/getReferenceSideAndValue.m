@@ -7,8 +7,10 @@ function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData,
 %   blockConfig: A block configuration
 %
 % Returns:
-%   referenceSide: A side kept constant across choice events (not lottery).
-%   referenceValue: A set value, on reference side, kept constant across choice events. 
+%   2-element tuple containing
+%
+%   - **referenceSide**: A side kept constant across choice events (not lottery).
+%   - **referenceValue**: A set value, on reference side, kept constant across choice events. 
 
 % Approach: Start from general options and overwrite with more specific ones
 

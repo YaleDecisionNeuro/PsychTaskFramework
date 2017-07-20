@@ -6,8 +6,10 @@ function [ firstIdx, lastIdx ] = getBlocksForSession(DataObject, blocksPerSessio
   %   blocksPerSession: A variable of the number of blocks run each session 
   %
   % Returns:
-  %   firstIdx: The beginning block index.
-  %   lastIdx: The ending block index.
+  %   2-element tuple containing
+  %
+  %   - **firstIdx**: The beginning block index.
+  %   - **lastIdx**: The ending block index.
   %  
   % NOTE: If all blocks have been done already, `lastIdx` will be an empty
   %   vector. This will prevent any loop of the form k:lastIdx from running, but

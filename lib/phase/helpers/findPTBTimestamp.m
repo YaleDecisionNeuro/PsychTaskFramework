@@ -7,8 +7,10 @@ function [ PTBTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig)
 %   phaseConfig: Phase configuration
 % 
 % Returns:
-%   PTBTimestamp: A record of the trial timestamp. 
-%   found: A variable to determine what timestamp measure to use.
+%   2-element tuple containing
+%
+%   - **PTBTimestamp**: A record of the PTB trial timestamp. 
+%   - **found**: A variable to determine what timestamp measure to use.
 %
 % Suitable locations: `startTimestamp` field in `phaseConfig`,
 % `${PHASENAME}Start` or `${PHASENAME}StartTS` in `trialData`.
