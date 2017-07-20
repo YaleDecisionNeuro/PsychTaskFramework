@@ -12,7 +12,6 @@ addpath(genpath('./tasks/UVRA'));
 
 %% Setup
 config = UVRA_blockDefaults();
-config = loadPTB(config);
 if ~exist('subjectId', 'var') % Practice
   subjectId = NaN;
   config = setupPracticeConfig(config);

@@ -3,18 +3,41 @@ function unloadPTB(varargin)
 %
 % closeScreen accepts arbitrarily many config structs.
 %
+% If the test script did not pass window pointers to the configs, it will
+% close all windows.
+%
 % Args:
 %   config1, config2, ...: Any number of configuration objects
+if length(varargin) > 0
+  windowIds = unique(cell2mat(cellfun(@getWindowId, varargin, ...
+    'UniformOutput', false)));
+  textureIds = unique(cell2mat(cellfun(@getTextureIds, varargin, ...
+    'UniformOutput', false)));
+else
+  windowIds = [];
+  textureIds = [];
+end
 
-windowIds = unique(cell2mat(cellfun(@getWindowId, varargin, 'UniformOutput', false)));
-textureIds = unique(cell2mat(cellfun(@getTextureIds, varargin, 'UniformOutput', false)));
-% FIXME: This is really ugly; there has to be a more elegant way to do this
+windowIds = windowIds(~isnan(windowIds));
+textureIds = textureIds(~isnan(textureIds));
 
-% 1. Close window
-Screen('Close', windowIds);
+if isempty(windowIds)
+  Screen('CloseAll');
+else
+  % 1. Close window
+  Screen('Close', windowIds);
 
-% 2. Close all textures
-Screen('Close', textureIds);
+  % 2. Close all textures
+  if ~isempty(textureIds)
+    Screen('Close', textureIds);
+  end
+end
+
+if ismember('refreshConfig', inmem)
+  % clear a function whose persistent variable could hold outdated 
+  % texture pointers, thus re-initializing the variable
+  clear('refreshConfig'); 
+end
 
 % 3. Clear Screen config (see PsychDebugWindowConfiguration for details)
 clear Screen
