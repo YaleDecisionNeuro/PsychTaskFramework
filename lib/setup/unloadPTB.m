@@ -19,6 +19,13 @@ end
 
 %% Helper functions to help extract fields and catch errors
 function windowId = getWindowId(config)
+% Extract window ID fields
+%
+% Args:
+%   config: A program configuration
+%
+% Returns:
+%   windowId: A defined window.
   try
     windowId = config.device.windowPtr;
   catch
@@ -27,6 +34,13 @@ function windowId = getWindowId(config)
 end
 
 function textureIds = getTextureIds(config)
+% Extract texture ID fields
+%
+% Args:
+%   config: A program configuration
+%
+% Returns:
+%   textureIds: A defined texture.
   try
     textureArray = values(config.runSetup.textures);
     textureIds = cellfun(@(x) x.textureId, textureArray, 'UniformOutput', true);

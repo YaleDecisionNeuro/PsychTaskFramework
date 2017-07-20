@@ -1,6 +1,12 @@
 function [ trialTbl ] = generateTrials(levelConfig)
-% GENERATETRIALS Generates a table of risk&ambiguity trials that contain all
+% Generates a table of risk&ambiguity trials that contain all
 %   combinations of `levelConfig` struct subfields.
+%
+% Args:
+%   levelConfig: A configuration level containing trial information
+% 
+% Returns:
+%   trialTbl: A table of all the trial information to be collected.
 %
 % NOTE: The generator is specific to the risk/ambiguity task. It expects that %
 % the struct will contain `stakes` and at least one of (`probs`, `ambigs`)
@@ -86,7 +92,17 @@ for k = 1:numel(getFields)
 end
 end
 
+%% Helper function
 function val = existingValueOrDefault(structVar, fieldname, default)
+% Define a value from an existing value or a default setting
+%
+% Args:
+%   structVar: An existing (alternative) variable
+%   fieldname: A defined field
+%   default: A preselected variable used when no alternative is given 
+%
+% Returns:
+%   val: An existing or default value
   if ~exist('default', 'var')
     default = NaN;
   end
