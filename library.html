@@ -233,22 +233,8 @@ saves the collected results to Data.blocks{n}.data. See lib/configDefaults.m for
 the parameters that a block can have.</p>
 <p>If <cite>Data.filename</cite> does not exist, it will not know how to save the trial
 choices (and will issue a warning).</p>
-<p>(Replaces <cite>runBlock</cite>, which is now deprecated.)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>Data</strong> -- a Data Object</li>
-<li><strong>n</strong> -- an integer index of block to run in DataObject.blocks</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<ol class="arabic simple" start="0">
-<li>Validate the arguments</li>
-</ol>
+<p>(Replaces <cite>runBlock</cite>, which is now deprecated.)
+0. Validate the arguments</p>
 </dd></dl>
 
 <dl class="function">
@@ -371,8 +357,26 @@ configuration file.</p>
 <span class="target" id="module-PTF.lib.phase.helpers"></span><dl class="function">
 <dt id="PTF.lib.phase.helpers.choiceReport">
 <code class="descclassname">PTF.lib.phase.helpers.</code><code class="descname">choiceReport</code><span class="sig-paren">(</span><em>trialData</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.helpers.choiceReport" title="Permalink to this definition">¶</a></dt>
-<dd><p>CHOICEREPORT Prints to stdout what the choice in <cite>trialData</cite> was and what
-the properties in <cite>trialData</cite> were.</p>
+<dd><dl class="docutils">
+<dt>Prints to stdout what the choice in <cite>trialData</cite> was and what the properties</dt>
+<dd>in <cite>trialData</cite> were.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>trialData</strong> -- A table of trial information</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>A summary of participant answers in the context of the</dt>
+<dd>question.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">report</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -380,8 +384,27 @@ the properties in <cite>trialData</cite> were.</p>
 <code class="descclassname">PTF.lib.phase.helpers.</code><code class="descname">findPTBTimestamp</code><span class="sig-paren">(</span><em>trialData</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.helpers.findPTBTimestamp" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>Return the right timestamp from the (optional) structures, or getSecs() if</dt>
-<dd>nothing suitable is find.</dd>
+<dd>nothing suitable is found.</dd>
 </dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>trialData</strong> -- A table of trial information</li>
+<li><strong>phaseConfig</strong> -- Phase configuration</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A record of the trial timestamp.
+found: A variable to determine what timestamp measure to use.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">PTBTimestamp</p>
+</td>
+</tr>
+</tbody>
+</table>
 <p>Suitable locations: <cite>startTimestamp</cite> field in <cite>phaseConfig</cite>,
 <cite>${PHASENAME}Start</cite> or <cite>${PHASENAME}StartTS</cite> in <cite>trialData</cite>.
 If nothing is found, earlier timestamp is better than later</p>
@@ -537,8 +560,30 @@ in phaseConfig.responseKeys</p>
 <span class="target" id="module-PTF.lib.setup"></span><dl class="function">
 <dt id="PTF.lib.setup.addGeneratedBlock">
 <code class="descclassname">PTF.lib.setup.</code><code class="descname">addGeneratedBlock</code><span class="sig-paren">(</span><em>DataObject</em>, <em>blockTrials</em>, <em>config</em>, <em>conditions</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.addGeneratedBlock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Properly stores block components (trials and config) in a DataObject.
-1. Initialize and check arguments</p>
+<dd><p>Properly stores ordered block components (trials and config) in a DataObject.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>DataObject</strong> -- An object storing block components</li>
+<li><strong>blockTrials</strong> -- A table of trials set up for each block</li>
+<li><strong>config</strong> -- A configuration of the block components</li>
+<li><strong>conditions</strong> -- A structure of how to configure block components</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An object storing block components.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataObject</p>
+</td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple">
+<li>Initialize and check arguments</li>
+</ol>
 </dd></dl>
 
 <dl class="function">
@@ -590,6 +635,28 @@ task is substantially different, you might have to roll your own.
 </dd></dl>
 
 <dl class="function">
+<dt id="PTF.lib.setup.importTrials">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">importTrials</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.importTrials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a table from trial file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> -- A named file of trial information</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A table of the trial information.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">trialTable</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>TODO: Maybe this does not have to be a hard failure, but rather allow a</dt>
+<dd>graceful fallback onto on-the-fly generation?</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="PTF.lib.setup.loadPTB">
 <code class="descclassname">PTF.lib.setup.</code><code class="descname">loadPTB</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.loadPTB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start PsychToolBox; return config struct with display info.</p>
@@ -597,6 +664,18 @@ task is substantially different, you might have to roll your own.
 <dt>Most importantly, the display info is in config.device; the essential one</dt>
 <dd>is s.device.windowPtr.</dd>
 </dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> -- A configuration of PTB set-up</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A configuration of PTB set-up</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">config</td>
+</tr>
+</tbody>
+</table>
 <p>Set random seed -- if already set, continue using that one</p>
 </dd></dl>
 
@@ -620,6 +699,18 @@ redundant loading of previously loaded images.</p>
 <dt id="PTF.lib.setup.setupPracticeConfig">
 <code class="descclassname">PTF.lib.setup.</code><code class="descname">setupPracticeConfig</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.setupPracticeConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable saving and randomize reference side assignment for practice runs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> -- A configuration of practice runs</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A configuration of practice runs</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">config</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -655,15 +746,46 @@ redundant loading of previously loaded images.</p>
 <dt id="PTF.lib.helpers.configHasLookups">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">configHasLookups</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.configHasLookups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if lookups exist and are non-empty.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> -- Block configuration</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Boolean true if lookups field is present and contains content.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.cutArrayToSize">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">cutArrayToSize</code><span class="sig-paren">(</span><em>arr</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.cutArrayToSize" title="Permalink to this definition">¶</a></dt>
-<dd><p>CUTARRAYTOSIZE Cuts, or extends, arr so that it has length n.
-Fix: If this is a character array, make it into a cell array to ensure</p>
-<blockquote>
-<div>expected behavior.</div></blockquote>
+<dd><p>Cuts, or extends, arr so that it has length n.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arr</strong> -- A cell array</li>
+<li><strong>n</strong> -- Length of desired array</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A cell array with desired length</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">arr</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Fix: If this is a character array, make it into a cell array to ensure</dt>
+<dd>expected behavior.</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -684,51 +806,196 @@ encompassed <em>all</em> trials.</dd>
 <dt id="PTF.lib.helpers.getBlocksForPractice">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">getBlocksForPractice</code><span class="sig-paren">(</span><em>practiceBlocks</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getBlocksForPractice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assumes that <cite>preparePractice</cite> has been run and re-numbers the block span</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>practiceBlocks</strong> -- A set of blocks</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The first ordered block in set.
+lastBlockIdx: The last ordered block in set.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">firstBlockIdx</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.getBlocksForSession">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">getBlocksForSession</code><span class="sig-paren">(</span><em>DataObject</em>, <em>blocksPerSession</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getBlocksForSession" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the indices for the blocks to begin and end the current session.</p>
-<p>NOTE: If all blocks have been done already, <cite>lastIdx</cite> will be an empty
-vector. This will prevent any loop of the form k:lastIdx from running, but
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>DataObject</strong> -- An object containing block information</li>
+<li><strong>blocksPerSession</strong> -- A variable of the number of blocks run each session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The beginning block index.
+lastIdx: The ending block index.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">firstIdx</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>NOTE: If all blocks have been done already, <cite>lastIdx</cite> will be an empty</dt>
+<dd>vector. This will prevent any loop of the form k:lastIdx from running, but
 you should make sure you don't rely on the numericity of lastIdx in other
-ways.
-Extract relevant values from DataObject</p>
+ways.</dd>
+</dl>
+<p>Extract relevant values from DataObject</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.getReferenceSideAndValue">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">getReferenceSideAndValue</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getReferenceSideAndValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if there is any specific reference side &amp; value defined for this trial,
-or for this block. If reference side is unavailable, generate it at random.
-Approach: Start from general options and overwrite with more specific ones
+<dd><dl class="docutils">
+<dt>Check if there is any specific reference side &amp; value defined for this trial,</dt>
+<dd>or for this block. If reference side is unavailable, generate it at random.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>trialData</strong> -- A table of trial information</li>
+<li><strong>blockConfig</strong> -- A block configuration</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A side kept constant across choice events (not lottery).
+referenceValue: A set value, on reference side, kept constant across choice events.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">referenceSide</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Approach: Start from general options and overwrite with more specific ones
 a. Check in blockConfig</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.isFunction">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">isFunction</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.isFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines whether input object is of specified class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> -- Any matlab object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A boolean to determine if x is of specified class</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.isFunctionOrFunctionArray">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">isFunctionOrFunctionArray</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.isFunctionOrFunctionArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether input object is a cell array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> -- Any matlab object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A boolean defining the cell array or the class of the object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.loadOrCreate">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">loadOrCreate</code><span class="sig-paren">(</span><em>subjectId</em>, <em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.loadOrCreate" title="Permalink to this definition">¶</a></dt>
-<dd><p>LOADORCREATE Load a subject data file. If it does not exist, create it.
-(Currently assumes that subject data is stored in a struct called Data,
-and that the folders in the path to <cite>fname</cite> all exist.)</p>
+<dd><p>Load a subject data file. If it does not exist, create it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>subjectID</strong> -- A participant ID</li>
+<li><strong>fname</strong> -- A filename</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Participant information.
+existed: A recorded file of participant information.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Data</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Currently assumes that subject data is stored in a struct called Data,
+and that the folders in the path to <cite>fname</cite> all exist.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.prependPath">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">prependPath</code><span class="sig-paren">(</span><em>filenames</em>, <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.prependPath" title="Permalink to this definition">¶</a></dt>
-<dd><p>PREPENDPATH When given a cell array <cite>filenames</cite>, returns that cell array
-with <cite>path</cite> added before each element of the cell array.</p>
+<dd><dl class="docutils">
+<dt>When given a cell array <cite>filenames</cite>, returns that cell array</dt>
+<dd>with <cite>path</cite> added before each element of the cell array.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filenames</strong> -- A cell array</li>
+<li><strong>path</strong> -- A string file path</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A cell array with 'path' before each array element.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">fullpaths</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.saveData">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">saveData</code><span class="sig-paren">(</span><em>Data</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.saveData" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>SAVEDATA Saves a subject data file to <cite>Data.filename</cite>. Ensures that it</dt>
-<dd>stores the struct Data correctly, such that <cite>loadOrCreate</cite> can load it
-properly.</dd>
+<dd><p>Saves a subject data file to <cite>Data.filename</cite>.</p>
+<dl class="docutils">
+<dt>Ensures that it stores the struct Data correctly, such that <cite>loadOrCreate</cite> can load it</dt>
+<dd>properly.</dd>
 </dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Data</strong> -- Participant information.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Participant information.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Data</td>
+</tr>
+</tbody>
+</table>
 <p>(WARNING: The function assumes that the trial-handling functions haven't
 overwritten previous records in Data, and as such, overwrites the file
 without warning.)</p>
