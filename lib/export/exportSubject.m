@@ -1,8 +1,15 @@
 function [ exportTable ] = exportSubject(DataObject, fname)
-% ExportSubject Given a DataObject, it unites all records in one table.
+% Given a DataObject, it unites all records in one table.
 %   If given fname, it will also write the table into a file.
 %
 % The file format has to be any that `writetable` can handle; consult its docs.
+%
+% Args:
+%   DataObject: An object containing programmed data
+%   fname: A defined file name
+%
+% Returns:
+%   exportTable: A final records table containing all relevant information.
 
 subjId = DataObject.subjectId;
 exportTable = table();
@@ -54,8 +61,17 @@ if exist('fname', 'var')
 end
 end
 
+%% Helper function
 function [ tbl ] = addConstantColumnToTable(tbl, colName, constVal)
-% AddConstantColumnToTable Repeat constant value to form another column of tbl.
+% Repeat constant value to form another column of tbl.
+%
+% Args:
+%   tbl: An existing table
+%   colName: A defined column title
+%   constVal: A constant value
+% 
+% Returns:
+%   tbl: A new table with a constant value column.
 nRows = height(tbl);
 column = cutArrayToSize(constVal, nRows);
 tbl.(colName) = column;

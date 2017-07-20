@@ -1,5 +1,7 @@
 function [ textureId, imgDims ] = imgLookup(keyIdx, fnameLookupTbl, textureLookupTbl)
-  % IMGLOOKUP Looks up what texture `keyIdx` corresponds to, taking it for an
+  % Supplies the texture and image dimensions of an image. 
+  %
+  %Looks up what texture `keyIdx` corresponds to, taking it for a
   %   simple index in `fnameLookupTbl`. (The middle step is looking up what
   %   texture ID a picture identified by its path corresponds to.)
   %
@@ -8,6 +10,17 @@ function [ textureId, imgDims ] = imgLookup(keyIdx, fnameLookupTbl, textureLooku
   % `loadTexturesFromConfig` and is up-to-date. If not, an error is thrown, as
   % `imgLookup` does not have a pointer to the currently open Screen it would
   % need to create the texture on its own.
+  %
+  % Args:
+  %   keyIdx: A key index
+  %   fnameLookupTbl: A table composed of image filenames to draw from
+  %   textureLookupTbl: A table composed of image textures
+  %
+  % Returns:
+  %   2-element tuple containing
+  %
+  %   - **textureId**: An image specific texture ID
+  %   - **imgDims**: The specific image dimensions
   %
   % NOTE: There is no enforcement of image paths being supplied as absolute
   % paths.

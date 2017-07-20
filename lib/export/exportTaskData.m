@@ -1,5 +1,12 @@
 function [ exportTable ] = exportTaskData(taskName, fname)
-% Export Exports all subject data in tasks/`taskName`/data.
+% Exports all subject data in tasks/`taskName`/data.
+%
+% Args:
+%   taskName: A defined task name
+%   fname: A defined file name
+% 
+% Returns:
+%   exportTable: A table of all subject task data.
 
 dataFolder = fullfile('tasks', taskName, 'data');
 dataFiles = dir(fullfile(dataFolder, '*.mat'));
