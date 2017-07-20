@@ -1,12 +1,23 @@
 function plannedBlocks = generateBlocks(blockConfig, ...
     catchTrial, catchIdx, adHocTrials)
-% GENERATEBLOCKS Returns a cell array of trial tables generated with
+% Returns a cell array of trial tables within a block.
+
+% Trial tables are generated with..
 %   `generateTrials` from blockConfig.trial.generate, separated into blocks with
 %   a fixed number of rows (defined in blockConfig.task.blockLength). If
 %   given further arguments, it will also add to the final trial table the
 %   table `catchTrial` at per-block indices passed in `catchIdx`. If
 %   `adHocTrials` are provided, they are mixed in with the generated trials
 %   prior to randomizationand separation into blocks.
+%
+% Args:
+%   blockConfig: A configuration of the block
+%   catchTrial: An empty trial table
+%   catchIdx: An index number assigned to a catch trial
+%   adHocTrials: Any added trials to block
+%
+% Returns:
+%   plannedBlocks: An array of trial tables in block.
 %
 % NOTE: catchTrial must include all the columns that `generateTrials` will
 % create based on `blockConfig.trial.generate`. An easy way to find what these
@@ -79,10 +90,20 @@ end
 
 % Helper function
 function tbl = injectRowAtIndex(tbl, row, rowIndex, levelConfig)
-  % INJECTROWATINDEX Put a constant `row` at all indices in `rowIndex`.
-  %   Assumes that the row can be concatenated with the output of `trialTbl`.
+  % Put a constant `row` at all indices in `rowIndex`.
+  %
+  % Assumes that the row can be concatenated with the output of `trialTbl`.
   %   If any of the named fields is NaN and levelConfig is provided,
   %   generate a value from that field from levels.
+  %
+  % Args:
+  %   tbl: The original table
+  %   row: An area in table where missing information has been filled in
+  %   rowIndex: An array of the row indices 
+  %   levelConfig:  A configuration level containing trial information
+  %
+  % Returns:
+  %   tbl: A new table with a row at every index.
   if exist('levelConfig', 'var')
     row = generateValuesForMissing(row, levelConfig);
   end
@@ -96,9 +117,17 @@ function tbl = injectRowAtIndex(tbl, row, rowIndex, levelConfig)
   end
 end
 
+%Helper function
 function tbl = generateValuesForMissing(tbl, levelConfig)
-  % GENERATEVALUESFORMISSING If any of the columns in `tbl` have NaN in row,
+  % If any of the columns in `tbl` have NaN in row,
   %   it will insert a random value from corresponding field of `levelConfig`.
+  %
+  % Args:
+  %   tbl: An original table
+  %   levelConfig: A configuration level containing trial information 
+  %
+  % Returns:
+  %   tbl: A new table with missing values generated.
   tblCols = tbl.Properties.VariableNames;
   knownLevels = fieldnames(levelConfig);
 
