@@ -1,0 +1,815 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Standard library reference &mdash; PTF 1.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PTF 1.11 documentation" href="index.html"/>
+        <link rel="prev" title="Callable tasks" href="tasks.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PTF
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Callable tasks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Standard library reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main-library-methods">Main library methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PTF.lib.phase">Phase methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PTF.lib.draw">Draw methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PTF.lib.action">Action methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-methods">Setup methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PTF.lib.export">Export methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-PTF.lib.helpers">Various helper methods</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PTF</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Standard library reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/library.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="standard-library-reference">
+<span id="standard-library-reference"></span><h1>Standard library reference<a class="headerlink" href="#standard-library-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="main-library-methods">
+<span id="main-library-methods"></span><h2>Main library methods<a class="headerlink" href="#main-library-methods" title="Permalink to this headline">¶</a></h2>
+<p>These functions provide functionality at the highest levels of abstraction.</p>
+<span class="target" id="module-PTF.lib"></span><dl class="function">
+<dt id="PTF.lib.configDefaults">
+<code class="descclassname">PTF.lib.</code><code class="descname">configDefaults</code><span class="sig-paren">(</span><em>changes</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.configDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default documented config for all tasks in a freely modifiable struct.</p>
+<p>Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.</p>
+<p>The defaults used here err on the side of catering to LevyLab's R&amp;A paradigm.
+If you're not using it, nuke s.draw from high orbit.</p>
+<p>Although the resulting structure contains task-wide config, it is typically
+modified with block-specific config right before being passed to <cite>runBlock</cite>
+or equivalent. For example, RA_blockDefaults(configDefaults) would modify
+these defaults to serve all RA block kinds. RA_lossConfig would then modify
+the result of <em>that</em> call for loss-domain blocks, like so:</p>
+<blockquote>
+<div>config = RA_blockDefaults(configDefaults);
+lossConfig = RA_lossConfig(config);</div></blockquote>
+<p>Most often, <cite>XYZ_blockDefaults</cite> will use <cite>configDefaults</cite> as a starting point
+without an argument. That is a useful option if you don't expect making any
+modifications to configDefaults for all your tasks.</p>
+<p>TODO: Implement <cite>changes</cite> to bring some order to post-return alterations.
+Defaults
+Debugging
+This will run PsychDebugWindowConfiguration unless overruled in a downstream
+config. (This means skipping sync checks and transparent background.)</p>
+<p>You should turn it off when your task is ready.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.runBlock">
+<code class="descclassname">PTF.lib.</code><code class="descname">runBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runBlock" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>RUNBLOCK Scaffolds multiple trial calls of the same kind and saves the file</dt>
+<dd>after al of them have run.</dd>
+</dl>
+<p>The main thing <cite>runBlock</cite> needs from blockConfig is for <cite>.task.fnHandles.trialFn</cite>
+to be a function handle to which it can pass Data, trial #, and blockConfig.</p>
+<p>If <cite>blockConfig.game</cite> includes fields <cite>preBlockFn</cite> and/or <cite>postBlockFn</cite>,
+it will assume they are callable functions and call them with <cite>Data</cite> and
+<cite>blockConfig</cite> as arguments. (This means they can display block beginning
+/ end and wait for keypress, or check if requisite values exist and fail
+gracefully, or any number of other things.)</p>
+<p>If <cite>Data.filename</cite> does not exist, it will not know how to save the trial
+choices (and will issue a warning).
+0. Validate the DataObject</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.runGenericTrial">
+<code class="descclassname">PTF.lib.</code><code class="descname">runGenericTrial</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runGenericTrial" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>RunGenericTrial Fully generalized workhorse function to display any phases of</dt>
+<dd>an individual trial, as defined using PhaseConfig objects in
+blockConfig.trial.phases.</dd>
+</dl>
+<p>Record the properties of this trial to trialData</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.runNthBlock">
+<code class="descclassname">PTF.lib.</code><code class="descname">runNthBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runNthBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>RunNthBlock runs Data.blocks{n}.trials using Data.blocks{n}.config and
+saves the collected results to Data.blocks{n}.data. See lib/configDefaults.m for
+the parameters that a block can have.</p>
+<p>If <cite>Data.filename</cite> does not exist, it will not know how to save the trial
+choices (and will issue a warning).</p>
+<p>(Replaces <cite>runBlock</cite>, which is now deprecated.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Data</strong> -- a Data Object</li>
+<li><strong>n</strong> -- an integer index of block to run in DataObject.blocks</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple" start="0">
+<li>Validate the arguments</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.runPhase">
+<code class="descclassname">PTF.lib.</code><code class="descname">runPhase</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runPhase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a phase defined with a phaseConfig construct</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.runRATrial">
+<code class="descclassname">PTF.lib.</code><code class="descname">runRATrial</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runRATrial" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>RunRATrial Workhorse function to display all typical phases of an</dt>
+<dd>risk-and-ambiguity trial. In turn, it displays the task-specific choice
+options, response prompt, response input feedback, and the intertrial
+period. It displays them using function handles set in
+<cite>blockConfig.trial.legacyPhases</cite>.</dd>
+</dl>
+<p>Record the properties of this trial to trialData</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PTF.lib.phase">
+<span id="phase-methods"></span><span id="phase-methods"></span><h2>Phase methods<a class="headerlink" href="#module-PTF.lib.phase" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.lib.phase.legacyPhaseStruct">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">legacyPhaseStruct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.legacyPhaseStruct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default phase config for R&amp;A-based tasks. Deprecated.</p>
+<p>If you're only changing some element of a phase, but you're happy with the
+standard order of phases (i.e. choice display, response prompt, feedback,
+intertrial), you can substitute a function here. It should take, and return,
+the same arguments that the phase function in lib/phase does. (In general,
+this is <cite>sampleFn(trialData, blockConfig, phaseConfig)</cite>.)</p>
+<p>By design, showChoicePhaseFn is left blank. <cite>runRATrial</cite> will complain if it is
+not set, or if any of the phase function handles below are unset. While you
+might avoid setting it by writing your own trial script, it is recommended
+that you still leverage these config; it will make your task easier to
+maintain and understand for your collaborators.</p>
+<p>By design, s.game.responsePhaseFn is set to &#64;phase_response; however, if your
+showChoice function collects responses during the display, it can be set to
+NaN.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.phaseConfig">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">phaseConfig</code><span class="sig-paren">(</span><em>name</em>, <em>varargin</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phaseConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares a uniform structure for the definition of a phase.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.phase_ITI">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_ITI</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_ITI" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>PHASE_ITI Displays the inactivity symbol in between trials. Its duration</dt>
+<dd>is based on the value in <cite>trialData.ITIs</cite>.</dd>
+</dl>
+<p>TODO: Modular phase has no smart way of determining what the duration
+should be if it is constant. It relies on a duration fields in
+blockConfig.trial.legacyPhases.{X} enumeration. Possible solution:
+trialData.trialDuration, which checks for
+blockConfig.task.constantBlockDuration to see what duration to do.
+(Alternative: if isnan(phaseConfig.duration), need to compute it.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.phase_feedback">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_feedback</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_feedback" title="Permalink to this definition">¶</a></dt>
+<dd><p>PHASE_FEEDBACK Based on the value in <cite>trialData.choice</cite>, draws the feedback
+that confirms to the player which option they chose (or whether they chose
+at all) and displays it for <cite>blockConfig.trial.legacyPhases.feedback.duration</cite>. Can be
+re-used for tasks that offer two options in a choice.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.phase_generic">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_generic</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_generic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a &quot;run-of-the-mill&quot; phase</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.phase_response">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_response</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_response" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>PHASE_RESPONSE The response script that handles the display of the response</dt>
+<dd>prompt and the eventual response or non-response. Takes standard phase
+script arguments.</dd>
+</dl>
+<p>Helper values</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.phase_showChoice">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_showChoice</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_showChoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>PHASE_SHOWCHOICE Shows the choices defined in trialData and blockData to the
+subject. This includes a lottery and a reference. If available, executes
+action defined in phaseConfig.action; otherwise, waits for duration.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.pickAndEvaluateTrial">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">pickAndEvaluateTrial</code><span class="sig-paren">(</span><em>DataObject</em>, <em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.pickAndEvaluateTrial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Picks a recorded trial at random, evaluates it, and displays the outcome.</p>
+<p>This can be run as a post-block callback. To do this, include
+<cite>blockConfig.task.fnHandles.postBlockFn = &#64;pickAndEvaluateTrial</cite> in your
+configuration file.</p>
+<p>FIXME: This was written in a hurry, and should at some point be refactored.
+1. Pick an available trial at random</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.preBlock">
+<code class="descclassname">PTF.lib.phase.</code><code class="descname">preBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.preBlock" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>PREBLOCK Display &quot;Block N: (BLOCKNAME)&quot; and wait for press of any of</dt>
+<dd>blockConfig.device.breakKeys.</dd>
+</dl>
+<p>Check if there are any recorded blocks yet</p>
+</dd></dl>
+
+<span class="target" id="module-PTF.lib.phase.helpers"></span><dl class="function">
+<dt id="PTF.lib.phase.helpers.choiceReport">
+<code class="descclassname">PTF.lib.phase.helpers.</code><code class="descname">choiceReport</code><span class="sig-paren">(</span><em>trialData</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.helpers.choiceReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>CHOICEREPORT Prints to stdout what the choice in <cite>trialData</cite> was and what
+the properties in <cite>trialData</cite> were.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.phase.helpers.findPTBTimestamp">
+<code class="descclassname">PTF.lib.phase.helpers.</code><code class="descname">findPTBTimestamp</code><span class="sig-paren">(</span><em>trialData</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.helpers.findPTBTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Return the right timestamp from the (optional) structures, or getSecs() if</dt>
+<dd>nothing suitable is find.</dd>
+</dl>
+<p>Suitable locations: <cite>startTimestamp</cite> field in <cite>phaseConfig</cite>,
+<cite>${PHASENAME}Start</cite> or <cite>${PHASENAME}StartTS</cite> in <cite>trialData</cite>.
+If nothing is found, earlier timestamp is better than later</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PTF.lib.draw">
+<span id="draw-methods"></span><span id="draw-methods"></span><h2>Draw methods<a class="headerlink" href="#module-PTF.lib.draw" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.lib.draw.drawBgr">
+<code class="descclassname">PTF.lib.draw.</code><code class="descname">drawBgr</code><span class="sig-paren">(</span><em>blockConfig</em>, <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawBgr" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>DRAWBGR Draws default background and sets default drawing properties (e.g.</dt>
+<dd>fontName and fontSize). To draw task-specific things, you can supply a
+callback function that does them. (For instance, you can supply the
+task-relevant drawRef function.)</dd>
+</dl>
+<p>NOTE: Unlike other draw functions, it only takes <cite>blockConfig</cite>, not
+<cite>trialData</cite>, and does not allow access to or modification of <cite>trialData</cite>.
+(FIXME?)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.drawFeedback">
+<code class="descclassname">PTF.lib.draw.</code><code class="descname">drawFeedback</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawFeedback" title="Permalink to this definition">¶</a></dt>
+<dd><p>DRAWFEEDBACK Draws the feedback according to trial data and config</p>
+<p>TODO: Implement vertical switch</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.drawITI">
+<code class="descclassname">PTF.lib.draw.</code><code class="descname">drawITI</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawITI" title="Permalink to this definition">¶</a></dt>
+<dd><p>DRAWITI Draws the inactivity symbol (by default, white oval) between trials.</p>
+<p>FIXME: Nigh-duplicate code with drawResponsePrompt. Factor out the general
+&quot;draw an object in the center when provided the center and
+blockConfig.draw.(object)&quot;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.drawLotto">
+<code class="descclassname">PTF.lib.draw.</code><code class="descname">drawLotto</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawLotto" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>DrawLotto Using an open PTB screen and other properties of blockConfig,</dt>
+<dd>draws a lottery with values specified in trialData in the center of
+the screen.</dd>
+</dl>
+<p>If blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
+the lottery by the specified amount of pixels.
+1. Extract config
+Device</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.drawRef">
+<code class="descclassname">PTF.lib.draw.</code><code class="descname">drawRef</code><span class="sig-paren">(</span><em>blockConfig</em>, <em>trialData</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>DRAWREF Draws the stable reference value on screen.
+1. Obtain values</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.drawResponsePrompt">
+<code class="descclassname">PTF.lib.draw.</code><code class="descname">drawResponsePrompt</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawResponsePrompt" title="Permalink to this definition">¶</a></dt>
+<dd><p>DRAWRESPONSEPROMPT Draws the response prompt symbol (by default, green oval).</p>
+<p>FIXME: Nigh-duplicate code with drawITI. Factor out the general &quot;draw an
+object in the center when provided the center and
+blockConfig.draw.(object)&quot;.</p>
+</dd></dl>
+
+<span class="target" id="module-PTF.lib.draw.helpers"></span><dl class="function">
+<dt id="PTF.lib.draw.helpers.centerRectDims">
+<code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">centerRectDims</code><span class="sig-paren">(</span><em>center</em>, <em>rectSize</em>, <em>pxOffCenter</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.centerRectDims" title="Permalink to this definition">¶</a></dt>
+<dd><p>CENTERRECTDIMS A helper function to calculate what the top-left pixel of
+an object is such that the object will appear centered. Accepts <cite>center</cite>
+that defines [x y] of the screen's center, <cite>rectSize</cite> that defines the
+object's dimensions, and (non-obligatory) <cite>pxOffCenter</cite>, which shifts
+the resulting position.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.helpers.dollarFormatter">
+<code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">dollarFormatter</code><span class="sig-paren">(</span><em>value</em>, <em>windowPtr</em>, <em>fontSize</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.dollarFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>DOLLARFORMATTER When given a numerical value, outputs its correct format
+in dollars and, if provided <cite>windowPtr</cite>, its width and height on screen.
+(If <cite>fontSize</cite> is not provided, the width and height will be estimated
+with currently set font size.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.helpers.getTextDims">
+<code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">getTextDims</code><span class="sig-paren">(</span><em>windowPtr</em>, <em>txt</em>, <em>fontSize</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.getTextDims" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>GETTEXTDIMS For window at <cite>windowPtr</cite>, get dimensions of <cite>txt</cite>. This will</dt>
+<dd>be at current font size or, if provided, at <cite>fontSize</cite>.</dd>
+</dl>
+<p>Adapted from Ruonan Jia's initial implementation in the MDM task.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.helpers.imgLookup">
+<code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">imgLookup</code><span class="sig-paren">(</span><em>keyIdx</em>, <em>fnameLookupTbl</em>, <em>textureLookupTbl</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.imgLookup" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>IMGLOOKUP Looks up what texture <cite>keyIdx</cite> corresponds to, taking it for an</dt>
+<dd>simple index in <cite>fnameLookupTbl</cite>. (The middle step is looking up what
+texture ID a picture identified by its path corresponds to.)</dd>
+</dl>
+<p>Assumes a <cite>fnameLookupTbl</cite> has a list of image filenames. If
+<cite>textureLookupTbl</cite> is provided, it is assumed it was created by
+<cite>loadTexturesFromConfig</cite> and is up-to-date. If not, an error is thrown, as
+<cite>imgLookup</cite> does not have a pointer to the currently open Screen it would
+need to create the texture on its own.</p>
+<p>NOTE: There is no enforcement of image paths being supplied as absolute
+paths.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.helpers.orderLotto">
+<code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">orderLotto</code><span class="sig-paren">(</span><em>trialData</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.orderLotto" title="Permalink to this definition">¶</a></dt>
+<dd><p>ORDERLOTTO Given the win color for the trial, it returns two sorted matrices
+with the probability (and, respectively, payoff) values sorted such that
+the first will appear on top and the second on the bottom of the drawLotto
+display.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.draw.helpers.textLookup">
+<code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">textLookup</code><span class="sig-paren">(</span><em>keyIdx</em>, <em>lookupTable</em>, <em>windowPtr</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.textLookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>TEXTLOOKUP Given an index in <cite>keyIdx</cite>, returns the (presumed character array)
+value corresponding to that index in <cite>lookupTable</cite> cell array. If provided
+<cite>windowPtr</cite>, also returns the dimensions that the text would take up under
+the current config in that PTB window.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PTF.lib.action">
+<span id="action-methods"></span><span id="action-methods"></span><h2>Action methods<a class="headerlink" href="#module-PTF.lib.action" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.lib.action.action_collectResponse">
+<code class="descclassname">PTF.lib.action.</code><code class="descname">action_collectResponse</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.action.action_collectResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>For duration specified in phaseConfig.duration, wait for a keypress specified
+in phaseConfig.responseKeys</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.action.action_display">
+<code class="descclassname">PTF.lib.action.</code><code class="descname">action_display</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.action.action_display" title="Permalink to this definition">¶</a></dt>
+<dd><p>For duration specified in phaseConfig.duration, maintain the phase</p>
+</dd></dl>
+
+</div>
+<div class="section" id="setup-methods">
+<span id="setup-methods"></span><h2>Setup methods<a class="headerlink" href="#setup-methods" title="Permalink to this headline">¶</a></h2>
+<p>Setup functions prepare the task to be displayed, be it through generating its varieties or through establishing the necessary PsychToolbox infrastructure.</p>
+<span class="target" id="module-PTF.lib.setup"></span><dl class="function">
+<dt id="PTF.lib.setup.addGeneratedBlock">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">addGeneratedBlock</code><span class="sig-paren">(</span><em>DataObject</em>, <em>blockTrials</em>, <em>config</em>, <em>conditions</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.addGeneratedBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Properly stores block components (trials and config) in a DataObject.
+1. Initialize and check arguments</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.setup.generateBlocks">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">generateBlocks</code><span class="sig-paren">(</span><em>blockConfig</em>, <em>catchTrial</em>, <em>catchIdx</em>, <em>adHocTrials</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.generateBlocks" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>GENERATEBLOCKS Returns a cell array of trial tables generated with</dt>
+<dd><cite>generateTrials</cite> from blockConfig.trial.generate, separated into blocks with
+a fixed number of rows (defined in blockConfig.task.blockLength). If
+given further arguments, it will also add to the final trial table the
+table <cite>catchTrial</cite> at per-block indices passed in <cite>catchIdx</cite>. If
+<cite>adHocTrials</cite> are provided, they are mixed in with the generated trials
+prior to randomizationand separation into blocks.</dd>
+</dl>
+<p>NOTE: catchTrial must include all the columns that <cite>generateTrials</cite> will
+create based on <cite>blockConfig.trial.generate</cite>. An easy way to find what these
+are is to run this function without catchTrial or catchIdx.</p>
+<dl class="docutils">
+<dt>If catchIdx is not provided, the catch trial will be placed randomly</dt>
+<dd>within each block.</dd>
+</dl>
+<p>The function also adds ITIs to be generated per trial. NOTE: If ITIs matter
+(e.g. for fMRI tasks), make sure that you've provided as many of them as
+necessary for <em>non-catch</em> trials. (Catch trials must have their own ITI
+defined in the column <cite>ITIs</cite>.)
+Step 1: Generate all trials for this kind of a block &amp; randomize</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.setup.generateTrials">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">generateTrials</code><span class="sig-paren">(</span><em>levelConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.generateTrials" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>GENERATETRIALS Generates a table of risk&amp;ambiguity trials that contain all</dt>
+<dd>combinations of <cite>levelConfig</cite> struct subfields.</dd>
+</dl>
+<p>NOTE: The generator is specific to the risk/ambiguity task. It expects that %
+the struct will contain <cite>stakes</cite> and at least one of (<cite>probs</cite>, <cite>ambigs</cite>)
+fields.  % It will also combine them in a particular way (specifically,
+assuming that all ambiguous % trials are coupled with .5 probability, and all
+probability trials have at % least one appearance with zero ambiguity). It
+distributes all other subfields % it finds randomly across thus generated
+trials.</p>
+<p>If you wish to omit any ambiguous trials but do not wish to delete the struct
+field, you can also pass an empty matrix to achieve the same result.</p>
+<p>Generally speaking: if your task only differs slightly from the monetary R&amp;A
+task, you should be able to use this script with minimum alteration. If your
+task is substantially different, you might have to roll your own.
+1. Generate the basics -- assuming field names contain well-defined content</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.setup.loadPTB">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">loadPTB</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.loadPTB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start PsychToolBox; return config struct with display info.</p>
+<dl class="docutils">
+<dt>Most importantly, the display info is in config.device; the essential one</dt>
+<dd>is s.device.windowPtr.</dd>
+</dl>
+<p>Set random seed -- if already set, continue using that one</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.setup.loadTexturesFromConfig">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">loadTexturesFromConfig</code><span class="sig-paren">(</span><em>configStruct</em>, <em>textureMap</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.loadTexturesFromConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>LOADTEXTURESFROMCONFIG Given a <cite>configStruct</cite>, it will extract file paths
+named <cite>.img</cite> and return a container mapping valid image filenames to
+a struct containing PTB's <cite>.textureId</cite> and their dimentsions in <cite>.dims</cite>.
+If provided with a previously generated <cite>textureMap</cite>, it will avoid
+redundant loading of previously loaded images.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.setup.preparePractice">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">preparePractice</code><span class="sig-paren">(</span><em>DataObject</em>, <em>selectBlockIdx</em>, <em>numTrialsFromBlock</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.preparePractice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trims DataObject.blocks to selected indices; selects numTrialsFromBlock at random.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.setup.setupPracticeConfig">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">setupPracticeConfig</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.setupPracticeConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable saving and randomize reference side assignment for practice runs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.setup.unloadPTB">
+<code class="descclassname">PTF.lib.setup.</code><code class="descname">unloadPTB</code><span class="sig-paren">(</span><em>varargin</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.unloadPTB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes windows &amp; textures from the passed config(s). Resets Screen config.</p>
+<p>closeScreen accepts arbitrarily many config structs.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PTF.lib.export">
+<span id="export-methods"></span><span id="export-methods"></span><h2>Export methods<a class="headerlink" href="#module-PTF.lib.export" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.lib.export.exportSubject">
+<code class="descclassname">PTF.lib.export.</code><code class="descname">exportSubject</code><span class="sig-paren">(</span><em>DataObject</em>, <em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.export.exportSubject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>ExportSubject Given a DataObject, it unites all records in one table.</dt>
+<dd>If given fname, it will also write the table into a file.</dd>
+</dl>
+<p>The file format has to be any that <cite>writetable</cite> can handle; consult its docs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.export.exportTaskData">
+<code class="descclassname">PTF.lib.export.</code><code class="descname">exportTaskData</code><span class="sig-paren">(</span><em>taskName</em>, <em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.export.exportTaskData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export Exports all subject data in tasks/<cite>taskName</cite>/data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PTF.lib.helpers">
+<span id="various-helper-methods"></span><span id="various-helper-methods"></span><h2>Various helper methods<a class="headerlink" href="#module-PTF.lib.helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.lib.helpers.configHasLookups">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">configHasLookups</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.configHasLookups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if lookups exist and are non-empty.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.cutArrayToSize">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">cutArrayToSize</code><span class="sig-paren">(</span><em>arr</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.cutArrayToSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>CUTARRAYTOSIZE Cuts, or extends, arr so that it has length n.
+Fix: If this is a character array, make it into a cell array to ensure</p>
+<blockquote>
+<div>expected behavior.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.experimentSummary">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">experimentSummary</code><span class="sig-paren">(</span><em>Data</em>, <em>blockId</em>, <em>trialId</em>, <em>bagMap</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.experimentSummary" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>EXPERIMENTSUMMARY Selects block and trial from Data.blocks.recorded and</dt>
+<dd>returns information necessary for lottery realization in a per-trial
+struct. If <cite>bagMap</cite> is supplied, it will use it instead of the default
+lookup map. NOTE: This is different from the original behavior of
+<cite>experimentSummary</cite>, which returned a human-readable struct array that
+encompassed <em>all</em> trials.</dd>
+</dl>
+<p>NOTE: You might want to load the bagMap via <cite>readtable</cite> from a CSV/XLS file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.getBlocksForPractice">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">getBlocksForPractice</code><span class="sig-paren">(</span><em>practiceBlocks</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getBlocksForPractice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assumes that <cite>preparePractice</cite> has been run and re-numbers the block span</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.getBlocksForSession">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">getBlocksForSession</code><span class="sig-paren">(</span><em>DataObject</em>, <em>blocksPerSession</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getBlocksForSession" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the indices for the blocks to begin and end the current session.</p>
+<p>NOTE: If all blocks have been done already, <cite>lastIdx</cite> will be an empty
+vector. This will prevent any loop of the form k:lastIdx from running, but
+you should make sure you don't rely on the numericity of lastIdx in other
+ways.
+Extract relevant values from DataObject</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.getReferenceSideAndValue">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">getReferenceSideAndValue</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getReferenceSideAndValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if there is any specific reference side &amp; value defined for this trial,
+or for this block. If reference side is unavailable, generate it at random.
+Approach: Start from general options and overwrite with more specific ones
+a. Check in blockConfig</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.loadOrCreate">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">loadOrCreate</code><span class="sig-paren">(</span><em>subjectId</em>, <em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.loadOrCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>LOADORCREATE Load a subject data file. If it does not exist, create it.
+(Currently assumes that subject data is stored in a struct called Data,
+and that the folders in the path to <cite>fname</cite> all exist.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.prependPath">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">prependPath</code><span class="sig-paren">(</span><em>filenames</em>, <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.prependPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>PREPENDPATH When given a cell array <cite>filenames</cite>, returns that cell array
+with <cite>path</cite> added before each element of the cell array.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.lib.helpers.saveData">
+<code class="descclassname">PTF.lib.helpers.</code><code class="descname">saveData</code><span class="sig-paren">(</span><em>Data</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.saveData" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>SAVEDATA Saves a subject data file to <cite>Data.filename</cite>. Ensures that it</dt>
+<dd>stores the struct Data correctly, such that <cite>loadOrCreate</cite> can load it
+properly.</dd>
+</dl>
+<p>(WARNING: The function assumes that the trial-handling functions haven't
+overwritten previous records in Data, and as such, overwrites the file
+without warning.)</p>
+<dl class="docutils">
+<dt>TODO: Determine what a file that's being overwritten with different info</dt>
+<dd>would look like, and test for that</dd>
+</dl>
+<p>Assume that if folder was provided, Data.filename is just filename and not path</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="tasks.html" class="btn btn-neutral" title="Callable tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, SP.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.11',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

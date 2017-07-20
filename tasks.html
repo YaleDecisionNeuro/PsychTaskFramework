@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Callable tasks &mdash; PTF 1.11 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PTF 1.11 documentation" href="index.html"/>
+        <link rel="next" title="Standard library reference" href="library.html"/>
+        <link rel="prev" title="PsychTaskFramework documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PTF
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Callable tasks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#monetary-risk-ambiguity-ra">Monetary risk &amp; ambiguity (RA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#medical-decision-making-task-mdm">Medical decision-making task (MDM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#self-other-decision-making-task-sodm">Self/other decision-making task (SODM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uniform-vertical-decision-making-task-uvra">Uniform vertical decision-making task (UVRA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#high-low-fat-food-decision-making-task-hlff">High-/low-fat food decision-making task (HLFF)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">Standard library reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PTF</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Callable tasks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tasks.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="callable-tasks">
+<span id="callable-tasks"></span><h1>Callable tasks<a class="headerlink" href="#callable-tasks" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="monetary-risk-ambiguity-ra">
+<span id="monetary-risk-ambiguity-ra"></span><h2>Monetary risk &amp; ambiguity (RA)<a class="headerlink" href="#monetary-risk-ambiguity-ra" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.RA">
+<code class="descclassname">PTF.</code><code class="descname">RA</code><span class="sig-paren">(</span><em>subjectId</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.RA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main task script for the monetary risk and ambiguity task in gains and losses</p>
+<p>Loads config and DataObject, generates and executes requisite blocks, and
+records data for the subject whose <cite>subjectId</cite> is passed as an argument.</p>
+<p>If <cite>subjectId</cite> is not given, the task runs a shorter practice version of
+itself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subjectId</strong> (<em>int, optional</em>) -- A participant ID</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <cite>DataObject</cite> with a record of the participant's
+choices.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">DataObject struct</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-PTF.tasks.RA"></span><dl class="function">
+<dt id="PTF.tasks.RA.RA_blockDefaults">
+<code class="descclassname">PTF.tasks.RA.</code><code class="descname">RA_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.RA.RA_blockDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>CONFIG_RA Return general block config for the monetary risk &amp; ambiguity</dt>
+<dd>task by modifying the default ones from <cite>config</cite>.</dd>
+</dl>
+<p>Only small modifications are necessary, as <cite>config</cite> caters to this paradigm
+Load defaults</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.RA.RA_lossConfig">
+<code class="descclassname">PTF.tasks.RA.</code><code class="descname">RA_lossConfig</code><span class="sig-paren">(</span><em>gains_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.RA.RA_lossConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>RA_LOSS_CONFIG Returns loss block config for the monetary R&amp;A task by
+modifying the ones created for the gains block.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="medical-decision-making-task-mdm">
+<span id="medical-decision-making-task-mdm"></span><h2>Medical decision-making task (MDM)<a class="headerlink" href="#medical-decision-making-task-mdm" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.MDM">
+<code class="descclassname">PTF.</code><code class="descname">MDM</code><span class="sig-paren">(</span><em>subjectId</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.MDM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main task script for the medical &amp; monetary decision-making task (MDM).</p>
+<p>Loads config and DataObject, generates and executes requisite blocks, and
+records data for the subject whose <cite>subjectId</cite> is passed as an argument.</p>
+<p>If <cite>subjectId</cite> is not given, the task runs a shorter practice version of
+itself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subjectId</strong> (<em>int, optional</em>) -- A participant ID</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <cite>DataObject</cite> with a record of the participant's
+choices.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">DataObject struct</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Like RA, MDM utilizes the risk-and-ambiguity framework; unlike RA, it
+displays symbols for its payoffs. (Historically, the task scripts developed
+together.)</p>
+</div>
+</dd></dl>
+
+<span class="target" id="module-PTF.tasks.MDM"></span><dl class="function">
+<dt id="PTF.tasks.MDM.MDM_blockDefaults">
+<code class="descclassname">PTF.tasks.MDM.</code><code class="descname">MDM_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.MDM.MDM_blockDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>MDM_CONFIG Return general block config for the medical decision-making</dt>
+<dd>task by modifying the default ones from <cite>config</cite>.</dd>
+</dl>
+<p>Load defaults</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.MDM.MDM_medicalConfig">
+<code class="descclassname">PTF.tasks.MDM.</code><code class="descname">MDM_medicalConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.MDM.MDM_medicalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>MDM_CONFIG Return config specific to the medical portion of MDM by</dt>
+<dd>modifying the general MDM_blockDefaults pass as argument.</dd>
+</dl>
+<p>Load defaults</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.MDM.MDM_monetaryConfig">
+<code class="descclassname">PTF.tasks.MDM.</code><code class="descname">MDM_monetaryConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.MDM.MDM_monetaryConfig" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>MDM_CONFIG Return config specific to the monetary portion of MDM by</dt>
+<dd>modifying the general MDM_blockDefaults pass as argument.</dd>
+</dl>
+<p>Load defaults</p>
+</dd></dl>
+
+</div>
+<div class="section" id="self-other-decision-making-task-sodm">
+<span id="self-other-decision-making-task-sodm"></span><h2>Self/other decision-making task (SODM)<a class="headerlink" href="#self-other-decision-making-task-sodm" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.SODM">
+<code class="descclassname">PTF.</code><code class="descname">SODM</code><span class="sig-paren">(</span><em>subjectId</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.SODM" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>SODM Runs a self-other monetary and medical decision-making task and records</dt>
+<dd>its results for the subject whose subject number is passed in. Modeled
+on (and largely copy-pasted from) RA.m, to test out image implementation
+(#5).</dd>
+</dl>
+<p>Add subfolders we'll be using to path</p>
+</dd></dl>
+
+<span class="target" id="module-PTF.tasks.SODM"></span><dl class="function">
+<dt id="PTF.tasks.SODM.SODM_blockDefaults">
+<code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_blockDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>SODM_CONFIG Return general block config for the medical decision-making</dt>
+<dd>task by modifying the default ones from <cite>config</cite>.</dd>
+</dl>
+<p>Load defaults</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.SODM.SODM_drawCondition">
+<code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_drawCondition</code><span class="sig-paren">(</span><em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_drawCondition" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>SODM_drawCondition Draw the designation of a self-rewarding vs.</dt>
+<dd>other-rewarding task. This can either be set in
+blockConfig.task.fnHandles.bgrDrawCallbackFn, or called directly from a draw
+function.</dd>
+</dl>
+<p>FIXME: Extract position into config</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.SODM.SODM_medicalConfig">
+<code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_medicalConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_medicalConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>SODM_CONFIG_MEDICAL Configure medical blocks of the self/other task</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.SODM.SODM_monetaryConfig">
+<code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_monetaryConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_monetaryConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>SODM_CONFIG_MONETARY Configure monetary blocks of the self/other task</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.SODM.SODM_preBlock">
+<code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_preBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_preBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert beneficiary condition into blockName, then call preBlock with it</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.SODM.SODM_showChoice">
+<code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_showChoice</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_showChoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>SODM_SHOWCHOICE Executes the SODM trial phase of showing the task choice to
+the subject and collecting their response. Choice values are derived
+from <cite>trialData</cite> and, if need be, <cite>blockConfig</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="uniform-vertical-decision-making-task-uvra">
+<span id="uniform-vertical-decision-making-task-uvra"></span><h2>Uniform vertical decision-making task (UVRA)<a class="headerlink" href="#uniform-vertical-decision-making-task-uvra" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.UVRA">
+<code class="descclassname">PTF.</code><code class="descname">UVRA</code><span class="sig-paren">(</span><em>subjectId</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.UVRA" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>UVRA Task script for a monetary R&amp;A task with relaxed test-taking conditions.</dt>
+<dd>(&quot;U&quot; stands for &quot;unlimited&quot;, &quot;V&quot; for vertical layout of the choices.)</dd>
+<dt>Like all main tasks scripts, this function loads config, executes requisite</dt>
+<dd>blocks, and records data for the subject whose ID is passed as an argument.</dd>
+</dl>
+<p>Add subfolders we'll be using to path</p>
+</dd></dl>
+
+<span class="target" id="module-PTF.tasks.UVRA"></span><dl class="function">
+<dt id="PTF.tasks.UVRA.UVRA_feedback">
+<code class="descclassname">PTF.tasks.UVRA.</code><code class="descname">UVRA_feedback</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.UVRA.UVRA_feedback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>UVRA_FEEDBACK Based on the value in <cite>trialData.choice</cite>, it draws the feedback</dt>
+<dd>that confirms to the player which option they chose (or whether they chose
+at all) and displays it for <cite>blockConfig.trial.legacyPhases.feedback.duration</cite>. Can be
+re-used for tasks that offer two options in a choice.</dd>
+</dl>
+<p>UVRA_feedback differs from phase_feedback by drawing the feedback vertically.</p>
+<dl class="docutils">
+<dt>TODO: Modularize drawFeedback so that it can draw things vertically in order</dt>
+<dd>to render this function unnecessary</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.UVRA.UVRA_showChoice">
+<code class="descclassname">PTF.tasks.UVRA.</code><code class="descname">UVRA_showChoice</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.UVRA.UVRA_showChoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>UVRA_SHOWCHOICE Executes the monetary R&amp;A trial stage of showing the task choice
+to the subject. Choice values are derived from <cite>trialData</cite> and,
+if need be, <cite>blockConfig</cite>. They are displayed vertically and expect a
+subject response.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="high-low-fat-food-decision-making-task-hlff">
+<span id="high-low-fat-food-decision-making-task-hlff"></span><h2>High-/low-fat food decision-making task (HLFF)<a class="headerlink" href="#high-low-fat-food-decision-making-task-hlff" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PTF.HLFF">
+<code class="descclassname">PTF.</code><code class="descname">HLFF</code><span class="sig-paren">(</span><em>subjectId</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.HLFF" title="Permalink to this definition">¶</a></dt>
+<dd><p>HLFF Runs the high-/low-fat food task designed by Sarah Healy.
+1. Add subfolders we'll be using to path</p>
+</dd></dl>
+
+<span class="target" id="module-PTF.tasks.HLFF"></span><dl class="function">
+<dt id="PTF.tasks.HLFF.HLFF_HFConfig">
+<code class="descclassname">PTF.tasks.HLFF.</code><code class="descname">HLFF_HFConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.HLFF.HLFF_HFConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>HLFF_HFConfig Configure high-fat blocks of high-/low-fat food task</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.HLFF.HLFF_LFConfig">
+<code class="descclassname">PTF.tasks.HLFF.</code><code class="descname">HLFF_LFConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.HLFF.HLFF_LFConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>HLFF_LFConfig Configure low-fat blocks of high-/low-fat food task</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.HLFF.HLFF_blockDefaults">
+<code class="descclassname">PTF.tasks.HLFF.</code><code class="descname">HLFF_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.HLFF.HLFF_blockDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>HLFF_CONFIG Return general block config for the high-/low-fat food task</dt>
+<dd>designed by Sarah Healy by modifying the default ones from <cite>config</cite>.</dd>
+</dl>
+<p>Load defaults</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PTF.tasks.HLFF.HLFF_monetaryConfig">
+<code class="descclassname">PTF.tasks.HLFF.</code><code class="descname">HLFF_monetaryConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.HLFF.HLFF_monetaryConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>HLFF_monetaryConfig Configure monetary blocks of high-/low-fat food task</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="library.html" class="btn btn-neutral float-right" title="Standard library reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="PsychTaskFramework documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, SP.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.11',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
