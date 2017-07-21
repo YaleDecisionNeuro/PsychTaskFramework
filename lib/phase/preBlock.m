@@ -1,6 +1,14 @@
 function [ Data, blockConfig ] = preBlock(Data, blockConfig)
-  % PREBLOCK Display "Block N: (BLOCKNAME)" and wait for press of any of
+  % Display "Block N: (BLOCKNAME)" and wait for press of any of
   %   blockConfig.device.breakKeys.
+  %
+  % Args:
+  %   Data: Information collected (in this case on blocks)
+  %   blockConfig: The block settings
+  %
+  % Returns:
+  %   Data: Information collected (in this case on blocks)
+  %   blockConfig: The block settings.
 
   % Check if there are any recorded blocks yet
   if isfield(Data, 'blocks') && isfield(Data, 'numFinishedBlocks')

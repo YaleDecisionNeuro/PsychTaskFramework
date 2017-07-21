@@ -1,5 +1,12 @@
 function [ phaseConfig ] = phaseConfig(name, varargin)
 % Prepares a uniform structure for the definition of a phase.
+%
+% Args:
+%   name: The phase name or ID
+%   Config1, Config2, ...: Any number of configuration objects
+% 
+% Returns:
+%   phaseConfig: The phase settings.
 
 defaultDuration = Inf;
 defaultPhaseScript = @phase_generic; % Good enough for run of the mill processing

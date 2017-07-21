@@ -1,7 +1,17 @@
 function [ trialData ] = phase_showChoice(trialData, blockConfig, phaseConfig)
-% PHASE_SHOWCHOICE Shows the choices defined in trialData and blockData to the
-%   subject. This includes a lottery and a reference. If available, executes
+% Shows the choices defined in trialData and blockData to the
+%   subject. 
+%
+% This includes a lottery and a reference. If available, executes
 %   action defined in phaseConfig.action; otherwise, waits for duration.
+%
+% Args:
+%   trialData: The participant data from a trial.
+%   blockConfig: The block settings
+%   phaseConfig: The phase settings
+%
+% Returns:
+%   trialData: The participant data from a trial.
 
 windowPtr = blockConfig.device.windowPtr;
 
@@ -36,6 +46,15 @@ end
 % Old behavior -- let the function automagically find the duration to have
 % Deprecated: remains for backwards compatibility
 function trialData = timeChoice(trialData, blockConfig)
+% Defines the time allotted for the participant to see the choices.
+%
+% Args:
+%   trialData: The participant data from a trial
+%   blockConfig: The block settings
+% 
+% Returns:
+%   trialData: The participant data from a trial
+
   % Extract to local variables now because struct field access costs time
   trialStart = trialData.choiceStartTime;
   trialDur = blockConfig.trial.legacyPhases.showChoice.duration;
