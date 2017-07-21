@@ -15,9 +15,9 @@ function [keyIsDown, responseTime, keyCode, deltaSecs] = waitForKey(keyName, sec
 %   - **deltaSecs**: The length of time it took for key to be pressed.
 %
 % NOTE: If you require precision, bear in mind that some time elapsed between
-% drawing your phase and calling this function. To that end, you should supply
-% `phaseConfig.duration - (GetSecs() - phaseStartTS)` rather than the mere
-% `phaseConfig.duration` as the `seconds` argument.
+%   drawing your phase and calling this function. To that end, you should supply
+%   `phaseConfig.duration - (GetSecs() - phaseStartTS)` rather than the mere
+%   `phaseConfig.duration` as the `seconds` argument.
 %
 % FIXME: Use KbQueueCheck instead of KbCheck, as per Harvard CBS FAQ
 % FIXME: Return the pressed key(s) instead of keyCode

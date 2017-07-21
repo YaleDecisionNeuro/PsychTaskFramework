@@ -1,5 +1,9 @@
 function drawRef(blockConfig, trialData)
-% DRAWREF Draws the stable reference value on screen.
+% Draws the stable reference value on screen.
+%
+% Args:
+%   blockConfig: The block settings
+%   trialData: The participant data from a trial
 
 %% 1. Obtain values
 [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockConfig);

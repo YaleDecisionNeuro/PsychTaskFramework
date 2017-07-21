@@ -1,10 +1,13 @@
 function drawLotto(trialData, blockConfig)
-% DrawLotto Using an open PTB screen and other properties of blockConfig,
-%   draws a lottery with values specified in trialData in the center of
+% Draws a lottery with values specified in trialData in the center of
 %   the screen.
 %
-% If blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
-% the lottery by the specified amount of pixels.
+% Uses an open PTB screen and other properties of blockConfig. If blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
+%   the lottery by the specified amount of pixels
+%
+% Args:
+%   trialData: The participant data from a trial
+%   blockConfig: The block settings 
 
 %% 1. Extract config
 % Device
@@ -118,6 +121,11 @@ end
 %% Nested functions,
 % (as it's useful to separate the logic while accessing to prior computations)
 function drawPayoffImageAndLabel(payoffs)
+% Draw the lottery image with label and correct placement on screen.
+%
+% Args:
+%   payoffs: The possible outcomes of the lottery
+%
   % 1. Draw labels
   Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.stakes.fontSize);
   lookupTbl = blockConfig.runSetup.lookups.txt;
@@ -153,6 +161,11 @@ function drawPayoffImageAndLabel(payoffs)
 end
 
 function drawPayoffAmount(payoffs)
+% Draw monetary values of lottery based on location of lottery image.
+%
+% Args:
+%   payoffs: The possible outcomes of the lottery
+%
   % 1. Get text dimensions & string
   Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.stakes.fontSize);
   [ topPayoffString, topPayoffDims ] = dollarFormatter(payoffs(1), windowPtr);

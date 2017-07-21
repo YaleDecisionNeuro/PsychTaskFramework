@@ -1,12 +1,18 @@
 function drawBgr(blockConfig, callback)
-% DRAWBGR Draws default background and sets default drawing properties (e.g.
-%   fontName and fontSize). To draw task-specific things, you can supply a
-%   callback function that does them. (For instance, you can supply the
-%   task-relevant drawRef function.)
+% Draws default background and sets default drawing properties (e.g.
+%   fontName and fontSize). 
+%
+% To draw task-specific things, you can supply a
+%   callback function that does them. For instance, you can supply the
+%   task-relevant drawRef function.
+%
+% Args:
+%   blockConfig: The block settings
+%   callback: A retrieval of previous (default) information 
 %
 % NOTE: Unlike other draw functions, it only takes `blockConfig`, not
-% `trialData`, and does not allow access to or modification of `trialData`.
-% (FIXME?)
+%   `trialData`, and does not allow access to or modification of `trialData`.
+%   (FIXME?)
 
 if ~isfield(blockConfig.device, 'windowPtr')
   error('Device blockConfig contain no designated draw screen');

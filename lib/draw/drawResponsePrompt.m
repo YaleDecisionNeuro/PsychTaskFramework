@@ -1,5 +1,9 @@
 function drawResponsePrompt(trialData, blockConfig)
-% DRAWRESPONSEPROMPT Draws the response prompt symbol (by default, green oval).
+% Draws the response prompt symbol (by default, green oval).
+%
+% Args:
+%   trialData: The participant data from a trial
+%   blockConfig: The block settings
 %
 % FIXME: Nigh-duplicate code with drawITI. Factor out the general "draw an
 % object in the center when provided the center and

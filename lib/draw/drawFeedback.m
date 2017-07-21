@@ -1,5 +1,9 @@
 function drawFeedback(trialData, blockConfig)
-% DRAWFEEDBACK Draws the feedback according to trial data and config
+% Draws the feedback according to trial data and config.
+%
+% Args:
+%   trialData: The participant data from a trial
+%   blockConfig: The block settings
 %
 % TODO: Implement vertical switch
 
