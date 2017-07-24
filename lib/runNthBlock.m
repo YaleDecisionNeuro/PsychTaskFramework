@@ -1,12 +1,21 @@
 function Data = runNthBlock(Data, n)
-  % RunNthBlock runs Data.blocks{n}.trials using Data.blocks{n}.config and
-  % saves the collected results to Data.blocks{n}.data. See lib/configDefaults.m for
-  % the parameters that a block can have.
+  % Runs a specified block and saves that block to a specific location. 
+  %
+  % Runs Data.blocks{n}.trials using Data.blocks{n}.config and
+  %   saves the collected results to Data.blocks{n}.data. See lib/configDefaults.m for
+  %   the parameters that a block can have.
   %
   % If `Data.filename` does not exist, it will not know how to save the trial
-  % choices (and will issue a warning).
+  %   choices (and will issue a warning).
   %
   % (Replaces `runBlock`, which is now deprecated.)
+  %
+  % Args:
+  %   Data: Information collected from task trials
+  %   n: A numbered object (block)
+  %
+  % Returns:
+  %   Data: Information collected from task trials.
 
   %% 0. Validate the arguments
   if ~isstruct(Data) || ~isfield(Data, 'blocks') || ~iscell(Data.blocks)
@@ -67,8 +76,16 @@ end
 
 %% Helper functions
 function [ tbl ] = appendRow(row, tbl)
-% APPENDROW If `tbl` is defined, append `row` and return it; otherwise, just
+% If `tbl` is defined, add `row` and return it; otherwise, just
 %   make `row` the new contents of `tbl`.
+%
+% Args:
+%   row: A single line of a table
+%   tbl: A table composed of a row or rows
+%
+% Returns:
+%   tbl: A table composed of a row or rows.
+
   if isempty(tbl)
     tbl = row;
   else
@@ -77,9 +94,17 @@ function [ tbl ] = appendRow(row, tbl)
 end
 
 function [ DataObject ] = addTrial(DataObject, trialData)
-% Appends `trialData` to the latest incomplete block record in DataObject.
+% Adds `trialData` to the latest incomplete block record in DataObject.
 %
 % Assumes that prepForRecording already ran on the DataObject.
+%
+% Args:
+%   DataObject: An object containing information (on blocks)
+%   trialData: Information gathered from a trial
+%   blockConfig: The block settings
+%
+% Returns:
+%   DataObject: An object containing information (on blocks).
 
 % Get the index of the current block being recorded
 currentBlockIdx = DataObject.numFinishedBlocks + 1;
@@ -96,6 +121,13 @@ end
 
 function [ DataObject ] = finishBlock(DataObject)
 % Mark that the block is finished and shouldn't be resumed.
+%
+% Args: 
+%   DataObject: An object containing information (on blocks)
+%
+% Returns:
+%   DataObject: An object containing information (on blocks).
+
   blockIdx = DataObject.numFinishedBlocks + 1;
   DataObject.blocks{blockIdx}.finished = true;
   DataObject.numFinishedBlocks = blockIdx;
@@ -103,13 +135,27 @@ end
 
 function [ DataObject ] = prepForRecording(DataObject)
 % Ensure that DataObject has the fields it is expected to have.
+%
+% Args:
+%   DataObject: An object containing information (on blocks)
+%
+% Returns:
+%   DataObject: An object containing information (on blocks).
+
   if ~isfield(DataObject, 'numFinishedBlocks')
     DataObject.numFinishedBlocks = 0;
   end
 end
 
 function [ firstTrial ] = getFirstTrial(DataObject)
-% Determine the first trial to run if the block was previously interrupted
+% Determine the first trial to run if the block was previously interrupted.
+%
+% Args:
+%   DataObject: An object containing information (on blocks)
+%
+% Returns: 
+%   firstTrial: The trial to start with when beginning a block or continuing in a partially completed block. 
+
 numStartedBlocks = sum(cellfun(@(x) isfield(x, 'data'), DataObject.blocks));
 numFinishedBlocks = DataObject.numFinishedBlocks;
 

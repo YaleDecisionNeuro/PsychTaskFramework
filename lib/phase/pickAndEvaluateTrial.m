@@ -2,8 +2,18 @@ function [ outcomeKind, outcomeLevel ] = pickAndEvaluateTrial(DataObject, config
 % Picks a recorded trial at random, evaluates it, and displays the outcome.
 %
 % This can be run as a post-block callback. To do this, include
-% `blockConfig.task.fnHandles.postBlockFn = @pickAndEvaluateTrial` in your
-% configuration file.
+%   `blockConfig.task.fnHandles.postBlockFn = @pickAndEvaluateTrial` in your
+%   configuration file.
+%
+% Args:
+%   DataObject: An object containing programmed information
+%   config: A program setting (from trial to block to screen)
+%
+% Returns:
+%   2-element tuple containing
+%
+%   - **outcomeKind**: Type of outcome (reference, win, or loss)
+%   - **outcomeLevel**: Type of choice (reference or lottery)
 %
 % FIXME: This was written in a hurry, and should at some point be refactored.
 
@@ -90,7 +100,22 @@ end
 end
 
 function [ outcomeKind, outcomeLevel, outcomeColorIdx, trueLotteryProb, randomDraw ] = evaluateTrial(trial)
-% EvaluateTrial Given a trial row, evaluates it.
+% Given a trial row, evaluates it.
+%
+% Args:
+%   trial: A (repeated) type of test within each block
+%
+% Returns:
+%   5-element tuple containing
+%
+%   - **outcomeKind**: Type of outcome (reference, win, or loss).
+%   - **outcomeLevel**: Type of choice (reference or lottery).
+%   - **outcomeColorIdx**: An index of the chosen outcome color. 
+%   - **trueLotteryProb**: A probability of the lottery that takes into
+%     account ambiguity when present.
+%   - **randomDraw**: A random selection of a lottery outcome as a win or
+%     loss based on the trial probability.
+
 if trial.choseLottery == 0
   outcomeKind = 'Reference';
   outcomeLevel = trial.reference;
