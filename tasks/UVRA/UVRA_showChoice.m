@@ -1,8 +1,18 @@
 function [ trialData ] = UVRA_showChoice(trialData, blockConfig, phaseConfig)
-% UVRA_SHOWCHOICE Executes the monetary R&A trial stage of showing the task choice
-%   to the subject. Choice values are derived from `trialData` and,
+% Executes the monetary R&A trial stage of showing the task choice
+%   to the subject. 
+%
+% Choice values are derived from `trialData` and,
 %   if need be, `blockConfig`. They are displayed vertically and expect a
 %   subject response.
+%
+% Args:
+%   trialData: The information collected from trials
+%   blockConfig: The block settings
+%   phaseConfig: The phase settings
+%
+% Returns:
+%   trialData: The information collected from trials.
 
 windowPtr = blockConfig.device.windowPtr;
 
@@ -43,6 +53,14 @@ end
 % Local function with timing responsibility
 function trialData = timeAndRecordTask(trialData, blockConfig)
   %% Record choice & assign feedback color
+  %
+  % Args:
+  %   trialData: The information collected by trials
+  %   blockConfig: The block settings
+  %
+  % Returns:
+  %   trialData: The information collected by trials.
+  
   [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
     waitForKey({'UpArrow', 'DownArrow'}, blockConfig.trial.legacyPhases.showChoice.duration);
   if keyisdown && keycode(KbName('UpArrow'))

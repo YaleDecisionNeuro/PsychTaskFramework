@@ -1,10 +1,20 @@
 function [ trialData ] = UVRA_feedback(trialData, blockConfig, callback)
-% UVRA_FEEDBACK Based on the value in `trialData.choice`, it draws the feedback
+% Draws feedback of choice for a specified time. 
+%
+% Based on the value in `trialData.choice`, it draws the feedback
 %   that confirms to the player which option they chose (or whether they chose
 %   at all) and displays it for `blockConfig.trial.legacyPhases.feedback.duration`. Can be
 %   re-used for tasks that offer two options in a choice.
 %
 % UVRA_feedback differs from phase_feedback by drawing the feedback vertically.
+%
+% Args:
+%   trialData: The information collected from trials
+%   blockConfig: The block settings
+%   callback: A retrieval of previous information
+%
+% Returns:
+%   trialData: The information collected from trials.
 %
 % TODO: Modularize drawFeedback so that it can draw things vertically in order
 %   to render this function unnecessary
@@ -56,6 +66,15 @@ end
 
 % Local function with timing responsibility
 function trialData = timeFeedback(trialData, blockConfig)
+% Determines the length of time to display feedback.
+%
+% Args:
+%   trialData: The information collected from trials
+%   blockConfig: The block settings
+%
+% Returns:
+%   trialData: The information collected from trials.
+
   elapsedTime = etime(datevec(now), trialData.feedbackStartTime);
   while elapsedTime < blockConfig.trial.legacyPhases.feedback.duration
     elapsedTime = etime(datevec(now), trialData.feedbackStartTime);

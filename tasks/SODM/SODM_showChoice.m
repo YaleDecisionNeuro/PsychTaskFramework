@@ -1,7 +1,16 @@
 function [ trialData ] = SODM_showChoice(trialData, blockConfig, phaseConfig)
-% SODM_SHOWCHOICE Executes the SODM trial phase of showing the task choice to
-%   the subject and collecting their response. Choice values are derived
-%   from `trialData` and, if need be, `blockConfig`.
+% Executes the SODM trial phase of showing the task choice to
+%   the subject and collecting their response. 
+%
+% Choice values are derived from `trialData` and, if need be, `blockConfig`.
+%
+% Args:
+%   trialData: The information collected from trials
+%   blockConfig: The block settings
+%   phaseConfig: The phase settings
+%
+% Returns:
+%   trialData: The information collected from trials.
 
 windowPtr = blockConfig.device.windowPtr;
 
@@ -36,6 +45,14 @@ end
 % Local function with timing responsibility
 function trialData = timeAndRecordTask(trialData, blockConfig)
   %% Record choice & assign feedback color
+  %
+  % Args:
+  %   trialData: The information collected from trials
+  %   blockConfig: The block settings
+  %
+  % Returns:
+  %   trialData: The information collected from trials.
+  
   [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
     waitForKey({'1!', '2@'}, blockConfig.trial.legacyPhases.showChoice.duration);
   if keyisdown && keycode(KbName('1!'))

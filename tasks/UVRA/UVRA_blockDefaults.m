@@ -1,4 +1,11 @@
 function s = UVRA_blockDefaults()
+% Return general block config for the UVRA task by modifying the default 
+%   ones from `config`.
+%
+% Returns:
+%   s: The structure architecture for defining the UVRA task and all
+%   default settings.
+
   s = configDefaults(); % Get defaults from lib/configDefaults
 
   s.task.taskPath = fullfile('tasks', 'UVRA');

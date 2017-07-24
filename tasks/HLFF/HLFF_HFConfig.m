@@ -1,5 +1,13 @@
 function c = HLFF_HFConfig(initial_config)
-% HLFF_HFConfig Configure high-fat blocks of high-/low-fat food task
+% Configure high-fat blocks of high-/low-fat food task.
+%
+% Args:
+%   initial_config: The initial task settings (HF block)
+%
+% Returns:
+%   c: The initial or default structure architecture for defining the task
+%     and its settings (HF block).
+
   if exist('initial_config', 'var')
     c = initial_config;
   else

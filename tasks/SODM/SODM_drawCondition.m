@@ -1,8 +1,12 @@
 function SODM_drawCondition(blockConfig)
-% SODM_drawCondition Draw the designation of a self-rewarding vs.
-%   other-rewarding task. This can either be set in
+% Draw the designation of a self-rewarding vs. other-rewarding task. 
+% 
+% This can either be set in
 %   blockConfig.task.fnHandles.bgrDrawCallbackFn, or called directly from a draw
 %   function.
+%
+% Args:
+%   blockConfig: The block settings
 
 % FIXME: Extract position into config
 xCoord = blockConfig.draw.condition.position(1);

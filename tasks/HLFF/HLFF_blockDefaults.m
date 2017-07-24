@@ -1,6 +1,10 @@
 function s = HLFF_blockDefaults()
-% HLFF_CONFIG Return general block config for the high-/low-fat food task
+% Return general block config for the high-/low-fat food task
 %   designed by Sarah Healy by modifying the default ones from `config`.
+%
+% Returns:
+%   s: The structure architecture for defining the HLFF task and all default
+%     settings.
 
 % Load defaults
 s = configDefaults();

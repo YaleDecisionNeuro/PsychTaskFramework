@@ -1,6 +1,13 @@
 function c = MDM_medicalConfig(initial_config)
-  % MDM_CONFIG Return config specific to the medical portion of MDM by
+  % Return config specific to the medical portion of MDM by
   %   modifying the general MDM_blockDefaults pass as argument.
+  %
+  % Args:
+  %   initial_config: The initial task settings (medical block)
+  %
+  % Returns:
+  %   c: The initial or default structure architecture for defining the task
+%     and its settings (medical block).
 
   % Load defaults
   c = initial_config;

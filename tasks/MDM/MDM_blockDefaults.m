@@ -1,6 +1,10 @@
 function s = MDM_blockDefaults()
-% MDM_CONFIG Return general block config for the medical decision-making
+% Return general block config for the medical decision-making
 %   task by modifying the default ones from `config`.
+%
+% Returns:
+%   s: The structure architecture for defining the MDM task and all default
+%     settings.
 
 % Load defaults
 s = configDefaults();

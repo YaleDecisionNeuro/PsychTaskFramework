@@ -1,5 +1,13 @@
 function c = SODM_medicalConfig(initial_config)
-% SODM_CONFIG_MEDICAL Configure medical blocks of the self/other task
+% Configure medical blocks of the self/other task.
+%
+% Args:
+%   initial_config: The initial task settings (medical block)
+%
+% Returns:
+%   c: The initial or default structure architecture for defining the task
+%     and its settings (medical block).
+
 if exist('initial_config', 'var')
   c = initial_config;
 else
