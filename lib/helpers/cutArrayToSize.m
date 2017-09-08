@@ -1,6 +1,9 @@
 function arr = cutArrayToSize(arr, n)
 % Cuts, or extends, arr so that it has length n.
 %
+% If `n` is not a direct multiple of the length of `arr`, the first n %%
+% length(arr) elements are used.
+%
 % Args:
 %   arr: A cell array
 %   n: Length of desired array
@@ -8,8 +11,10 @@ function arr = cutArrayToSize(arr, n)
 % Return:
 %   arr: A cell array with desired length
 %
-% Fix: If this is a character array, make it into a cell array to ensure
+% Todo: 
+%   If this is a character array, make it into a cell array to ensure
 %   expected behavior.
+
 if ischar(arr)
   arr = {arr};
 end

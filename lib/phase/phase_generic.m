@@ -7,7 +7,7 @@ function [ trialData ] = phase_generic(trialData, blockConfig, phaseConfig)
 %   phaseConfig: The phase settings
 %
 % Returns:
-%   trialData: The participant data from a trial.
+%   trialData: The (possibly updated) participant data from a trial.
 
 windowPtr = blockConfig.device.windowPtr;
 

@@ -4,28 +4,35 @@ function s = configDefaults(changes)
 % Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.
 %
 % The defaults used here err on the side of catering to LevyLab's R&A paradigm.
-%   If you're not using it, nuke s.draw from high orbit.
+% If you're not using it, nuke s.draw from high orbit.
 %
 % Although the resulting structure contains task-wide config, it is typically
-%   modified with block-specific config right before being passed to `runBlock`
-%   or equivalent. For example, RA_blockDefaults(configDefaults) would modify
-%   these defaults to serve all RA block kinds. RA_lossConfig would then modify
-%   the result of *that* call for loss-domain blocks, like so:
+% modified with block-specific config right before being passed to `runBlock`
+% or equivalent. For example, RA_blockDefaults(configDefaults) would modify
+% these defaults to serve all RA block kinds. RA_lossConfig would then modify
+% the result of *that* call for loss-domain blocks, like so:
 %
 %     config = RA_blockDefaults(configDefaults);
 %     lossConfig = RA_lossConfig(config);
 %
 % Most often, `XYZ_blockDefaults` will use `configDefaults` as a starting point
-%   without an argument. That is a useful option if you don't expect making any
-%   modifications to configDefaults for all your tasks.
+% without an argument. That is a useful option if you don't expect making any
+% modifications to configDefaults for all your tasks.
 %
 % Args:
-%   changes: A field of modifications made to the original set-up
+%   changes: A field of modifications made to the original set-up (not implemented)
+%
+% Note:
+%   `changes` is not actually implemented yet. Instead, directly modify the
+%   structure returned by the function.
 % 
 % Returns:
-%   s: The structure architecture for defining the task and all settings.
+%   struct: The default config struct with all standard task settings
 %
-% TODO: Implement `changes` to bring some order to post-return alterations.
+% Todo: 
+%   Implement `changes` to bring some order to post-return alterations.
+
+0; % to prevent sphinx for grabbing the headline for autodoc
 
 %%% Defaults
 %% Debugging

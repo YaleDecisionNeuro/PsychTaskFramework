@@ -1,17 +1,20 @@
 function trialData = runRATrial(trialData, blockConfig)
 % Workhorse function to display all typical phases of an risk-and-ambiguity trial. 
 %
-% In turn, it displays the task-specific choice
-%   options, response prompt, response input feedback, and the intertrial
-%   period. It displays them using function handles set in
-%   `blockConfig.trial.legacyPhases`.
+% Deprecated in favor of `runGenericTrial`.
+%
+% In turn, it displays the task-specific choice options, response prompt,
+% response input feedback, and the intertrial period. It displays them using
+% function handles set in `blockConfig.trial.legacyPhases`.
 %
 % Args:
-%   trialData: Information gathered from a trial
+%   trialData: Table of trial properties
 %   blockConfig: The block settings
 %
 % Returns:
-%   trialData: Information gathered from a trial.
+%   trialData: Table of trial properties, updated with collected data
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 % Record the properties of this trial to trialData
 trialData.trialStartTime = datevec(now);

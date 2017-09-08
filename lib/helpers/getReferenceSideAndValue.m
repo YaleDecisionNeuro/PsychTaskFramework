@@ -1,6 +1,9 @@
 function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockConfig)
-% Check if there is any specific reference side & value defined for this trial,
-%   or for this block. If reference side is unavailable, generate it at random.
+% Extracts properties of the reference from both supplied configuration structs.
+%
+% Checks if there is any specific reference side & value defined for this
+% trial, or for this block. If reference side is unavailable, generate it at
+% random.
 %
 % Args:
 %   trialData: A table of trial information
@@ -9,8 +12,10 @@ function [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData,
 % Returns:
 %   2-element tuple containing
 %
-%   - **referenceSide**: A side kept constant across choice events (not lottery).
-%   - **referenceValue**: A set value, on reference side, kept constant across choice events. 
+%   - **referenceSide**: Side on which the reference should be displayed
+%   - **referenceValue**: The value to display.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 % Approach: Start from general options and overwrite with more specific ones
 

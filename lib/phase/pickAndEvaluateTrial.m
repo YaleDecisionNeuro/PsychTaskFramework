@@ -2,20 +2,23 @@ function [ outcomeKind, outcomeLevel ] = pickAndEvaluateTrial(DataObject, config
 % Picks a recorded trial at random, evaluates it, and displays the outcome.
 %
 % This can be run as a post-block callback. To do this, include
-%   `blockConfig.task.fnHandles.postBlockFn = @pickAndEvaluateTrial` in your
-%   configuration file.
+% `blockConfig.task.fnHandles.postBlockFn = @pickAndEvaluateTrial` in your
+% configuration file.
 %
 % Args:
-%   DataObject: An object containing programmed information
-%   config: A program setting (from trial to block to screen)
+%   DataObject: An object with participant records & other session info
+%   config: A standard block setting (from trial to block to Screen)
 %
 % Returns:
 %   2-element tuple containing
 %
-%   - **outcomeKind**: Type of outcome (reference, win, or loss)
-%   - **outcomeLevel**: Type of choice (reference or lottery)
+%   - **outcomeKind**: Type of outcome picked (reference, win, or loss)
+%   - **outcomeLevel**: Type of choice picked (reference or lottery)
 %
-% FIXME: This was written in a hurry, and should at some point be refactored.
+% Warning: 
+%   This was written in a hurry, and should at some point be refactored.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% 1. Pick an available trial at random
 blockIdx = randi(DataObject.numFinishedBlocks);

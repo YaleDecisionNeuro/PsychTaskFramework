@@ -1,17 +1,17 @@
 function [ dims ] = getTextDims(windowPtr, txt, fontSize)
-% For window at `windowPtr`, get dimensions of `txt`. 
+% For window at `windowPtr`, get dimensions of `txt`.
 %
 % This will be at current font size or, if provided, at `fontSize`.
 %
+% Adapted from Ruonan Jia's initial implementation in the MDM task.
+%
 % Args:
-%   windowPtr: A window pointer to specify screen
+%   windowPtr: A window pointer to specify active screen
 %   txt: The characters displayed on a screen
 %   fontSize: The size of the existing text
 %
 % Returns:
 %   dims: The dimensions of the displayed text.
-%
-% Adapted from Ruonan Jia's initial implementation in the MDM task.
 
 if exist('fontSize', 'var')
   oldFontSize = Screen('TextSize', windowPtr);

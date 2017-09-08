@@ -8,20 +8,28 @@ function [ trialTbl ] = generateTrials(levelConfig)
 % Returns:
 %   trialTbl: A table of all the trial information to be collected.
 %
-% NOTE: The generator is specific to the risk/ambiguity task. It expects that %
-% the struct will contain `stakes` and at least one of (`probs`, `ambigs`)
-% fields.  % It will also combine them in a particular way (specifically,
-% assuming that all ambiguous % trials are coupled with .5 probability, and all
-% probability trials have at % least one appearance with zero ambiguity). It
-% distributes all other subfields % it finds randomly across thus generated
-% trials.
+% Note: 
+%   The generator is specific to the risk/ambiguity task. It expects that the
+%   struct will contain `stakes` and at least one of (`probs`, `ambigs`)
+%   fields.  It will also combine them in a particular way (specifically,
+%   assuming that all ambiguous trials are coupled with .5 probability, and all
+%   probability trials have at least one appearance with zero ambiguity). It
+%   distributes all other subfields it finds randomly across thus generated
+%   trials.
 %
-% If you wish to omit any ambiguous trials but do not wish to delete the struct
-% field, you can also pass an empty matrix to achieve the same result.
+% Note:
+%   If you wish to omit any ambiguous trials but do not wish to delete the
+%   struct field, you can also pass an empty matrix to achieve the same result.
 %
-% Generally speaking: if your task only differs slightly from the monetary R&A
-% task, you should be able to use this script with minimum alteration. If your
-% task is substantially different, you might have to roll your own.
+%   There is currently no way to disabuse generateTrials of the assumption that
+%   the midpoint of ambiguity occluder is at 0.5.
+%
+%
+% Generally speaking: if your task only differs slightly from the monetary
+% R&A task, you should be able to use this script with minimum alteration. If
+% your task is substantially different, you might have to roll your own.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% 1. Generate the basics -- assuming field names contain well-defined content
 allStakes = levelConfig.stakes;

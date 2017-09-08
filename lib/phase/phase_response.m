@@ -1,6 +1,5 @@
 function [ trialData ] = phase_response(trialData, blockConfig, phaseConfig)
-% The response script that handles the display of the response
-%   prompt and the eventual response or non-response. 
+% Draw response prompt and handle potential response keypress or lack thereof.
 %
 % Takes standard phase script arguments.
 %
@@ -10,12 +9,9 @@ function [ trialData ] = phase_response(trialData, blockConfig, phaseConfig)
 %   phaseConfig: The phase settings
 %
 % Returns:
-%   trialData: The participant data from a trial.
+%   trialData: Updated participant data from a trial.
 
-%% Helper values
 windowPtr = blockConfig.device.windowPtr;
-
-%% Response prompt
 drawResponsePrompt(trialData, blockConfig);
 
 %% Draw

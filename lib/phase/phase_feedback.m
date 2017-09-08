@@ -1,10 +1,10 @@
 function [ trialData ] = phase_feedback(trialData, blockConfig, phaseConfig)
 % Displays feedback of trial choice for a specified time.
 %
-% Based on the value in `trialData.choice`, draws the feedback
-%   that confirms to the player which option they chose (or whether they chose
-%   at all) and displays it for `blockConfig.trial.legacyPhases.feedback.duration`. Can be
-%   re-used for tasks that offer two options in a choice.
+% Based on the value in `trialData.choice`, draws the feedback that confirms to
+% the player which option they chose (or whether they chose at all) and
+% displays it for `blockConfig.trial.legacyPhases.feedback.duration`. Can be
+% re-used for tasks that offer two options in a choice.
 %
 % Args:
 %   trialData: The participant data from a trial
@@ -12,7 +12,7 @@ function [ trialData ] = phase_feedback(trialData, blockConfig, phaseConfig)
 %   phaseConfig: The phase settings
 %
 % Returns:
-%   trialData: The participant data from a trial.
+%   trialData: Updated participant data from a trial.
 
 windowPtr = blockConfig.device.windowPtr;
 drawFeedback(trialData, blockConfig);

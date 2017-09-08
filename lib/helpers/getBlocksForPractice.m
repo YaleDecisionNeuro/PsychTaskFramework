@@ -1,5 +1,12 @@
 function [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks)
-% Assumes that `preparePractice` has been run and re-numbers the block span
+% Give the practice blocks to run from a trimmed practice-only block set.
+%
+% Warning:
+%   **Deprecated.** Use methods that evaluate lotteries instead.
+%
+% Note:
+%   Assumes that `preparePractice` has been run, removed the blocks that
+%   weren't selected, and re-numbered the block span.
 %
 % Args:
 %   practiceBlocks: A set of practice blocks
@@ -7,8 +14,8 @@ function [ firstBlockIdx, lastBlockIdx ] = getBlocksForPractice(practiceBlocks)
 % Returns:
 %   2-element tuple containing
 %
-%   - **firstBlockIdx**: The first ordered block in set.
-%   - **lastBlockIdx**: The last ordered block in set.
+%   - **firstBlockIdx**: The index of the first block to run
+%   - **lastBlockIdx**: The index of the last block to run
 
 firstBlockIdx = 1;
 lastBlockIdx = length(practiceBlocks);

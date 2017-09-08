@@ -1,6 +1,7 @@
 function [ trialData ] = phase_ITI(trialData, blockConfig, phaseConfig)
-% Displays the inactivity symbol in between trials. Its duration
-%   is based on the value in `trialData.ITIs`.
+% Displays the intertrial "refocus" symbol in between trials. 
+%
+% Display duration is based on the value in `trialData.ITIs`.
 %
 % Args: 
 %   trialData: The participant data from a trial
@@ -10,8 +11,9 @@ function [ trialData ] = phase_ITI(trialData, blockConfig, phaseConfig)
 % Returns:
 %   trialData: The participant data from a trial.
 %
-% TODO: Modular phase has no smart way of determining what the duration
-%   should be if it is constant. It relies on a duration fields in
+% Todo: 
+%   Modular phase has no smart way of determining what the duration should be
+%   if it is constant. It relies on a duration fields in
 %   blockConfig.trial.legacyPhases.{X} enumeration. Possible solution:
 %   trialData.trialDuration, which checks for
 %   blockConfig.task.constantBlockDuration to see what duration to do.

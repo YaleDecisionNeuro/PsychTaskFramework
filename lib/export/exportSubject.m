@@ -1,15 +1,16 @@
 function [ exportTable ] = exportSubject(DataObject, fname)
-% Given a DataObject, it unites all records in one table.
-%   If given fname, it will also write the table into a file.
+% Given a DataObject, it unites all records in one table. 
+%
+% If given fname, it will also write the table into a file.
 %
 % The file format has to be any that `writetable` can handle; consult its docs.
 %
 % Args:
-%   DataObject: An object containing programmed data
-%   fname: A defined file name
+%   DataObject: An object containing participant data.
+%   fname: Optionally, a file name to save the resultant table in.
 %
 % Returns:
-%   exportTable: A final records table containing all relevant information.
+%   exportTable: A table containing all recorded information in all blocks.
 
 subjId = DataObject.subjectId;
 exportTable = table();

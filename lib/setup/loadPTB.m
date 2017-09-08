@@ -1,14 +1,16 @@
 function [ config ] = loadPTB(config)
 % Start PsychToolBox; return config struct with display info.
 %
-% Most importantly, the display info is in config.device; the essential one
-%   is s.device.windowPtr.
+% Most importantly, the display info is in config.device; the essential one is
+% s.device.windowPtr.
 %
 % Args:
-%   config: A configuration of PTB set-up
+%   config: Initial configuration of a PTB set-up
 %
 % Returns:
-%   config: A configuration of PTB set-up 
+%   config: Updated configuration of PTB set-up 
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% Set random seed -- if already set, continue using that one
 if exist('RandStream', 'var') % Not on Octave

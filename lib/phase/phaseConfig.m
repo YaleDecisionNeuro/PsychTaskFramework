@@ -3,7 +3,8 @@ function [ phaseConfig ] = phaseConfig(name, varargin)
 %
 % Args:
 %   name: The phase name or ID
-%   Config1, Config2, ...: Any number of configuration objects
+%   'PropertyName1', 'PropertyValue1', ...: Any number of phase configuration
+%     properties
 % 
 % Returns:
 %   phaseConfig: The phase settings.

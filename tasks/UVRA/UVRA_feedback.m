@@ -16,7 +16,8 @@ function [ trialData ] = UVRA_feedback(trialData, blockConfig, callback)
 % Returns:
 %   trialData: The information collected from trials.
 %
-% TODO: Modularize drawFeedback so that it can draw things vertically in order
+% Todo: 
+%   Modularize drawFeedback so that it can draw things vertically in order
 %   to render this function unnecessary
 
 W = blockConfig.device.windowWidth; % width

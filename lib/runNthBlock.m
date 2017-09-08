@@ -1,21 +1,23 @@
 function Data = runNthBlock(Data, n)
   % Runs a specified block and saves that block to a specific location. 
   %
-  % Runs Data.blocks{n}.trials using Data.blocks{n}.config and
-  %   saves the collected results to Data.blocks{n}.data. See lib/configDefaults.m for
-  %   the parameters that a block can have.
+  % Runs Data.blocks{n}.trials using Data.blocks{n}.config and saves the
+  % collected results to Data.blocks{n}.data. See lib/configDefaults.m for the
+  % parameters that a block can have.
   %
   % If `Data.filename` does not exist, it will not know how to save the trial
-  %   choices (and will issue a warning).
+  % choices (and will issue a warning).
   %
   % (Replaces `runBlock`, which is now deprecated.)
   %
   % Args:
   %   Data: Information collected from task trials
-  %   n: A numbered object (block)
+  %   n: An integer index of the block to run in Data.blocks{n}
   %
   % Returns:
-  %   Data: Information collected from task trials.
+  %   Data: Updated information collected from task trials.
+
+  0; % to prevent sphinx from thinking that the next comment is more docstring
 
   %% 0. Validate the arguments
   if ~isstruct(Data) || ~isfield(Data, 'blocks') || ~iscell(Data.blocks)

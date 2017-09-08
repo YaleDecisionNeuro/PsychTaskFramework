@@ -5,7 +5,7 @@ function [ config ] = setupPracticeConfig(config)
 %   config: A configuration of practice runs
 %
 % Returns:
-%   config: A configuration of practice runs
+%   config: An updated configuration of practice runs
 config.device.saveAfterTrial = false;
 config.device.saveAfterBlock = false;
 config.runSetup.refSide = randi(2);

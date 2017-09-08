@@ -1,28 +1,29 @@
 function Data = runBlock(Data, blockConfig)
-  % Scaffolds multiple trial calls of the same kind and saves the file
-  %   after all of them have run.
-  %
-  % The main thing `runBlock` needs from blockConfig is for `.task.fnHandles.trialFn`
-  %   to be a function handle to which it can pass Data, trial #, and blockConfig.
-  %
-  % If `blockConfig.game` includes fields `preBlockFn` and/or `postBlockFn`,
-  %   it will assume they are callable functions and call them with `Data` and
-  %   `blockConfig` as arguments. (This means they can display block beginning
-  %   / end and wait for keypress, or check if requisite values exist and fail
-  %   gracefully, or any number of other things.)
-  %
-  % If `Data.filename` does not exist, it will not know how to save the trial
-  %   choices (and will issue a warning).
-  %
-  % Args:
-  %   Data: Information collected from task trials
-  %   blockConfig: The block settings
-  %
-  % Returns:
-  %   Data: Information collected from task trials.
+% Scaffolds multiple trial calls of the same kind. Saves results to file.
+%
+% Deprecated in favor of `runNthBlock`.
+%
+% The main thing `runBlock` needs from blockConfig is for
+% `.task.fnHandles.trialFn` to be a function handle to which it can pass Data,
+% trial #, and blockConfig.
+%
+% If `blockConfig.game` includes fields `preBlockFn` and/or `postBlockFn`, it
+% will assume they are callable functions and call them with `Data` and
+% `blockConfig` as arguments. (This means they can display block beginning /
+% end and wait for keypress, or check if requisite values exist and fail
+% gracefully, or any number of other things.)
+%
+% If `Data.filename` does not exist, it will not know how to save the trial
+% choices (and will issue a warning).
+%
+% Args:
+%   Data: Information collected from task trials
+%   blockConfig: The block settings
+%
+% Returns:
+%   DataObject struct: Information collected from task trials.
 
-  %% 0. Validate the DataObject
-  Data = prepForRecording(Data);
+  Data = prepForRecording(Data); %% 0. Validate the DataObject
 
   %% 1. If config say so, run pre-block callback (e.g. display title)
   if isfield(blockConfig.task.fnHandles, 'preBlockFn') && ...

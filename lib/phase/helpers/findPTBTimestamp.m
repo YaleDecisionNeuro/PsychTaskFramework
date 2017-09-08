@@ -1,6 +1,10 @@
 function [ PTBTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig)
-% Return the right timestamp from the (optional) structures, or getSecs() if
+% Return the correct timestamp from the (optional) structures, or getSecs() if
 %   nothing suitable is found.
+%
+% Suitable locations: 
+% * `startTimestamp` field in `phaseConfig`
+% * `${PHASENAME}Start` or `${PHASENAME}StartTS` in `trialData`.
 %
 % Args:
 %   trialData: A table of trial information
@@ -10,10 +14,10 @@ function [ PTBTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig)
 %   2-element tuple containing
 %
 %   - **PTBTimestamp**: A record of the PTB trial timestamp. 
-%   - **found**: A variable to determine what timestamp measure to use.
-%
-% Suitable locations: `startTimestamp` field in `phaseConfig`,
-% `${PHASENAME}Start` or `${PHASENAME}StartTS` in `trialData`.
+%   - **found**: A boolean signaling whether a timestamp was found. If false,
+%       the returned PTBTimestamp is the output of GetSecs().
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 % If nothing is found, earlier timestamp is better than later
 PTBTimestamp = GetSecs();

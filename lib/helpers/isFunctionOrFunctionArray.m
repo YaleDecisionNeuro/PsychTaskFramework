@@ -1,11 +1,11 @@
 function [ bool ] = isFunctionOrFunctionArray(x)
-% Determines whether input object is a cell array.
+% Is the input object is a function handle or a function handle array?
 %
 % Args:
 %    x: Any matlab object
 %
 % Returns:
-%   bool: A boolean defining the cell array or the class of the object.
+%   bool: true if x is function handle or a cell array full of function handles.
 
   if iscell(x)
     bool = all(cellfun(@(y) isFunction(y), x));

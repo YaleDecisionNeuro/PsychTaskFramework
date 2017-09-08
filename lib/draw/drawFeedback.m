@@ -5,7 +5,12 @@ function drawFeedback(trialData, blockConfig)
 %   trialData: The participant data from a trial
 %   blockConfig: The block settings
 %
-% TODO: Implement vertical switch
+% Returns:
+%   Like all draw functions, it has no return.
+%
+% Todo: 
+%   If blockConfig.draw.lottery.verticalLayout is set to true, the feedback
+%   should be be drawn to the side vertically rather than horizontally.
 
 windowPtr = blockConfig.device.windowPtr;
 W = blockConfig.device.windowWidth; % width

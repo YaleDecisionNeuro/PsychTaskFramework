@@ -7,7 +7,7 @@ function [ DataObject ] = preparePractice(DataObject, selectBlockIdx, numTrialsF
 %   numTrialsFromBlock: The number of trials within a given block
 %
 % Returns:
-%   DataObject: An object containing data on (trimmed) blocks
+%   DataObject: An updated object containing data on (trimmed) blocks
 
 numBlocks = numel(DataObject.blocks);
 if isempty(intersect(selectBlockIdx, 1:numBlocks))

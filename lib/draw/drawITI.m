@@ -2,10 +2,14 @@ function drawITI(trialData, blockConfig)
 % Draws the inactivity symbol (by default, white oval) between trials.
 %
 % Args:
-%   trialData: The participant data from a trial
+%   trialData: The participant data from a trial (unused)
 %   blockConfig: The block settings
 %
-% FIXME: Nigh-duplicate code with drawResponsePrompt. Factor out the general
+% Returns:
+%   Like all draw functions, it has no return.
+%
+% Todo: 
+%   Nigh-duplicate code with drawResponsePrompt. Factor out the general
 %   "draw an object in the center when provided the center and
 %   blockConfig.draw.(object)".
 

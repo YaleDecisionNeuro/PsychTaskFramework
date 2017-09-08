@@ -1,5 +1,8 @@
 function [ bool ] = configHasLookups(config)
-% Checks if lookups exist and are non-empty.
+% Checks if lookups exist and are non-empty. (Tests presence of image payoffs.)
+%
+% The function is commonly used to detect if the config defines an image + text
+% value to substitute for the value in trialData specification.
 %
 % Args: 
 %   config: Block configuration

@@ -1,10 +1,10 @@
 function [ txt, txtDims ] = textLookup(keyIdx, lookupTable, windowPtr)
-% Supplies the specified text and text dimensions.
+% Looks up a text by key, optionally computing text dimensions.
 %
-% Given an index in `keyIdx`, returns the (presumed character array)
-%   value corresponding to that index in `lookupTable` cell array. If provided
-%   `windowPtr`, also returns the dimensions that the text would take up under
-%   the current config in that PTB window.\
+% Given an index in `keyIdx`, returns the (presumed character array) value
+% corresponding to that index in `lookupTable` cell array. If provided
+% `windowPtr`, also returns the dimensions that the text would take up under
+% the current config in that PTB window.\
 %
 % Args:
 %   keyIdx: A key index

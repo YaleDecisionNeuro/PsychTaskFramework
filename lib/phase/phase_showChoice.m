@@ -1,9 +1,8 @@
 function [ trialData ] = phase_showChoice(trialData, blockConfig, phaseConfig)
-% Shows the choices defined in trialData and blockData to the
-%   subject. 
+% Phase shows the choices defined in trialData and blockConfig.
 %
-% This includes a lottery and a reference. If available, executes
-%   action defined in phaseConfig.action; otherwise, waits for duration.
+% This includes a lottery and a reference. If available, executes action
+% defined in phaseConfig.action; otherwise, waits for duration.
 %
 % Args:
 %   trialData: The participant data from a trial.
@@ -11,7 +10,7 @@ function [ trialData ] = phase_showChoice(trialData, blockConfig, phaseConfig)
 %   phaseConfig: The phase settings
 %
 % Returns:
-%   trialData: The participant data from a trial.
+%   trialData: Updated participant data from a trial.
 
 windowPtr = blockConfig.device.windowPtr;
 

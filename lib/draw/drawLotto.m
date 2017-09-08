@@ -1,13 +1,23 @@
 function drawLotto(trialData, blockConfig)
-% Draws a lottery with values specified in trialData in the center of
-%   the screen.
+% Draws a lottery as specified in trialData in the center of the screen.
 %
-% Uses an open PTB screen and other properties of blockConfig. If blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
-%   the lottery by the specified amount of pixels
+% Uses an open PTB screen and other properties of blockConfig. If
+% blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
+% the lottery by the specified amount of pixels.
+%
+% Note:
+%   If you wish to draw multiple lotteries or determine the offset dynamically,
+%   you will need to hot-patch the arguments to this function. A redress is
+%   under development.
 %
 % Args:
-%   trialData: The participant data from a trial
+%   trialData: Trial properties and collected participant data
 %   blockConfig: The block settings 
+%
+% Returns:
+%   Like all draw functions, it has no return.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% 1. Extract config
 % Device

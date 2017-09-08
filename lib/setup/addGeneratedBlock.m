@@ -10,6 +10,8 @@ function [ DataObject ] = addGeneratedBlock(DataObject, blockTrials, config, con
 % Returns:
 %   DataObject: An object storing block components.
 
+0; % to prevent sphinx from thinking that the next comment is more docstring
+
 % 1. Initialize and check arguments
 if ~isfield(DataObject, 'blocks')
   DataObject.blocks = cell.empty;

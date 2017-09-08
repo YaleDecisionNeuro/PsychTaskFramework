@@ -1,10 +1,10 @@
 function [ bool ] = isFunction(x)
-% Defines whether input object is of specified class.
+% Is the argument a function handle?
 %
 % Args:
 %   x: Any matlab object
 %
 % Returns:
-%   bool: A boolean to determine if x is of specified class
+%   bool: A boolean to determine if x is of class function handle
   bool = isa(x, 'function_handle');
 end

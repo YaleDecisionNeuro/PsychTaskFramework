@@ -1,35 +1,40 @@
 function plannedBlocks = generateBlocks(blockConfig, ...
     catchTrial, catchIdx, adHocTrials)
 % Returns a cell array of trial tables within a block.
-
-% Trial tables are generated with..
-%   `generateTrials` from blockConfig.trial.generate, separated into blocks with
-%   a fixed number of rows (defined in blockConfig.task.blockLength). If
-%   given further arguments, it will also add to the final trial table the
-%   table `catchTrial` at per-block indices passed in `catchIdx`. If
-%   `adHocTrials` are provided, they are mixed in with the generated trials
-%   prior to randomizationand separation into blocks.
+%
+% Trial tables are generated with `generateTrials` from
+% blockConfig.trial.generate, separated into blocks with a fixed number of rows
+% (defined in blockConfig.task.blockLength). If given further arguments, it
+% will also add to the final trial table the table `catchTrial` at per-block
+% indices passed in `catchIdx`. If `adHocTrials` are provided, they are mixed
+% in with the generated trials prior to randomizationand separation into
+% blocks.
+%
+% Note: 
+%   catchTrial must include all the columns that `generateTrials` will create
+%   based on `blockConfig.trial.generate`. An easy way to find what these are
+%   is to run this function without catchTrial or catchIdx.
+%
+%   If catchIdx is not provided, the catch trial will be placed randomly within
+%   each block.
+%
+% The function also adds ITIs to be generated per trial. 
+%
+% Note: 
+%   If ITIs matter (e.g. for fMRI tasks), make sure that you've provided as
+%   many of them as necessary for *non-catch* trials. (Catch trials must have
+%   their own ITI defined in the column `ITIs`.)
 %
 % Args:
 %   blockConfig: A configuration of the block
-%   catchTrial: An empty trial table
-%   catchIdx: An index number assigned to a catch trial
+%   catchTrial: An single-row table with trial properties for a catch trial
+%   catchIdx: (Optional) Catch trial is to be presented as catchIdx'th trial
 %   adHocTrials: Any added trials to block
 %
 % Returns:
 %   plannedBlocks: An array of trial tables in block.
-%
-% NOTE: catchTrial must include all the columns that `generateTrials` will
-% create based on `blockConfig.trial.generate`. An easy way to find what these
-% are is to run this function without catchTrial or catchIdx.
-%
-% If catchIdx is not provided, the catch trial will be placed randomly
-%   within each block.
-%
-% The function also adds ITIs to be generated per trial. NOTE: If ITIs matter
-% (e.g. for fMRI tasks), make sure that you've provided as many of them as
-% necessary for *non-catch* trials. (Catch trials must have their own ITI
-% defined in the column `ITIs`.)
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% Step 1: Generate all trials for this kind of a block & randomize
 levels = blockConfig.trial.generate;
