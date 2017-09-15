@@ -26,9 +26,9 @@ Descriptive commits are highly preferred. Please see [The Art of a Commit](https
 # Conventions
 
 * We indent with two spaces (soft tabs)
-* Spaces belong: 
-		* after method parameters, e.g. `sprintf(a, b)` 
-		* before and after operators, e.g. `1 + 2`
+* Spaces belong:
+	* after method parameters, e.g. `sprintf(a, b)` 
+	* before and after operators, e.g. `1 + 2`
 * Spaces never belong between function name and braces, i.e. `thisFunction()`.
 * Each function should have a comment that explains what it does and why.
 * Functions and variable names are written with snakeCase.
@@ -50,6 +50,15 @@ Your feature branch should base off of the `HEAD` (i.e. latest commit) of the ma
 To tell your local version that it has an upstream remote repo, run once
 `git remote add upstream https://github.com/YaleDecisionNeuro/PsychTaskFramework.git`.
 
-To get the latest changes from PTF, you'll want to run `git pull --rebase upstream/master` on your feature branch (and, optionally, your master branch). 
+To get the latest changes from PTF, you'll want to run `git pull --rebase upstream master` on your feature branch (and, optionally, your master branch). 
 
 Again, [see this general outline of the process](https://guides.github.com/introduction/flow/) and [this gist with specific commands you might want to use.](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
+
+### Troubleshooting
+
+If you have unsaved changes that you are not prepared to commit, you may wish to "stash" them with `git stash`, run `git pull --rebase upstream master`, and then load your stashed changes with `git stash pop`. Alternatively, you can set your `.gitconfig` so that this behavior is triggered otherwise:
+
+* `git config --global rebase.autoStash true` will always save and load unstaged changes automatically when you run `git pull --rebase` and `git rebase`
+* `git config --global alias.sync 'pull --rebase --autostash upstream master'` will create a command `git sync` that will run the required command.
+
+If you wish `git pull` to always rebase rather than create a merge commit, you can set such behavior with `git config --global pull.rebase preserve`.
