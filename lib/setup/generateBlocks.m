@@ -3,19 +3,19 @@ function plannedBlocks = generateBlocks(blockConfig, ...
 % Returns a cell array of trial tables within a block.
 %
 % Trial tables are generated with `generateTrials` from
-% blockConfig.trial.generate, separated into blocks with a fixed number of rows
-% (defined in blockConfig.task.blockLength). If given further arguments, it
+% `blockConfig.trial.generate`, separated into blocks with a fixed number of rows
+% (defined in `blockConfig.task.blockLength`). If given further arguments, it
 % will also add to the final trial table the table `catchTrial` at per-block
 % indices passed in `catchIdx`. If `adHocTrials` are provided, they are mixed
-% in with the generated trials prior to randomizationand separation into
+% in with the generated trials prior to randomization and separation into
 % blocks.
 %
 % Note: 
-%   catchTrial must include all the columns that `generateTrials` will create
+%   `catchTrial` must include all the columns that `generateTrials` will create
 %   based on `blockConfig.trial.generate`. An easy way to find what these are
 %   is to run this function without catchTrial or catchIdx.
 %
-%   If catchIdx is not provided, the catch trial will be placed randomly within
+%   If `catchIdx` is not provided, the catch trial will be placed randomly within
 %   each block.
 %
 % The function also adds ITIs to be generated per trial. 
@@ -47,37 +47,33 @@ end
 if exist('adHocTrials', 'var')
   allTrials = [allTrials; adHocTrials];
 end
+
 numTrials = height(allTrials);
 allTrials = allTrials(randperm(numTrials), :);
 
 %% Step 2: Separate trials into blocks by blockLength
-% NOTE: blockLength is assumed to include any catch trials, but those are not
-%   assigned yet, which is why they're subtracted.
 if exist('catchTrial', 'var')
-  minusTrials = height(catchTrial);
+  numCatchTrials = height(catchTrial);
 else
-  minusTrials = 0;
+  numCatchTrials = 0;
 end
-blockLen = blockConfig.task.blockLength - minusTrials;
-
-if rem(numTrials, blockLen) ~= 0
-  error('%d trials cannot be divided into even blocks of length %d', ...
-    numTrials, blockLen)
-end
-
-blockNum = numTrials / blockLen;
+blockLengths = getBlockLengths(blockConfig, numTrials, numCatchTrials);
+blockNum = length(blockLengths);
 plannedBlocks = cell(blockNum, 1); % Pre-allocate
 
-endIndices = (1:blockNum) * blockLen;
-for k = 1:length(endIndices)
-  startIdx = 1 + (k - 1) * blockLen;
-  endIdx = endIndices(k);
-  trialTbl = allTrials(startIdx : endIdx, :);
+for k = 1:blockNum
+  if k == 0
+    startIdx = 1;
+  else
+    startIdx = sum(blockLengths(1:(k - 1))) + 1;
+  end
+  endIdx = sum(blockLengths(1:k));
+  trialTbl = allTrials(startIdx:endIdx, :);
 
-  % Insert ITIs here, before the catch trial. and randomize
+  % Insert ITIs here, before the catch trial, and randomize
   % FIXME: Check for in-phase definition?
   if isfield(blockConfig.trial.generate, 'ITIs')
-    ITIs = cutArrayToSize(blockConfig.trial.generate.ITIs(:), blockLen);
+    ITIs = cutArrayToSize(blockConfig.trial.generate.ITIs(:), blockLengths(k));
     trialTbl.ITIs = ITIs(randperm(length(ITIs)));
   end
 
@@ -86,7 +82,7 @@ for k = 1:length(endIndices)
     if exist('catchIdx', 'var')
       trialTbl = injectRowAtIndex(trialTbl, catchTrial, catchIdx, levels);
     else
-      trialTbl = injectRowAtIndex(trialTbl, catchTrial, randi(blockLen), levels);
+      trialTbl = injectRowAtIndex(trialTbl, catchTrial, randi(blockLengths(k)), levels);
     end
   end
   plannedBlocks{k} = trialTbl;
