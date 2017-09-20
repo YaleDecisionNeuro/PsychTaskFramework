@@ -174,59 +174,63 @@
 <code class="descclassname">PTF.lib.</code><code class="descname">configDefaults</code><span class="sig-paren">(</span><em>changes</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.configDefaults" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default documented config for all tasks in a freely modifiable struct.</p>
 <p>Colors, when given, are RGB colors. PTB also accepts RGBA and CLUT.</p>
-<dl class="docutils">
-<dt>The defaults used here err on the side of catering to LevyLab's R&amp;A paradigm.</dt>
-<dd>If you're not using it, nuke s.draw from high orbit.</dd>
-<dt>Although the resulting structure contains task-wide config, it is typically</dt>
-<dd><p class="first">modified with block-specific config right before being passed to <cite>runBlock</cite>
+<p>The defaults used here err on the side of catering to LevyLab's R&amp;A paradigm.
+If you're not using it, nuke s.draw from high orbit.</p>
+<p>Although the resulting structure contains task-wide config, it is typically
+modified with block-specific config right before being passed to <cite>runBlock</cite>
 or equivalent. For example, RA_blockDefaults(configDefaults) would modify
 these defaults to serve all RA block kinds. RA_lossConfig would then modify
 the result of <em>that</em> call for loss-domain blocks, like so:</p>
-<blockquote class="last">
+<blockquote>
 <div>config = RA_blockDefaults(configDefaults);
 lossConfig = RA_lossConfig(config);</div></blockquote>
-</dd>
-<dt>Most often, <cite>XYZ_blockDefaults</cite> will use <cite>configDefaults</cite> as a starting point</dt>
-<dd>without an argument. That is a useful option if you don't expect making any
-modifications to configDefaults for all your tasks.</dd>
-</dl>
+<p>Most often, <cite>XYZ_blockDefaults</cite> will use <cite>configDefaults</cite> as a starting point
+without an argument. That is a useful option if you don't expect making any
+modifications to configDefaults for all your tasks.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changes</strong> -- A field of modifications made to the original set-up</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The structure architecture for defining the task and all settings.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">s</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changes</strong> -- A field of modifications made to the original set-up (not implemented)</td>
 </tr>
 </tbody>
 </table>
-<p>TODO: Implement <cite>changes</cite> to bring some order to post-return alterations.
-Defaults
-Debugging
-This will run PsychDebugWindowConfiguration unless overruled in a downstream</p>
-<blockquote>
-<div>config. (This means skipping sync checks and transparent background.)</div></blockquote>
-<p>You should turn it off when your task is ready.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>changes</cite> is not actually implemented yet. Instead, directly modify the
+structure returned by the function.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The default config struct with all standard task settings</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">struct</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Implement <cite>changes</cite> to bring some order to post-return alterations.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.runBlock">
 <code class="descclassname">PTF.lib.</code><code class="descname">runBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runBlock" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Scaffolds multiple trial calls of the same kind and saves the file</dt>
-<dd>after all of them have run.</dd>
-<dt>The main thing <cite>runBlock</cite> needs from blockConfig is for <cite>.task.fnHandles.trialFn</cite></dt>
-<dd>to be a function handle to which it can pass Data, trial #, and blockConfig.</dd>
-<dt>If <cite>blockConfig.game</cite> includes fields <cite>preBlockFn</cite> and/or <cite>postBlockFn</cite>,</dt>
-<dd>it will assume they are callable functions and call them with <cite>Data</cite> and
-<cite>blockConfig</cite> as arguments. (This means they can display block beginning
-/ end and wait for keypress, or check if requisite values exist and fail
-gracefully, or any number of other things.)</dd>
-<dt>If <cite>Data.filename</cite> does not exist, it will not know how to save the trial</dt>
-<dd>choices (and will issue a warning).</dd>
-</dl>
+<dd><p>Scaffolds multiple trial calls of the same kind. Saves results to file.</p>
+<p>Deprecated in favor of <cite>runNthBlock</cite>.</p>
+<p>The main thing <cite>runBlock</cite> needs from blockConfig is for
+<cite>.task.fnHandles.trialFn</cite> to be a function handle to which it can pass Data,
+trial #, and blockConfig.</p>
+<p>If <cite>blockConfig.game</cite> includes fields <cite>preBlockFn</cite> and/or <cite>postBlockFn</cite>, it
+will assume they are callable functions and call them with <cite>Data</cite> and
+<cite>blockConfig</cite> as arguments. (This means they can display block beginning /
+end and wait for keypress, or check if requisite values exist and fail
+gracefully, or any number of other things.)</p>
+<p>If <cite>Data.filename</cite> does not exist, it will not know how to save the trial
+choices (and will issue a warning).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -240,36 +244,30 @@ gracefully, or any number of other things.)</dd>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Information collected from task trials.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Data</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataObject struct</p>
 </td>
 </tr>
 </tbody>
 </table>
-<ol class="arabic simple" start="0">
-<li>Validate the DataObject</li>
-</ol>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.runGenericTrial">
 <code class="descclassname">PTF.lib.</code><code class="descname">runGenericTrial</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runGenericTrial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs through all the phases of a 'typical' trial.</p>
-<dl class="docutils">
-<dt>Fully generalized workhorse function to display any phases of</dt>
-<dd>an individual trial, as defined using PhaseConfig objects in
-blockConfig.trial.phases.</dd>
-</dl>
+<dd><p>Runs through all the phases of an arbitrarily defined trial.</p>
+<p>Fully generalized workhorse function to display any phases of an individual
+trial, as defined using PhaseConfig objects in blockConfig.trial.phases.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>trialData</strong> -- Information gathered from a trial</li>
+<li><strong>trialData</strong> -- Table of properties of the trial about to be run</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Information gathered from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Table of trial properties + information gathered from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -277,20 +275,17 @@ blockConfig.trial.phases.</dd>
 </tr>
 </tbody>
 </table>
-<p>Record the properties of this trial to trialData</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.runNthBlock">
 <code class="descclassname">PTF.lib.</code><code class="descname">runNthBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runNthBlock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a specified block and saves that block to a specific location.</p>
-<dl class="docutils">
-<dt>Runs Data.blocks{n}.trials using Data.blocks{n}.config and</dt>
-<dd>saves the collected results to Data.blocks{n}.data. See lib/configDefaults.m for
-the parameters that a block can have.</dd>
-<dt>If <cite>Data.filename</cite> does not exist, it will not know how to save the trial</dt>
-<dd>choices (and will issue a warning).</dd>
-</dl>
+<p>Runs Data.blocks{n}.trials using Data.blocks{n}.config and saves the
+collected results to Data.blocks{n}.data. See lib/configDefaults.m for the
+parameters that a block can have.</p>
+<p>If <cite>Data.filename</cite> does not exist, it will not know how to save the trial
+choices (and will issue a warning).</p>
 <p>(Replaces <cite>runBlock</cite>, which is now deprecated.)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -298,11 +293,11 @@ the parameters that a block can have.</dd>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>Data</strong> -- Information collected from task trials</li>
-<li><strong>n</strong> -- A numbered object (block)</li>
+<li><strong>n</strong> -- An integer index of the block to run in Data.blocks{n}</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Information collected from task trials.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated information collected from task trials.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Data</p>
@@ -310,27 +305,24 @@ the parameters that a block can have.</dd>
 </tr>
 </tbody>
 </table>
-<ol class="arabic simple" start="0">
-<li>Validate the arguments</li>
-</ol>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.runPhase">
 <code class="descclassname">PTF.lib.</code><code class="descname">runPhase</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runPhase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run a phase defined with a phaseConfig construct.</p>
+<dd><p>Run a generic phase defined with a phaseConfig construct.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>trialData</strong> -- Information gathered from a trial</li>
+<li><strong>trialData</strong> -- Table of trial properties</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 <li><strong>phaseConfig</strong> -- The phase settings</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Information gathered from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Table of trial properties, updated with collected data</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -344,23 +336,21 @@ the parameters that a block can have.</dd>
 <dt id="PTF.lib.runRATrial">
 <code class="descclassname">PTF.lib.</code><code class="descname">runRATrial</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.runRATrial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Workhorse function to display all typical phases of an risk-and-ambiguity trial.</p>
-<dl class="docutils">
-<dt>In turn, it displays the task-specific choice</dt>
-<dd>options, response prompt, response input feedback, and the intertrial
-period. It displays them using function handles set in
-<cite>blockConfig.trial.legacyPhases</cite>.</dd>
-</dl>
+<p>Deprecated in favor of <cite>runGenericTrial</cite>.</p>
+<p>In turn, it displays the task-specific choice options, response prompt,
+response input feedback, and the intertrial period. It displays them using
+function handles set in <cite>blockConfig.trial.legacyPhases</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>trialData</strong> -- Information gathered from a trial</li>
+<li><strong>trialData</strong> -- Table of trial properties</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Information gathered from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Table of trial properties, updated with collected data</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -368,7 +358,6 @@ period. It displays them using function handles set in
 </tr>
 </tbody>
 </table>
-<p>Record the properties of this trial to trialData</p>
 </dd></dl>
 
 </div>
@@ -378,21 +367,19 @@ period. It displays them using function handles set in
 <dt id="PTF.lib.phase.legacyPhaseStruct">
 <code class="descclassname">PTF.lib.phase.</code><code class="descname">legacyPhaseStruct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.legacyPhaseStruct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default phase config for R&amp;A-based tasks. Deprecated.</p>
-<dl class="docutils">
-<dt>If you're only changing some element of a phase, but you're happy with the</dt>
-<dd>standard order of phases (i.e. choice display, response prompt, feedback,
+<p>If you're only changing some element of a phase, but you're happy with the
+standard order of phases (i.e. choice display, response prompt, feedback,
 intertrial), you can substitute a function here. It should take, and return,
 the same arguments that the phase function in lib/phase does. (In general,
-this is <cite>sampleFn(trialData, blockConfig, phaseConfig)</cite>.)</dd>
-<dt>By design, showChoicePhaseFn is left blank. <cite>runRATrial</cite> will complain if it is</dt>
-<dd>not set, or if any of the phase function handles below are unset. While you
-might avoid setting it by writing your own trial script, it is recommended
-that you still leverage these config; it will make your task easier to
-maintain and understand for your collaborators.</dd>
-<dt>By design, s.game.responsePhaseFn is set to &#64;phase_response; however, if your</dt>
-<dd>showChoice function collects responses during the display, it can be set to
-NaN.</dd>
-</dl>
+this is <cite>sampleFn(trialData, blockConfig, phaseConfig)</cite>.)</p>
+<p>By design, showChoicePhaseFn is left blank. <cite>runRATrial</cite> will complain if it
+is not set, or if any of the phase function handles below are unset. While
+you might avoid setting it by writing your own trial script, it is
+recommended that you still leverage these config; it will make your task
+easier to maintain and understand for your collaborators.</p>
+<p>By design, s.game.responsePhaseFn is set to &#64;phase_response; however, if your
+showChoice function collects responses during the display, it can be set to
+NaN.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -415,7 +402,8 @@ NaN.</dd>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> -- The phase name or ID</li>
-<li><strong>Config2, ...</strong> (<em>Config1,</em>) -- Any number of configuration objects</li>
+<li><strong>'PropertyValue1', ...</strong> (<em>'PropertyName1',</em>) -- Any number of phase configuration
+properties</li>
 </ul>
 </td>
 </tr>
@@ -432,10 +420,8 @@ NaN.</dd>
 <dl class="function">
 <dt id="PTF.lib.phase.phase_ITI">
 <code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_ITI</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_ITI" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Displays the inactivity symbol in between trials. Its duration</dt>
-<dd>is based on the value in <cite>trialData.ITIs</cite>.</dd>
-</dl>
+<dd><p>Displays the intertrial &quot;refocus&quot; symbol in between trials.</p>
+<p>Display duration is based on the value in <cite>trialData.ITIs</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -455,26 +441,25 @@ NaN.</dd>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>TODO: Modular phase has no smart way of determining what the duration</dt>
-<dd>should be if it is constant. It relies on a duration fields in
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Modular phase has no smart way of determining what the duration should be
+if it is constant. It relies on a duration fields in
 blockConfig.trial.legacyPhases.{X} enumeration. Possible solution:
 trialData.trialDuration, which checks for
 blockConfig.task.constantBlockDuration to see what duration to do.
-(Alternative: if isnan(phaseConfig.duration), need to compute it.)</dd>
-</dl>
+(Alternative: if isnan(phaseConfig.duration), need to compute it.)</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.phase.phase_feedback">
 <code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_feedback</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_feedback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Displays feedback of trial choice for a specified time.</p>
-<dl class="docutils">
-<dt>Based on the value in <cite>trialData.choice</cite>, draws the feedback</dt>
-<dd>that confirms to the player which option they chose (or whether they chose
-at all) and displays it for <cite>blockConfig.trial.legacyPhases.feedback.duration</cite>. Can be
-re-used for tasks that offer two options in a choice.</dd>
-</dl>
+<p>Based on the value in <cite>trialData.choice</cite>, draws the feedback that confirms to
+the player which option they chose (or whether they chose at all) and
+displays it for <cite>blockConfig.trial.legacyPhases.feedback.duration</cite>. Can be
+re-used for tasks that offer two options in a choice.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -486,7 +471,7 @@ re-used for tasks that offer two options in a choice.</dd>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The participant data from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated participant data from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -511,7 +496,7 @@ re-used for tasks that offer two options in a choice.</dd>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The participant data from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The (possibly updated) participant data from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -524,10 +509,7 @@ re-used for tasks that offer two options in a choice.</dd>
 <dl class="function">
 <dt id="PTF.lib.phase.phase_response">
 <code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_response</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_response" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>The response script that handles the display of the response</dt>
-<dd>prompt and the eventual response or non-response.</dd>
-</dl>
+<dd><p>Draw response prompt and handle potential response keypress or lack thereof.</p>
 <p>Takes standard phase script arguments.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -540,7 +522,7 @@ re-used for tasks that offer two options in a choice.</dd>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The participant data from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated participant data from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -548,18 +530,14 @@ re-used for tasks that offer two options in a choice.</dd>
 </tr>
 </tbody>
 </table>
-<p>Helper values</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.phase.phase_showChoice">
 <code class="descclassname">PTF.lib.phase.</code><code class="descname">phase_showChoice</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.phase_showChoice" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Shows the choices defined in trialData and blockData to the</dt>
-<dd>subject.</dd>
-<dt>This includes a lottery and a reference. If available, executes</dt>
-<dd>action defined in phaseConfig.action; otherwise, waits for duration.</dd>
-</dl>
+<dd><p>Phase shows the choices defined in trialData and blockConfig.</p>
+<p>This includes a lottery and a reference. If available, executes action
+defined in phaseConfig.action; otherwise, waits for duration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -571,7 +549,7 @@ re-used for tasks that offer two options in a choice.</dd>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The participant data from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated participant data from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -585,42 +563,40 @@ re-used for tasks that offer two options in a choice.</dd>
 <dt id="PTF.lib.phase.pickAndEvaluateTrial">
 <code class="descclassname">PTF.lib.phase.</code><code class="descname">pickAndEvaluateTrial</code><span class="sig-paren">(</span><em>DataObject</em>, <em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.pickAndEvaluateTrial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Picks a recorded trial at random, evaluates it, and displays the outcome.</p>
-<dl class="docutils">
-<dt>This can be run as a post-block callback. To do this, include</dt>
-<dd><cite>blockConfig.task.fnHandles.postBlockFn = &#64;pickAndEvaluateTrial</cite> in your
-configuration file.</dd>
-</dl>
+<p>This can be run as a post-block callback. To do this, include
+<cite>blockConfig.task.fnHandles.postBlockFn = &#64;pickAndEvaluateTrial</cite> in your
+configuration file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>DataObject</strong> -- An object containing programmed information</li>
-<li><strong>config</strong> -- A program setting (from trial to block to screen)</li>
+<li><strong>DataObject</strong> -- An object with participant records &amp; other session info</li>
+<li><strong>config</strong> -- A standard block setting (from trial to block to Screen)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
 <ul class="simple">
-<li><strong>outcomeKind</strong>: Type of outcome (reference, win, or loss)</li>
-<li><strong>outcomeLevel</strong>: Type of choice (reference or lottery)</li>
+<li><strong>outcomeKind</strong>: Type of outcome picked (reference, win, or loss)</li>
+<li><strong>outcomeLevel</strong>: Type of choice picked (reference or lottery)</li>
 </ul>
 </p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>FIXME: This was written in a hurry, and should at some point be refactored.
-1. Pick an available trial at random</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This was written in a hurry, and should at some point be refactored.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.phase.preBlock">
 <code class="descclassname">PTF.lib.phase.</code><code class="descname">preBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.preBlock" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Display &quot;Block N: (BLOCKNAME)&quot; and wait for press of any of</dt>
-<dd>blockConfig.device.breakKeys.</dd>
-</dl>
+<dd><p>Display &quot;Block N: (BLOCKNAME)&quot; and wait indefinitely for a break key.</p>
+<p>Break keys are defined in blockConfig.device.breakKeys.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -631,8 +607,8 @@ configuration file.</dd>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Information collected (in this case on blocks)
-blockConfig: The block settings.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Information collected (unchanged)
+blockConfig: The block settings (unchanged)</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Data</p>
@@ -640,16 +616,12 @@ blockConfig: The block settings.</p>
 </tr>
 </tbody>
 </table>
-<p>Check if there are any recorded blocks yet</p>
 </dd></dl>
 
 <span class="target" id="module-PTF.lib.phase.helpers"></span><dl class="function">
 <dt id="PTF.lib.phase.helpers.choiceReport">
 <code class="descclassname">PTF.lib.phase.helpers.</code><code class="descname">choiceReport</code><span class="sig-paren">(</span><em>trialData</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.helpers.choiceReport" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Prints to stdout what the choice in <cite>trialData</cite> was and what the properties</dt>
-<dd>in <cite>trialData</cite> were.</dd>
-</dl>
+<dd><p>Prints to stdout participant choice and decision properties.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -657,8 +629,8 @@ blockConfig: The block settings.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>trialData</strong> -- A table of trial information</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>A summary of participant answers in the context of the</dt>
-<dd>question.</dd>
+<dt>Whether participant chose the lottery and what the properties of</dt>
+<dd>the offered lottery were.</dd>
 </dl>
 </td>
 </tr>
@@ -672,9 +644,12 @@ blockConfig: The block settings.</p>
 <dt id="PTF.lib.phase.helpers.findPTBTimestamp">
 <code class="descclassname">PTF.lib.phase.helpers.</code><code class="descname">findPTBTimestamp</code><span class="sig-paren">(</span><em>trialData</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.helpers.findPTBTimestamp" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>Return the right timestamp from the (optional) structures, or getSecs() if</dt>
+<dt>Return the correct timestamp from the (optional) structures, or getSecs() if</dt>
 <dd>nothing suitable is found.</dd>
 </dl>
+<p>Suitable locations:
+* <cite>startTimestamp</cite> field in <cite>phaseConfig</cite>
+* <cite>${PHASENAME}Start</cite> or <cite>${PHASENAME}StartTS</cite> in <cite>trialData</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -688,16 +663,17 @@ blockConfig: The block settings.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
 <ul class="simple">
 <li><strong>PTBTimestamp</strong>: A record of the PTB trial timestamp.</li>
-<li><strong>found</strong>: A variable to determine what timestamp measure to use.</li>
+<li><dl class="first docutils">
+<dt><strong>found</strong>: A boolean signaling whether a timestamp was found. If false,</dt>
+<dd>the returned PTBTimestamp is the output of GetSecs().</dd>
+</dl>
+</li>
 </ul>
 </p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Suitable locations: <cite>startTimestamp</cite> field in <cite>phaseConfig</cite>,
-<cite>${PHASENAME}Start</cite> or <cite>${PHASENAME}StartTS</cite> in <cite>trialData</cite>.
-If nothing is found, earlier timestamp is better than later</p>
 </dd></dl>
 
 </div>
@@ -706,30 +682,30 @@ If nothing is found, earlier timestamp is better than later</p>
 <dl class="function">
 <dt id="PTF.lib.draw.drawBgr">
 <code class="descclassname">PTF.lib.draw.</code><code class="descname">drawBgr</code><span class="sig-paren">(</span><em>blockConfig</em>, <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawBgr" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Draws default background and sets default drawing properties (e.g.</dt>
-<dd>fontName and fontSize).</dd>
-<dt>To draw task-specific things, you can supply a</dt>
-<dd>callback function that does them. For instance, you can supply the
-task-relevant drawRef function.</dd>
-</dl>
+<dd><p>Draws default background and sets default drawing properties</p>
+<p>The most important default drawing properties set are fontName and fontSize.</p>
+<p>To draw task-specific things, you can supply a callback function that does
+them. For instance, you can supply the task-relevant drawRef function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>blockConfig</strong> -- The block settings</li>
-<li><strong>callback</strong> -- A retrieval of previous (default) information</li>
+<li><strong>callback</strong> -- A function handle to execute after the function has concluded.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Like all draw functions, it has no return.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>NOTE: Unlike other draw functions, it only takes <cite>blockConfig</cite>, not</dt>
-<dd><cite>trialData</cite>, and does not allow access to or modification of <cite>trialData</cite>.
-(FIXME?)</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Unlike other draw functions, drawBgr only takes <cite>blockConfig</cite>, not
+<cite>trialData</cite>, and does not allow access to or modification of <cite>trialData</cite>.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -740,15 +716,22 @@ task-relevant drawRef function.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>trialData</strong> -- The participant data from a trial</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Like all draw functions, it has no return.</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>TODO: Implement vertical switch</p>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">If blockConfig.draw.lottery.verticalLayout is set to true, the feedback
+should be be drawn to the side vertically rather than horizontally.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -759,65 +742,78 @@ task-relevant drawRef function.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>trialData</strong> -- The participant data from a trial</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>trialData</strong> -- The participant data from a trial (unused)</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Like all draw functions, it has no return.</p>
+</td>
+</tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>FIXME: Nigh-duplicate code with drawResponsePrompt. Factor out the general</dt>
-<dd>&quot;draw an object in the center when provided the center and
-blockConfig.draw.(object)&quot;.</dd>
-</dl>
+<div class="admonition-todo admonition" id="index-3">
+<p class="first admonition-title">Todo</p>
+<p class="last">Nigh-duplicate code with drawResponsePrompt. Factor out the general
+&quot;draw an object in the center when provided the center and
+blockConfig.draw.(object)&quot;.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.draw.drawLotto">
 <code class="descclassname">PTF.lib.draw.</code><code class="descname">drawLotto</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawLotto" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Draws a lottery with values specified in trialData in the center of</dt>
-<dd>the screen.</dd>
-<dt>Uses an open PTB screen and other properties of blockConfig. If blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift</dt>
-<dd>the lottery by the specified amount of pixels</dd>
-</dl>
+<dd><p>Draws a lottery as specified in trialData in the center of the screen.</p>
+<p>Uses an open PTB screen and other properties of blockConfig. If
+blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
+the lottery by the specified amount of pixels.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you wish to draw multiple lotteries or determine the offset dynamically,
+you will need to hot-patch the arguments to this function. A redress is
+under development.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>trialData</strong> -- The participant data from a trial</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>trialData</strong> -- Trial properties and collected participant data</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Like all draw functions, it has no return.</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>1. Extract config
-Device</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.draw.drawRef">
 <code class="descclassname">PTF.lib.draw.</code><code class="descname">drawRef</code><span class="sig-paren">(</span><em>blockConfig</em>, <em>trialData</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.drawRef" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws the stable reference value on screen.</p>
+<p>To get the side and reference value, it uses getReferenceSideAndValue, which
+searches the structures supplied as arguments.</p>
+<p>If blockConfig.draw.lottery.verticalLayout is set to true, the reference will
+be drawn to the side vertically rather than horizontally.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>blockConfig</strong> -- The block settings</li>
-<li><strong>trialData</strong> -- The participant data from a trial</li>
+<li><strong>trialData</strong> -- Trial properties and collected participant data</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Like all draw functions, it has no return.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<ol class="arabic simple">
-<li>Obtain values</li>
-</ol>
 </dd></dl>
 
 <dl class="function">
@@ -828,42 +824,52 @@ Device</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>trialData</strong> -- The participant data from a trial</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>trialData</strong> -- Trial properties and collected participant data</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Like all draw functions, it has no return.</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>FIXME: Nigh-duplicate code with drawITI. Factor out the general &quot;draw an
-object in the center when provided the center and
-blockConfig.draw.(object)&quot;.</p>
+<div class="admonition-todo admonition" id="index-4">
+<p class="first admonition-title">Todo</p>
+<p class="last">Nigh-duplicate code with drawITI. Factor out the general &quot;draw an object in
+the center when provided the center and blockConfig.draw.(object)&quot;.</p>
+</div>
 </dd></dl>
 
 <span class="target" id="module-PTF.lib.draw.helpers"></span><dl class="function">
 <dt id="PTF.lib.draw.helpers.centerRectDims">
 <code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">centerRectDims</code><span class="sig-paren">(</span><em>center</em>, <em>rectSize</em>, <em>pxOffCenter</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.centerRectDims" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds center of screen and centers objects.</p>
-<dl class="docutils">
-<dt>A helper function to calculate what the top-left pixel of</dt>
-<dd>an object is such that the object will appear centered. Accepts <cite>center</cite>
-that defines [x y] of the screen's center, <cite>rectSize</cite> that defines the
-object's dimensions, and (non-obligatory) <cite>pxOffCenter</cite>, which shifts
-the resulting position.</dd>
-</dl>
+<p>A helper function to calculate what the top-left pixel of an object is such
+that the object will appear centered. Accepts <cite>center</cite> that defines [x y] of
+the screen's center, <cite>rectSize</cite> that defines the object's dimensions, and
+(non-obligatory) <cite>pxOffCenter</cite>, which shifts the resulting position.</p>
+<p>If pxOffCenter is supplied, shifts the computation by that much in both
+dimensions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>center</strong> -- The coordinates of (a screen's) center</li>
-<li><strong>rectSize</strong> -- The dimensions of a rectangle (screen)</li>
-<li><strong>pxOffCenter</strong> -- Calculates when object is not centered</li>
+<li><strong>center</strong> -- The 2x1 coordinates of (a screen's) center</li>
+<li><strong>rectSize</strong> -- The 2x1 dimensions of a rectangle (screen)</li>
+<li><strong>pxOffCenter</strong> -- A simple integer value by which the result should be adjusted
+in both dimensions.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The dimensions needed to center an object</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt>The 2x2 rectangular matrix of xy-coordinates usable as argument for</dt>
+<dd><p class="first last">PTB::Screen functions.</p>
+</dd>
+</dl>
+</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dims</p>
@@ -876,26 +882,26 @@ the resulting position.</dd>
 <dl class="function">
 <dt id="PTF.lib.draw.helpers.dollarFormatter">
 <code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">dollarFormatter</code><span class="sig-paren">(</span><em>value</em>, <em>windowPtr</em>, <em>fontSize</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.dollarFormatter" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>When given a numerical value, outputs its correct format</dt>
-<dd>in dollars and, if provided <cite>windowPtr</cite>, its width and height on screen.</dd>
-<dt>If <cite>fontSize</cite> is not provided, the width and height will be estimated</dt>
-<dd>with currently set font size.</dd>
-</dl>
+<dd><p>When given a numerical value, outputs its correct format in dollars and, if
+provided <cite>windowPtr</cite>, its width and height on screen.</p>
+<p>If <cite>fontSize</cite> is not provided, the width and height will be estimated with
+currently set font size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>value</strong> -- The assigned numerical worth</li>
-<li><strong>windowPtr</strong> -- A window pointer to specify screen</li>
-<li><strong>fontSize</strong> -- The size of the text font</li>
+<li><strong>value</strong> -- Any integer to be conveted into a dollar string</li>
+<li><strong>windowPtr</strong> -- A window pointer to specify active screen</li>
+<li><strong>fontSize</strong> -- The desired font size of the displayed dollar amount</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
-<p>txt: A string of monetary values.
-dims: The dimensions of the text (txt).</p>
+<ul class="simple">
+<li>txt: A string of monetary values.</li>
+<li>dims: The dimensions of <cite>txt</cite> when printed</li>
+</ul>
 </p>
 </td>
 </tr>
@@ -908,12 +914,13 @@ dims: The dimensions of the text (txt).</p>
 <code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">getTextDims</code><span class="sig-paren">(</span><em>windowPtr</em>, <em>txt</em>, <em>fontSize</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.getTextDims" title="Permalink to this definition">¶</a></dt>
 <dd><p>For window at <cite>windowPtr</cite>, get dimensions of <cite>txt</cite>.</p>
 <p>This will be at current font size or, if provided, at <cite>fontSize</cite>.</p>
+<p>Adapted from Ruonan Jia's initial implementation in the MDM task.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>windowPtr</strong> -- A window pointer to specify screen</li>
+<li><strong>windowPtr</strong> -- A window pointer to specify active screen</li>
 <li><strong>txt</strong> -- The characters displayed on a screen</li>
 <li><strong>fontSize</strong> -- The size of the existing text</li>
 </ul>
@@ -927,52 +934,54 @@ dims: The dimensions of the text (txt).</p>
 </tr>
 </tbody>
 </table>
-<p>Adapted from Ruonan Jia's initial implementation in the MDM task.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.draw.helpers.imgLookup">
 <code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">imgLookup</code><span class="sig-paren">(</span><em>keyIdx</em>, <em>fnameLookupTbl</em>, <em>textureLookupTbl</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.imgLookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Supplies the texture and image dimensions of an image.</p>
-<dl class="docutils">
-<dt>Looks up what texture <cite>keyIdx</cite> corresponds to, taking it for a</dt>
-<dd><blockquote class="first">
-<div>simple index in <cite>fnameLookupTbl</cite>. (The middle step is looking up what
-texture ID a picture identified by its path corresponds to.)</div></blockquote>
+<p>Looks up what texture <cite>keyIdx</cite> corresponds to, taking it for a simple index
+in <cite>fnameLookupTbl</cite>. (The middle step is looking up what texture ID a picture
+identified by its path corresponds to.)</p>
 <p>Assumes a <cite>fnameLookupTbl</cite> has a list of image filenames. If
 <cite>textureLookupTbl</cite> is provided, it is assumed it was created by
 <cite>loadTexturesFromConfig</cite> and is up-to-date. If not, an error is thrown, as
 <cite>imgLookup</cite> does not have a pointer to the currently open Screen it would
 need to create the texture on its own.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>keyIdx: A key index
-fnameLookupTbl: A table composed of image filenames to draw from
-textureLookupTbl: A table composed of image textures</dd>
-<dt>Returns:</dt>
-<dd><p class="first">2-element tuple containing</p>
-<ul class="last simple">
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyIdx</strong> -- A key index</li>
+<li><strong>fnameLookupTbl</strong> -- A table composed of image filenames to draw from</li>
+<li><strong>textureLookupTbl</strong> -- A table composed of image textures</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
+<ul class="simple">
 <li><strong>textureId</strong>: An image specific texture ID</li>
 <li><strong>imgDims</strong>: The specific image dimensions</li>
 </ul>
-</dd>
-</dl>
-<p class="last">NOTE: There is no enforcement of image paths being supplied as absolute
-paths.</p>
-</dd>
-</dl>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">There is no enforcement of image paths being supplied as absolute paths.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.draw.helpers.orderLotto">
 <code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">orderLotto</code><span class="sig-paren">(</span><em>trialData</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.orderLotto" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set-up of the probability and win or loss amount for each lottery.</p>
-<dl class="docutils">
-<dt>Given the win color for the trial, it returns two sorted matrices</dt>
-<dd>with the probability (and, respectively, payoff) values sorted such that
-the first will appear on top and the second on the bottom of the drawLotto
-display.</dd>
-</dl>
+<dd><p>Set up the probability and win/loss amount for each lottery.</p>
+<p>Given the win color for the trial, it returns two sorted matrices with the
+probability (and, respectively, payoff) values sorted such that the first
+will appear on top and the second on the bottom of the drawLotto display.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -992,13 +1001,11 @@ display.</dd>
 <dl class="function">
 <dt id="PTF.lib.draw.helpers.textLookup">
 <code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">textLookup</code><span class="sig-paren">(</span><em>keyIdx</em>, <em>lookupTable</em>, <em>windowPtr</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.textLookup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Supplies the specified text and text dimensions.</p>
-<dl class="docutils">
-<dt>Given an index in <cite>keyIdx</cite>, returns the (presumed character array)</dt>
-<dd>value corresponding to that index in <cite>lookupTable</cite> cell array. If provided
+<dd><p>Looks up a text by key, optionally computing text dimensions.</p>
+<p>Given an index in <cite>keyIdx</cite>, returns the (presumed character array) value
+corresponding to that index in <cite>lookupTable</cite> cell array. If provided
 <cite>windowPtr</cite>, also returns the dimensions that the text would take up under
-the current config in that PTB window.</dd>
-</dl>
+the current config in that PTB window.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1025,18 +1032,20 @@ the current config in that PTB window.</dd>
 <dl class="function">
 <dt id="PTF.lib.draw.helpers.xyAndDimsToRect">
 <code class="descclassname">PTF.lib.draw.helpers.</code><code class="descname">xyAndDimsToRect</code><span class="sig-paren">(</span><em>xy</em>, <em>dims</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.draw.helpers.xyAndDimsToRect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifies coordinates and dimensions of a rectangle (screen)</p>
+<dd><p>Given origin point and dimensions, returns the rect matrix for Screen.</p>
+<p>Converts a top-left xy-coordinate and a 2x1 widthxlength matrix to 2x2
+dimensions expected by PsychToolBox's Screen.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xy</strong> -- The coordinate points of an object</li>
+<li><strong>xy</strong> -- The coordinate top-left origin of an object</li>
 <li><strong>dims</strong> -- The dimensions (height and width) of an object</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A rectangle of known dimensions and coordinates</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A rectangle usable by Screen</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">rect</p>
@@ -1052,23 +1061,26 @@ the current config in that PTB window.</dd>
 <dl class="function">
 <dt id="PTF.lib.action.action_collectResponse">
 <code class="descclassname">PTF.lib.action.</code><code class="descname">action_collectResponse</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.action.action_collectResponse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Collect participant response to lottery and record in trial data.</p>
-<dl class="docutils">
-<dt>For duration specified in phaseConfig.duration, wait for a keypress specified</dt>
-<dd>in blockConfig.device.choiceKeys</dd>
-</dl>
+<dd><p>Phase action to record the participant's response.</p>
+<p>For duration specified in phaseConfig.duration, waits for one of the
+keypresses specified in blockConfig.device.choiceKeys.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Currently, the function is R&amp;A-specific: it will only expect the first two
+keys, and it will recode the choice to choseLottery via keyToChoice.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>trialData</strong> -- The participant data from a trial</li>
+<li><strong>trialData</strong> -- The participant data from a trial so far</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 <li><strong>phaseConfig</strong> -- The phase settings</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The participant data from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated participant data from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -1081,19 +1093,20 @@ the current config in that PTB window.</dd>
 <dl class="function">
 <dt id="PTF.lib.action.action_display">
 <code class="descclassname">PTF.lib.action.</code><code class="descname">action_display</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.action.action_display" title="Permalink to this definition">¶</a></dt>
-<dd><p>For duration specified in phaseConfig.duration, maintain the phase.</p>
+<dd><p>Phase action to simply display phase content without any interaction.</p>
+<p>Duration is specified in phaseConfig.duration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>trialData</strong> -- The participant data from a trial</li>
+<li><strong>trialData</strong> -- The participant data from a trial so far</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 <li><strong>phaseConfig</strong> -- The phase settings</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The participant data from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated participant data from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -1106,23 +1119,21 @@ the current config in that PTB window.</dd>
 <dl class="function">
 <dt id="PTF.lib.action.action_waitForBreak">
 <code class="descclassname">PTF.lib.action.</code><code class="descname">action_waitForBreak</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.action.action_waitForBreak" title="Permalink to this definition">¶</a></dt>
-<dd><p>Phase action that waits for a defined duration for a defined break key.</p>
-<dl class="docutils">
-<dt>Duration is defined under phaseConfig.duration and the break key is</dt>
-<dd>defined under blockConfig.device.breakKeys.</dd>
-</dl>
+<dd><p>Phase action to wait for a break key press.</p>
+<p>For a duration specified in phaseConfig.duration, waits for the press of a
+break key defined in blockConfig.device.breakKeys.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>trialData</strong> -- The participant data from a trial</li>
+<li><strong>trialData</strong> -- The participant data from a trial so far</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
 <li><strong>phaseConfig</strong> -- The phase settings</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The participant data from a trial.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated participant data from a trial.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trialData</p>
@@ -1160,31 +1171,42 @@ the current config in that PTB window.</dd>
 </tr>
 </tbody>
 </table>
-<ol class="arabic simple">
-<li>Initialize and check arguments</li>
-</ol>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.setup.generateBlocks">
 <code class="descclassname">PTF.lib.setup.</code><code class="descname">generateBlocks</code><span class="sig-paren">(</span><em>blockConfig</em>, <em>catchTrial</em>, <em>catchIdx</em>, <em>adHocTrials</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.generateBlocks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a cell array of trial tables within a block.
-Trial tables are generated with..</p>
-<blockquote>
-<div><cite>generateTrials</cite> from blockConfig.trial.generate, separated into blocks with
-a fixed number of rows (defined in blockConfig.task.blockLength). If
-given further arguments, it will also add to the final trial table the
-table <cite>catchTrial</cite> at per-block indices passed in <cite>catchIdx</cite>. If
-<cite>adHocTrials</cite> are provided, they are mixed in with the generated trials
-prior to randomizationand separation into blocks.</div></blockquote>
+<dd><p>Returns a cell array of trial tables within a block.</p>
+<p>Trial tables are generated with <cite>generateTrials</cite> from
+blockConfig.trial.generate, separated into blocks with a fixed number of rows
+(defined in blockConfig.task.blockLength). If given further arguments, it
+will also add to the final trial table the table <cite>catchTrial</cite> at per-block
+indices passed in <cite>catchIdx</cite>. If <cite>adHocTrials</cite> are provided, they are mixed
+in with the generated trials prior to randomizationand separation into
+blocks.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>catchTrial must include all the columns that <cite>generateTrials</cite> will create
+based on <cite>blockConfig.trial.generate</cite>. An easy way to find what these are
+is to run this function without catchTrial or catchIdx.</p>
+<p class="last">If catchIdx is not provided, the catch trial will be placed randomly within
+each block.</p>
+</div>
+<p>The function also adds ITIs to be generated per trial.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If ITIs matter (e.g. for fMRI tasks), make sure that you've provided as
+many of them as necessary for <em>non-catch</em> trials. (Catch trials must have
+their own ITI defined in the column <cite>ITIs</cite>.)</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>blockConfig</strong> -- A configuration of the block</li>
-<li><strong>catchTrial</strong> -- An empty trial table</li>
-<li><strong>catchIdx</strong> -- An index number assigned to a catch trial</li>
+<li><strong>catchTrial</strong> -- An single-row table with trial properties for a catch trial</li>
+<li><strong>catchIdx</strong> -- (Optional) Catch trial is to be presented as catchIdx'th trial</li>
 <li><strong>adHocTrials</strong> -- Any added trials to block</li>
 </ul>
 </td>
@@ -1197,18 +1219,6 @@ prior to randomizationand separation into blocks.</div></blockquote>
 </tr>
 </tbody>
 </table>
-<p>NOTE: catchTrial must include all the columns that <cite>generateTrials</cite> will
-create based on <cite>blockConfig.trial.generate</cite>. An easy way to find what these
-are is to run this function without catchTrial or catchIdx.</p>
-<dl class="docutils">
-<dt>If catchIdx is not provided, the catch trial will be placed randomly</dt>
-<dd>within each block.</dd>
-</dl>
-<p>The function also adds ITIs to be generated per trial. NOTE: If ITIs matter
-(e.g. for fMRI tasks), make sure that you've provided as many of them as
-necessary for <em>non-catch</em> trials. (Catch trials must have their own ITI
-defined in the column <cite>ITIs</cite>.)
-Step 1: Generate all trials for this kind of a block &amp; randomize</p>
 </dd></dl>
 
 <dl class="function">
@@ -1230,30 +1240,44 @@ Step 1: Generate all trials for this kind of a block &amp; randomize</p>
 </tr>
 </tbody>
 </table>
-<p>NOTE: The generator is specific to the risk/ambiguity task. It expects that %
-the struct will contain <cite>stakes</cite> and at least one of (<cite>probs</cite>, <cite>ambigs</cite>)
-fields.  % It will also combine them in a particular way (specifically,
-assuming that all ambiguous % trials are coupled with .5 probability, and all
-probability trials have at % least one appearance with zero ambiguity). It
-distributes all other subfields % it finds randomly across thus generated
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The generator is specific to the risk/ambiguity task. It expects that the
+struct will contain <cite>stakes</cite> and at least one of (<cite>probs</cite>, <cite>ambigs</cite>)
+fields.  It will also combine them in a particular way (specifically,
+assuming that all ambiguous trials are coupled with .5 probability, and all
+probability trials have at least one appearance with zero ambiguity). It
+distributes all other subfields it finds randomly across thus generated
 trials.</p>
-<p>If you wish to omit any ambiguous trials but do not wish to delete the struct
-field, you can also pass an empty matrix to achieve the same result.</p>
-<p>Generally speaking: if your task only differs slightly from the monetary R&amp;A
-task, you should be able to use this script with minimum alteration. If your
-task is substantially different, you might have to roll your own.
-1. Generate the basics -- assuming field names contain well-defined content</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you wish to omit any ambiguous trials but do not wish to delete the
+struct field, you can also pass an empty matrix to achieve the same result.</p>
+<p class="last">There is currently no way to disabuse generateTrials of the assumption that
+the midpoint of ambiguity occluder is at 0.5.</p>
+</div>
+<p>Generally speaking: if your task only differs slightly from the monetary
+R&amp;A task, you should be able to use this script with minimum alteration. If
+your task is substantially different, you might have to roll your own.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.setup.importTrials">
 <code class="descclassname">PTF.lib.setup.</code><code class="descname">importTrials</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.importTrials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a table from trial file</p>
+<dd><p>Create a table of trial properties by reading them from a tabular file.</p>
+<p>If the provided does not exist, it will raise an error.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The function does not verify that the file defines the _correct_
+properties; indeed, it just reads the file and returns its contents.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> -- A named file of trial information</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> -- File name of a tabular file (e.g. in CSV format) with trial
+properties</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A table of the trial information.</td>
 </tr>
@@ -1261,57 +1285,58 @@ task is substantially different, you might have to roll your own.
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>TODO: Maybe this does not have to be a hard failure, but rather allow a</dt>
-<dd>graceful fallback onto on-the-fly generation?</dd>
-</dl>
+<div class="admonition-todo admonition" id="index-5">
+<p class="first admonition-title">Todo</p>
+<p class="last">Maybe this does not have to be a hard failure, but rather could allow a
+graceful fallback onto on-the-fly generation?</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.setup.loadPTB">
 <code class="descclassname">PTF.lib.setup.</code><code class="descname">loadPTB</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.loadPTB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start PsychToolBox; return config struct with display info.</p>
-<dl class="docutils">
-<dt>Most importantly, the display info is in config.device; the essential one</dt>
-<dd>is s.device.windowPtr.</dd>
-</dl>
+<p>Most importantly, the display info is in config.device; the essential one is
+s.device.windowPtr.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> -- A configuration of PTB set-up</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> -- Initial configuration of a PTB set-up</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A configuration of PTB set-up</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Updated configuration of PTB set-up</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">config</td>
 </tr>
 </tbody>
 </table>
-<p>Set random seed -- if already set, continue using that one</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.setup.loadTexturesFromConfig">
 <code class="descclassname">PTF.lib.setup.</code><code class="descname">loadTexturesFromConfig</code><span class="sig-paren">(</span><em>configStruct</em>, <em>textureMap</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.setup.loadTexturesFromConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a texture map of images and image information.</p>
-<dl class="docutils">
-<dt>Given a <cite>configStruct</cite>, it will extract file paths</dt>
-<dd>named <cite>.img</cite> and return a container mapping valid image filenames to
-a struct containing PTB's <cite>.textureId</cite> and their dimentsions in <cite>.dims</cite>.
-If provided with a previously generated <cite>textureMap</cite>, it will avoid
-redundant loading of previously loaded images.</dd>
-</dl>
+<p>Given a <cite>configStruct</cite>, it will extract file paths named <cite>.img</cite> and return a
+container mapping valid image filenames to a struct containing PTB's
+<cite>.textureId</cite> and their dimensions in <cite>.dims</cite>. If provided with a previously
+generated <cite>textureMap</cite>, it will avoid redundant loading of previously loaded
+images.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>configStruct</strong> -- A configuration structure containing named images</li>
-<li><strong>textureMap</strong> -- A data structure of images and image information mapped to a key.</li>
+<li><strong>textureMap</strong> -- Optionally, a previously created textureMap to update</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A data structure of images and image information mapped to a key.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt>A data structure of texture pointer and dimensions mapped to a</dt>
+<dd><p class="first last">filename.</p>
+</dd>
+</dl>
+</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">textureMap</p>
@@ -1336,7 +1361,7 @@ redundant loading of previously loaded images.</dd>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An object containing data on (trimmed) blocks</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An updated object containing data on (trimmed) blocks</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataObject</p>
@@ -1356,7 +1381,7 @@ redundant loading of previously loaded images.</dd>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> -- A configuration of practice runs</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A configuration of practice runs</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An updated configuration of practice runs</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">config</td>
 </tr>
@@ -1385,22 +1410,20 @@ redundant loading of previously loaded images.</dd>
 <dl class="function">
 <dt id="PTF.lib.export.exportSubject">
 <code class="descclassname">PTF.lib.export.</code><code class="descname">exportSubject</code><span class="sig-paren">(</span><em>DataObject</em>, <em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.export.exportSubject" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Given a DataObject, it unites all records in one table.</dt>
-<dd>If given fname, it will also write the table into a file.</dd>
-</dl>
+<dd><p>Given a DataObject, it unites all records in one table.</p>
+<p>If given fname, it will also write the table into a file.</p>
 <p>The file format has to be any that <cite>writetable</cite> can handle; consult its docs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>DataObject</strong> -- An object containing programmed data</li>
-<li><strong>fname</strong> -- A defined file name</li>
+<li><strong>DataObject</strong> -- An object containing participant data.</li>
+<li><strong>fname</strong> -- Optionally, a file name to save the resultant table in.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A final records table containing all relevant information.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A table containing all recorded information in all blocks.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">exportTable</p>
@@ -1414,17 +1437,21 @@ redundant loading of previously loaded images.</dd>
 <dt id="PTF.lib.export.exportTaskData">
 <code class="descclassname">PTF.lib.export.</code><code class="descname">exportTaskData</code><span class="sig-paren">(</span><em>taskName</em>, <em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.export.exportTaskData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exports all subject data in tasks/<cite>taskName</cite>/data.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The function merely concatenates the sequential outputs of exportSubject.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>taskName</strong> -- A defined task name</li>
-<li><strong>fname</strong> -- A defined file name</li>
+<li><strong>taskName</strong> -- Name of the task to export. Assumed to be folder name.</li>
+<li><strong>fname</strong> -- Optional file name in which to save the results table.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A table of all subject task data.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A table of all participant data collected in the task.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">exportTable</p>
@@ -1440,7 +1467,9 @@ redundant loading of previously loaded images.</dd>
 <dl class="function">
 <dt id="PTF.lib.helpers.configHasLookups">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">configHasLookups</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.configHasLookups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if lookups exist and are non-empty.</p>
+<dd><p>Checks if lookups exist and are non-empty. (Tests presence of image payoffs.)</p>
+<p>The function is commonly used to detect if the config defines an image + text
+value to substitute for the value in trialData specification.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1459,6 +1488,8 @@ redundant loading of previously loaded images.</dd>
 <dt id="PTF.lib.helpers.cutArrayToSize">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">cutArrayToSize</code><span class="sig-paren">(</span><em>arr</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.cutArrayToSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cuts, or extends, arr so that it has length n.</p>
+<p>If <cite>n</cite> is not a direct multiple of the length of <cite>arr</cite>, the first n %%
+length(arr) elements are used.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1477,30 +1508,44 @@ redundant loading of previously loaded images.</dd>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Fix: If this is a character array, make it into a cell array to ensure</dt>
-<dd>expected behavior.</dd>
-</dl>
+<div class="admonition-todo admonition" id="index-6">
+<p class="first admonition-title">Todo</p>
+<p class="last">If this is a character array, make it into a cell array to ensure
+expected behavior.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.experimentSummary">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">experimentSummary</code><span class="sig-paren">(</span><em>Data</em>, <em>blockId</em>, <em>trialId</em>, <em>bagMap</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.experimentSummary" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>EXPERIMENTSUMMARY Selects block and trial from Data.blocks.recorded and</dt>
-<dd>returns information necessary for lottery realization in a per-trial
-struct. If <cite>bagMap</cite> is supplied, it will use it instead of the default
-lookup map. NOTE: This is different from the original behavior of
-<cite>experimentSummary</cite>, which returned a human-readable struct array that
-encompassed <em>all</em> trials.</dd>
-</dl>
-<p>NOTE: You might want to load the bagMap via <cite>readtable</cite> from a CSV/XLS file.</p>
+<dd><p>Picks a trial; returns info necessary for in-person lottery realization.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>Deprecated.</strong> Use methods that evaluate lotteries instead.</p>
+</div>
+<p>If <cite>bagMap</cite> is supplied, it will use it instead of the default
+lookup map.</p>
+<p>You might want to load the bagMap via <cite>readtable</cite> from a CSV/XLS file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is different from the original behavior of <cite>experimentSummary</cite>, which
+returned a human-readable struct array that encompassed <em>all</em> trials.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.getBlocksForPractice">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">getBlocksForPractice</code><span class="sig-paren">(</span><em>practiceBlocks</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getBlocksForPractice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assumes that <cite>preparePractice</cite> has been run and re-numbers the block span</p>
+<dd><p>Give the practice blocks to run from a trimmed practice-only block set.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>Deprecated.</strong> Use methods that evaluate lotteries instead.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Assumes that <cite>preparePractice</cite> has been run, removed the blocks that
+weren't selected, and re-numbered the block span.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1508,8 +1553,8 @@ encompassed <em>all</em> trials.</dd>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>practiceBlocks</strong> -- A set of practice blocks</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2-element tuple containing<ul class="simple">
-<li><strong>firstBlockIdx</strong>: The first ordered block in set.</li>
-<li><strong>lastBlockIdx</strong>: The last ordered block in set.</li>
+<li><strong>firstBlockIdx</strong>: The index of the first block to run</li>
+<li><strong>lastBlockIdx</strong>: The index of the last block to run</li>
 </ul>
 </td>
 </tr>
@@ -1527,36 +1572,36 @@ encompassed <em>all</em> trials.</dd>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>DataObject</strong> -- An object containing block information</li>
-<li><strong>blocksPerSession</strong> -- A variable of the number of blocks run each session</li>
+<li><strong>blocksPerSession</strong> -- The number of blocks to run this session</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
 <ul class="simple">
-<li><strong>firstIdx</strong>: The beginning block index.</li>
-<li><strong>lastIdx</strong>: The ending block index.</li>
+<li><strong>firstIdx</strong>: The index of the first block.</li>
+<li><strong>lastIdx</strong>: The index of the last block.</li>
 </ul>
 </p>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>NOTE: If all blocks have been done already, <cite>lastIdx</cite> will be an empty</dt>
-<dd>vector. This will prevent any loop of the form k:lastIdx from running, but
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If all blocks have been done already, <cite>lastIdx</cite> will be an empty
+vector. This will prevent any loop of the form k:lastIdx from running, but
 you should make sure you don't rely on the numericity of lastIdx in other
-ways.</dd>
-</dl>
-<p>Extract relevant values from DataObject</p>
+ways.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.getReferenceSideAndValue">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">getReferenceSideAndValue</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.getReferenceSideAndValue" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Check if there is any specific reference side &amp; value defined for this trial,</dt>
-<dd>or for this block. If reference side is unavailable, generate it at random.</dd>
-</dl>
+<dd><p>Extracts properties of the reference from both supplied configuration structs.</p>
+<p>Checks if there is any specific reference side &amp; value defined for this
+trial, or for this block. If reference side is unavailable, generate it at
+random.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1569,29 +1614,27 @@ ways.</dd>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
 <ul class="simple">
-<li><strong>referenceSide</strong>: A side kept constant across choice events (not lottery).</li>
-<li><strong>referenceValue</strong>: A set value, on reference side, kept constant across choice events.</li>
+<li><strong>referenceSide</strong>: Side on which the reference should be displayed</li>
+<li><strong>referenceValue</strong>: The value to display.</li>
 </ul>
 </p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Approach: Start from general options and overwrite with more specific ones
-a. Check in blockConfig</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.lib.helpers.isFunction">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">isFunction</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.isFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines whether input object is of specified class.</p>
+<dd><p>Is the argument a function handle?</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> -- Any matlab object</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A boolean to determine if x is of specified class</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A boolean to determine if x is of class function handle</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
@@ -1602,14 +1645,14 @@ a. Check in blockConfig</p>
 <dl class="function">
 <dt id="PTF.lib.helpers.isFunctionOrFunctionArray">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">isFunctionOrFunctionArray</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.isFunctionOrFunctionArray" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determines whether input object is a cell array.</p>
+<dd><p>Is the input object is a function handle or a function handle array?</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> -- Any matlab object</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A boolean defining the cell array or the class of the object.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true if x is function handle or a cell array full of function handles.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
@@ -1634,15 +1677,19 @@ a. Check in blockConfig</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
 <ul class="simple">
 <li><strong>Data</strong>: Participant information.</li>
-<li><strong>existed</strong>: A recorded file of participant information.</li>
+<li><dl class="first docutils">
+<dt><strong>existed</strong>: Boolean reporting whether the file previously existed, or</dt>
+<dd>had to be created.</dd>
+</dl>
+</li>
 </ul>
 </p>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
 <p class="last">Currently assumes that subject data is stored in a struct called Data,
 and that the folders in the path to <cite>fname</cite> all exist.</p>
 </div>
@@ -1660,8 +1707,8 @@ and that the folders in the path to <cite>fname</cite> all exist.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filenames</strong> -- A cell array</li>
-<li><strong>path</strong> -- A string file path</li>
+<li><strong>filenames</strong> -- A cell array of file names</li>
+<li><strong>path</strong> -- A string folder on which the filenames are located.</li>
 </ul>
 </td>
 </tr>
@@ -1679,10 +1726,8 @@ and that the folders in the path to <cite>fname</cite> all exist.</p>
 <dt id="PTF.lib.helpers.saveData">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">saveData</code><span class="sig-paren">(</span><em>Data</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.saveData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a subject data file to <cite>Data.filename</cite>.</p>
-<dl class="docutils">
-<dt>Ensures that it stores the struct Data correctly, such that <cite>loadOrCreate</cite> can load it</dt>
-<dd>properly.</dd>
-</dl>
+<p>Ensures that it stores the struct Data correctly, such that <cite>loadOrCreate</cite>
+can load it properly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1695,14 +1740,17 @@ and that the folders in the path to <cite>fname</cite> all exist.</p>
 </tr>
 </tbody>
 </table>
-<p>(WARNING: The function assumes that the trial-handling functions haven't
-overwritten previous records in Data, and as such, overwrites the file
-without warning.)</p>
-<dl class="docutils">
-<dt>TODO: Determine what a file that's being overwritten with different info</dt>
-<dd>would look like, and test for that</dd>
-</dl>
-<p>Assume that if folder was provided, Data.filename is just filename and not path</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The function assumes that the trial-handling functions haven't overwritten
+previous records in Data, and as such, overwrites the file without
+warning.</p>
+</div>
+<div class="admonition-todo admonition" id="index-7">
+<p class="first admonition-title">Todo</p>
+<p class="last">Determine what a file that's being overwritten with different info would
+look like, and test for that</p>
+</div>
 </dd></dl>
 
 </div>
