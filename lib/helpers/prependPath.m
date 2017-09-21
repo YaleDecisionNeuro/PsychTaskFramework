@@ -1,6 +1,6 @@
 function fullpaths = prependPath(filenames, path)
 % When given a cell array `filenames`, returns that cell array
-%   with `path` added before each element of the cell array.
+% with `path` added before each element of the cell array.
 %
 % Args:
 %   filenames: A cell array of file names

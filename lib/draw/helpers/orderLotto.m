@@ -12,7 +12,7 @@ function [probOrder, amtOrder] = orderLotto(trialData)
 %   2-element tuple containing
 %
 %   - **probOrder**: A probability matrix of a win versus a loss.
-%   - ** amtOrder**: A matrix of the amount that was won or lost.
+%   - **amtOrder**: A matrix of the amount that was won or lost.
 
   winProb = trialData.probs;
   winAmt = trialData.stakes;

@@ -5,8 +5,8 @@ function report = choiceReport(trialData)
 %   trialData: A table of trial information
 %
 % Returns:
-%   report: Whether participant chose the lottery and what the properties of
-%     the offered lottery were.
+%   boolean: Whether participant chose the lottery and what the properties of
+%   the offered lottery were.
 
   choice = trialData.choice;
   if choice == 0

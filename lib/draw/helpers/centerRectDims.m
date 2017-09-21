@@ -16,8 +16,8 @@ function dims = centerRectDims(center, rectSize, pxOffCenter)
 %     in both dimensions.
 %
 % Returns:
-%   dims: The 2x2 rectangular matrix of xy-coordinates usable as argument for
-%     PTB::Screen functions.
+%   The 2x2 rectangular matrix of xy-coordinates usable as argument for
+%   `PTB::Screen` functions.
 
   dims = [center - rectSize/2, center + rectSize/2];
   if exist('pxOffCenter', 'var')

@@ -16,7 +16,7 @@ function [ PTBTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig)
 %
 %   - **PTBTimestamp**: A record of the PTB trial timestamp. 
 %   - **found**: A boolean signaling whether a timestamp was found. If false,
-%       the returned PTBTimestamp is the output of GetSecs().
+%     the returned PTBTimestamp is the output of GetSecs().
 
 0; % to prevent sphinx from thinking that the next comment is more docstring
 

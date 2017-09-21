@@ -11,7 +11,7 @@ function [ dims ] = getTextDims(windowPtr, txt, fontSize)
 %   fontSize: The size of the existing text
 %
 % Returns:
-%   dims: The dimensions of the displayed text.
+%   The 1x2 dimensions of the displayed text.
 
 if exist('fontSize', 'var')
   oldFontSize = Screen('TextSize', windowPtr);
