@@ -181,11 +181,8 @@ itself.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subjectId</strong> (<em>int, optional</em>) -- A participant ID</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>A <cite>DataObject</cite> with a record of the participant's</dt>
-<dd>choices.</dd>
-</dl>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A <cite>DataObject</cite> with a record of the participant's
+choices.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">DataObject struct</td>
 </tr>
@@ -196,48 +193,31 @@ itself.</p>
 <span class="target" id="module-PTF.tasks.RA"></span><dl class="function">
 <dt id="PTF.tasks.RA.RA_blockDefaults">
 <code class="descclassname">PTF.tasks.RA.</code><code class="descname">RA_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.RA.RA_blockDefaults" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return general block config for the monetary risk &amp; ambiguity</dt>
-<dd>task by modifying the default ones from <cite>config</cite>.</dd>
-</dl>
-<p>Only small modifications are necessary, as <cite>config</cite> caters to this paradigm</p>
+<dd><p>Return general block config for the monetary risk &amp; ambiguity
+task by modifying the default ones from <cite>configDefaults</cite>.</p>
+<p>Only small modifications are necessary, as <cite>config</cite> caters to this paradigm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The structure architecture for defining the RA task and all default</dt>
-<dd>settings.</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">s</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Config struct with settings shared across all R&amp;A conditions.</td>
 </tr>
 </tbody>
 </table>
-<p>Load defaults</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.tasks.RA.RA_lossConfig">
 <code class="descclassname">PTF.tasks.RA.</code><code class="descname">RA_lossConfig</code><span class="sig-paren">(</span><em>gains_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.RA.RA_lossConfig" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Returns loss block config for the monetary R&amp;A task by</dt>
-<dd>modifying the ones created for the gains block.</dd>
-</dl>
+<dd><p>Returns loss block config for the monetary R&amp;A task by
+modifying the ones created for the gains block.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gains_config</strong> -- The gains block settings</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gains_config</strong> -- Config returned from <cite>RA_gainsConfig</cite></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (RA loss block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the RA loss condition</td>
 </tr>
 </tbody>
 </table>
@@ -278,77 +258,50 @@ together.)</p>
 <span class="target" id="module-PTF.tasks.MDM"></span><dl class="function">
 <dt id="PTF.tasks.MDM.MDM_blockDefaults">
 <code class="descclassname">PTF.tasks.MDM.</code><code class="descname">MDM_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.MDM.MDM_blockDefaults" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return general block config for the medical decision-making</dt>
-<dd>task by modifying the default ones from <cite>config</cite>.</dd>
-</dl>
+<dd><p>Return general block config for the medical decision-making task by modifying
+the default ones from <cite>configDefault</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The structure architecture for defining the MDM task and all default</dt>
-<dd>settings.</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">s</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Config struct with settings shared across all MDM conditions.</td>
 </tr>
 </tbody>
 </table>
-<p>Load defaults</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.tasks.MDM.MDM_medicalConfig">
 <code class="descclassname">PTF.tasks.MDM.</code><code class="descname">MDM_medicalConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.MDM.MDM_medicalConfig" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return config specific to the medical portion of MDM by</dt>
-<dd>modifying the general MDM_blockDefaults pass as argument.</dd>
-</dl>
+<dd><p>Return config specific to the medical portion of MDM by modifying the
+general <cite>MDM_blockDefaults</cite> pass as argument.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- The initial task settings (medical block)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- Task config struct to modify</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (medical block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the MDM medical condition</td>
 </tr>
 </tbody>
 </table>
-<p>Load defaults</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.tasks.MDM.MDM_monetaryConfig">
 <code class="descclassname">PTF.tasks.MDM.</code><code class="descname">MDM_monetaryConfig</code><span class="sig-paren">(</span><em>initial_config</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.MDM.MDM_monetaryConfig" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return config specific to the monetary portion of MDM by</dt>
-<dd>modifying the general MDM_blockDefaults pass as argument.</dd>
-</dl>
+<dd><p>Return config specific to the monetary portion of MDM by
+modifying the general MDM_blockDefaults pass as argument.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- The initial task settings (monetary block)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- Task config struct to modify</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (monetary block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the MDM monetary condition</td>
 </tr>
 </tbody>
 </table>
-<p>Load defaults</p>
 </dd></dl>
 
 </div>
@@ -357,48 +310,32 @@ together.)</p>
 <dl class="function">
 <dt id="PTF.SODM">
 <code class="descclassname">PTF.</code><code class="descname">SODM</code><span class="sig-paren">(</span><em>subjectId</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.SODM" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>SODM Runs a self-other monetary and medical decision-making task and records</dt>
-<dd>its results for the subject whose subject number is passed in. Modeled
-on (and largely copy-pasted from) RA.m, to test out image implementation
-(#5).</dd>
-</dl>
-<p>Add subfolders we'll be using to path</p>
+<dd><p>Runs a self-other monetary and medical decision-making task and records
+its results for the subject whose subject number is passed in. Modeled on
+(and largely copy-pasted from) RA.m, to test out image implementation (#5).</p>
 </dd></dl>
 
 <span class="target" id="module-PTF.tasks.SODM"></span><dl class="function">
 <dt id="PTF.tasks.SODM.SODM_blockDefaults">
 <code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_blockDefaults" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return general block config for the medical decision-making</dt>
-<dd>task by modifying the default ones from <cite>config</cite>.</dd>
-</dl>
+<dd><p>Return general block config for the medical decision-making task by modifying
+the default ones from <cite>configDefaults</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The structure architecture for defining the SODM task and all</dt>
-<dd>default settings.</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">s</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The config struct with settings shared across all SODM conditions.</td>
 </tr>
 </tbody>
 </table>
-<p>Load defaults</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="PTF.tasks.SODM.SODM_drawCondition">
 <code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_drawCondition</code><span class="sig-paren">(</span><em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_drawCondition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw the designation of a self-rewarding vs. other-rewarding task.</p>
-<dl class="docutils">
-<dt>This can either be set in</dt>
-<dd>blockConfig.task.fnHandles.bgrDrawCallbackFn, or called directly from a draw
-function.</dd>
-</dl>
+<p>This can either be set in <cite>blockConfig.task.fnHandles.bgrDrawCallbackFn</cite>, or
+called directly from a draw function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -407,7 +344,10 @@ function.</dd>
 </tr>
 </tbody>
 </table>
-<p>FIXME: Extract position into config</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Extract position into config</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -420,7 +360,7 @@ function.</dd>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>blockConfig</strong> -- The block settings</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An array of possible beneficiaries (self or other).</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">String naming the beneficiary for the current condition</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">beneficiary</td>
 </tr>
@@ -436,15 +376,9 @@ function.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- The initial task settings (medical block)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- Task config struct to modify</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (medical block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the medical conditions of the self/other task</td>
 </tr>
 </tbody>
 </table>
@@ -458,15 +392,9 @@ function.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- The initial task settings (monetary block)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- Task config struct to modify</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (monetary block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the monetary conditions of the self/other task</td>
 </tr>
 </tbody>
 </table>
@@ -475,7 +403,7 @@ function.</dd>
 <dl class="function">
 <dt id="PTF.tasks.SODM.SODM_preBlock">
 <code class="descclassname">PTF.tasks.SODM.</code><code class="descname">SODM_preBlock</code><span class="sig-paren">(</span><em>Data</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.SODM.SODM_preBlock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Insert beneficiary condition into blockName, then call preBlock with it.</p>
+<dd><p>Insert beneficiary condition into blockName, then call <cite>preBlock</cite> with it.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -489,7 +417,7 @@ function.</dd>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
 <ul class="simple">
 <li><strong>Data</strong>: The information collected from task trials.</li>
-<li><strong>blockConfig</strong>: The block settings.</li>
+<li><strong>blockConfig</strong>: The block settings with updated <cite>runSetup.blockName</cite></li>
 </ul>
 </p>
 </td>
@@ -533,30 +461,22 @@ function.</dd>
 <dl class="function">
 <dt id="PTF.UVRA">
 <code class="descclassname">PTF.</code><code class="descname">UVRA</code><span class="sig-paren">(</span><em>subjectId</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.UVRA" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>UVRA Task script for a monetary R&amp;A task with relaxed test-taking conditions.</dt>
-<dd>(&quot;U&quot; stands for &quot;unlimited&quot;, &quot;V&quot; for vertical layout of the choices.)</dd>
-<dt>Like all main tasks scripts, this function loads config, executes requisite</dt>
-<dd>blocks, and records data for the subject whose ID is passed as an argument.</dd>
-</dl>
-<p>Add subfolders we'll be using to path</p>
+<dd><p>Task script for a monetary R&amp;A task with relaxed test-taking conditions.
+(&quot;U&quot; stands for &quot;unlimited&quot;, &quot;V&quot; for vertical layout of the choices.)</p>
+<p>Like all main tasks scripts, this function loads config, executes requisite
+blocks, and records data for the subject whose ID is passed as an argument.</p>
 </dd></dl>
 
 <span class="target" id="module-PTF.tasks.UVRA"></span><dl class="function">
 <dt id="PTF.tasks.UVRA.UVRA_blockDefaults">
 <code class="descclassname">PTF.tasks.UVRA.</code><code class="descname">UVRA_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.UVRA.UVRA_blockDefaults" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return general block config for the UVRA task by modifying the default</dt>
-<dd>ones from <cite>config</cite>.</dd>
-</dl>
+<dd><p>Return general block config for the UVRA task by modifying the default
+ones from <cite>configDefaults</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The structure architecture for defining the UVRA task and all
-default settings.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">s</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Config struct with settings shared across all UVRA conditions.</td>
 </tr>
 </tbody>
 </table>
@@ -564,23 +484,20 @@ default settings.</td>
 
 <dl class="function">
 <dt id="PTF.tasks.UVRA.UVRA_feedback">
-<code class="descclassname">PTF.tasks.UVRA.</code><code class="descname">UVRA_feedback</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.UVRA.UVRA_feedback" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">PTF.tasks.UVRA.</code><code class="descname">UVRA_feedback</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.UVRA.UVRA_feedback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws feedback of choice for a specified time.</p>
-<dl class="docutils">
-<dt>Based on the value in <cite>trialData.choice</cite>, it draws the feedback</dt>
-<dd>that confirms to the player which option they chose (or whether they chose
-at all) and displays it for <cite>blockConfig.trial.legacyPhases.feedback.duration</cite>. Can be
-re-used for tasks that offer two options in a choice.</dd>
-</dl>
+<p>Based on the value in <cite>trialData.choice</cite>, it draws the feedback that confirms
+to the player which option they chose (or whether they chose at all) and
+displays it for <cite>blockConfig.trial.legacyPhases.feedback.duration</cite>. Can be
+re-used for tasks that offer two options in a choice.</p>
 <p>UVRA_feedback differs from phase_feedback by drawing the feedback vertically.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>trialData</strong> -- The information collected from trials</li>
+<li><strong>trialData</strong> -- The participant data from a trial</li>
 <li><strong>blockConfig</strong> -- The block settings</li>
-<li><strong>callback</strong> -- A retrieval of previous information</li>
 </ul>
 </td>
 </tr>
@@ -592,9 +509,9 @@ re-used for tasks that offer two options in a choice.</dd>
 </tr>
 </tbody>
 </table>
-<div class="admonition-todo admonition" id="index-0">
+<div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
-<p class="last">Modularize drawFeedback so that it can draw things vertically in order
+<p class="last">Modularize <cite>drawFeedback</cite> so that it can draw things vertically in order
 to render this function unnecessary</p>
 </div>
 </dd></dl>
@@ -602,13 +519,10 @@ to render this function unnecessary</p>
 <dl class="function">
 <dt id="PTF.tasks.UVRA.UVRA_showChoice">
 <code class="descclassname">PTF.tasks.UVRA.</code><code class="descname">UVRA_showChoice</code><span class="sig-paren">(</span><em>trialData</em>, <em>blockConfig</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.UVRA.UVRA_showChoice" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Executes the monetary R&amp;A trial stage of showing the task choice</dt>
-<dd>to the subject.</dd>
-<dt>Choice values are derived from <cite>trialData</cite> and,</dt>
-<dd>if need be, <cite>blockConfig</cite>. They are displayed vertically and expect a
-subject response.</dd>
-</dl>
+<dd><p>Executes the monetary R&amp;A trial stage of showing the task choice
+to the subject.</p>
+<p>Choice values are derived from <cite>trialData</cite> and, if need be, <cite>blockConfig</cite>.
+They are displayed vertically and expect a subject response.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -649,9 +563,6 @@ subject response.</dd>
 </tr>
 </tbody>
 </table>
-<ol class="arabic simple">
-<li>Add subfolders we'll be using to path</li>
-</ol>
 </dd></dl>
 
 <span class="target" id="module-PTF.tasks.HLFF"></span><dl class="function">
@@ -662,15 +573,9 @@ subject response.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- The initial task settings (HF block)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- Task config struct to modify</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (HF block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the HLFF high-fat condition</td>
 </tr>
 </tbody>
 </table>
@@ -684,15 +589,9 @@ subject response.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- The initial task settings (LF block)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- Task config struct to modify</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (LF block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the HLFF low-fat condition</td>
 </tr>
 </tbody>
 </table>
@@ -701,25 +600,16 @@ subject response.</dd>
 <dl class="function">
 <dt id="PTF.tasks.HLFF.HLFF_blockDefaults">
 <code class="descclassname">PTF.tasks.HLFF.</code><code class="descname">HLFF_blockDefaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PTF.tasks.HLFF.HLFF_blockDefaults" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return general block config for the high-/low-fat food task</dt>
-<dd>designed by Sarah Healy by modifying the default ones from <cite>config</cite>.</dd>
-</dl>
+<dd><p>Return general block config for the high-/low-fat food task
+designed by Sarah Healy by modifying the default ones from <cite>config</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The structure architecture for defining the HLFF task and all default</dt>
-<dd>settings.</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">s</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Config struct with settings shared across all HLFF conditions.</td>
 </tr>
 </tbody>
 </table>
-<p>Load defaults</p>
 </dd></dl>
 
 <dl class="function">
@@ -730,15 +620,9 @@ subject response.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- The initial task settings (monetary block)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>initial_config</strong> -- Task config struct to modify</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>The initial or default structure architecture for defining the task</dt>
-<dd>and its settings (monetary block).</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">c</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Config struct specific to the HLFF monetary condition</td>
 </tr>
 </tbody>
 </table>

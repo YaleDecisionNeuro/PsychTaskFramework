@@ -628,13 +628,10 @@ blockConfig: The block settings (unchanged)</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>trialData</strong> -- A table of trial information</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>Whether participant chose the lottery and what the properties of</dt>
-<dd>the offered lottery were.</dd>
-</dl>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Whether participant chose the lottery and what the properties of
+the offered lottery were.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">report</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
 </tr>
 </tbody>
 </table>
@@ -643,13 +640,13 @@ blockConfig: The block settings (unchanged)</p>
 <dl class="function">
 <dt id="PTF.lib.phase.helpers.findPTBTimestamp">
 <code class="descclassname">PTF.lib.phase.helpers.</code><code class="descname">findPTBTimestamp</code><span class="sig-paren">(</span><em>trialData</em>, <em>phaseConfig</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.phase.helpers.findPTBTimestamp" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Return the correct timestamp from the (optional) structures, or getSecs() if</dt>
-<dd>nothing suitable is found.</dd>
-</dl>
-<p>Suitable locations:
-* <cite>startTimestamp</cite> field in <cite>phaseConfig</cite>
-* <cite>${PHASENAME}Start</cite> or <cite>${PHASENAME}StartTS</cite> in <cite>trialData</cite>.</p>
+<dd><p>Return the correct timestamp from the (optional) structures, or getSecs() if
+nothing suitable is found.</p>
+<p>Suitable locations:</p>
+<ul class="simple">
+<li><cite>startTimestamp</cite> field in <cite>phaseConfig</cite></li>
+<li><cite>${PHASENAME}Start</cite> or <cite>${PHASENAME}StartTS</cite> in <cite>trialData</cite>.</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -663,11 +660,8 @@ blockConfig: The block settings (unchanged)</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>2-element tuple containing</p>
 <ul class="simple">
 <li><strong>PTBTimestamp</strong>: A record of the PTB trial timestamp.</li>
-<li><dl class="first docutils">
-<dt><strong>found</strong>: A boolean signaling whether a timestamp was found. If false,</dt>
-<dd>the returned PTBTimestamp is the output of GetSecs().</dd>
-</dl>
-</li>
+<li><strong>found</strong>: A boolean signaling whether a timestamp was found. If false,
+the returned PTBTimestamp is the output of GetSecs().</li>
 </ul>
 </p>
 </td>
@@ -864,15 +858,8 @@ in both dimensions.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
-<dt>The 2x2 rectangular matrix of xy-coordinates usable as argument for</dt>
-<dd><p class="first last">PTB::Screen functions.</p>
-</dd>
-</dl>
-</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dims</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The 2x2 rectangular matrix of xy-coordinates usable as argument for
+<cite>PTB::Screen</cite> functions.</p>
 </td>
 </tr>
 </tbody>
@@ -926,10 +913,7 @@ currently set font size.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The dimensions of the displayed text.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dims</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The 1x2 dimensions of the displayed text.</p>
 </td>
 </tr>
 </tbody>
@@ -990,7 +974,7 @@ will appear on top and the second on the bottom of the drawLotto display.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2-element tuple containing<ul class="simple">
 <li><strong>probOrder</strong>: A probability matrix of a win versus a loss.</li>
-<li>** amtOrder**: A matrix of the amount that was won or lost.</li>
+<li><strong>amtOrder</strong>: A matrix of the amount that was won or lost.</li>
 </ul>
 </td>
 </tr>
@@ -1698,10 +1682,8 @@ and that the folders in the path to <cite>fname</cite> all exist.</p>
 <dl class="function">
 <dt id="PTF.lib.helpers.prependPath">
 <code class="descclassname">PTF.lib.helpers.</code><code class="descname">prependPath</code><span class="sig-paren">(</span><em>filenames</em>, <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#PTF.lib.helpers.prependPath" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>When given a cell array <cite>filenames</cite>, returns that cell array</dt>
-<dd>with <cite>path</cite> added before each element of the cell array.</dd>
-</dl>
+<dd><p>When given a cell array <cite>filenames</cite>, returns that cell array
+with <cite>path</cite> added before each element of the cell array.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
