@@ -7,8 +7,7 @@ function [ Data ] = HLFF(subjectId)
 % Returns:
 %   Data: A record of the participant's choices.
 
-%% 1. Add subfolders we'll be using to path
-addpath(genpath('./lib'));
+addpath(genpath('./lib')); % 1. Add subfolders we'll be using to path
 addpath(genpath('./tasks/HLFF'));
 
 config = HLFF_blockDefaults();

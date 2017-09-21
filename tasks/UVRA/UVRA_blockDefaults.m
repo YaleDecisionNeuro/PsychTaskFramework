@@ -1,10 +1,9 @@
 function s = UVRA_blockDefaults()
 % Return general block config for the UVRA task by modifying the default 
-%   ones from `config`.
+% ones from `configDefaults`.
 %
 % Returns:
-%   s: The structure architecture for defining the UVRA task and all
-%   default settings.
+%   Config struct with settings shared across all UVRA conditions.
 
   s = configDefaults(); % Get defaults from lib/configDefaults
 

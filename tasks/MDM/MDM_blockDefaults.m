@@ -1,13 +1,11 @@
 function s = MDM_blockDefaults()
-% Return general block config for the medical decision-making
-%   task by modifying the default ones from `config`.
+% Return general block config for the medical decision-making task by modifying
+% the default ones from `configDefault`.
 %
 % Returns:
-%   s: The structure architecture for defining the MDM task and all default
-%     settings.
+%   Config struct with settings shared across all MDM conditions.
 
-% Load defaults
-s = configDefaults();
+s = configDefaults(); % Load defaults
 
 %% Machine config
 s.task.taskPath = ['tasks' filesep 'MDM'];

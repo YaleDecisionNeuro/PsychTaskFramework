@@ -1,15 +1,13 @@
 function s = RA_blockDefaults()
 % Return general block config for the monetary risk & ambiguity
-%   task by modifying the default ones from `config`.
-
-% Only small modifications are necessary, as `config` caters to this paradigm
+% task by modifying the default ones from `configDefaults`.
+%
+% Only small modifications are necessary, as `config` caters to this paradigm.
 %
 % Returns:
-%   s: The structure architecture for defining the RA task and all default
-%     settings.
+%   Config struct with settings shared across all R&A conditions.
 
-% Load defaults
-s = configDefaults();
+s = configDefaults(); % Load defaults
 
 %% Machine config
 s.task.taskPath = ['tasks' filesep 'RA'];

@@ -1,13 +1,12 @@
 function c = RA_lossConfig(gains_config)
 % Returns loss block config for the monetary R&A task by
-%   modifying the ones created for the gains block.
+% modifying the ones created for the gains block.
 %
 % Args:
-%   gains_config: The gains block settings
+%   gains_config: Config returned from `RA_gainsConfig`
 %
 % Returns:
-%   c: The initial or default structure architecture for defining the task
-%     and its settings (RA loss block).
+%   Config struct specific to the RA loss condition
 
   c = gains_config;
 

@@ -1,16 +1,14 @@
 function c = MDM_monetaryConfig(initial_config)
 % Return config specific to the monetary portion of MDM by
-%   modifying the general MDM_blockDefaults pass as argument.
+% modifying the general MDM_blockDefaults pass as argument.
 %
 % Args:
-%   initial_config: The initial task settings (monetary block)
+%   initial_config: Task config struct to modify
 %
 % Returns:
-%   c: The initial or default structure architecture for defining the task
-%     and its settings (monetary block).
+%   Config struct specific to the MDM monetary condition
 
-% Load defaults
-c = initial_config;
+c = initial_config; % Load defaults
 
 %% Block properties
 c.runSetup.blockName = 'Monetary';

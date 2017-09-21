@@ -1,13 +1,11 @@
 function s = HLFF_blockDefaults()
 % Return general block config for the high-/low-fat food task
-%   designed by Sarah Healy by modifying the default ones from `config`.
+% designed by Sarah Healy by modifying the default ones from `config`.
 %
 % Returns:
-%   s: The structure architecture for defining the HLFF task and all default
-%     settings.
+%   Config struct with settings shared across all HLFF conditions.
 
-% Load defaults
-s = configDefaults();
+s = configDefaults(); % Load defaults
 
 %% Machine config
 s.task.taskPath = ['tasks' filesep 'HLFF'];

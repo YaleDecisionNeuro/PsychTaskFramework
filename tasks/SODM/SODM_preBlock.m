@@ -1,5 +1,5 @@
 function [ Data, blockConfig ] = SODM_preBlock(Data, blockConfig)
-% Insert beneficiary condition into blockName, then call preBlock with it.
+% Insert beneficiary condition into blockName, then call `preBlock` with it.
 %
 % Args:
 %   Data: The information collected from task trials
@@ -9,7 +9,7 @@ function [ Data, blockConfig ] = SODM_preBlock(Data, blockConfig)
 %   2-element tuple containing
 %
 %   - **Data**: The information collected from task trials.
-%   - **blockConfig**: The block settings.
+%   - **blockConfig**: The block settings with updated `runSetup.blockName`
 
 blockConfig.runSetup.blockName = [blockConfig.runSetup.blockName ' / ' ...
   SODM_extractBeneficiary(blockConfig)];

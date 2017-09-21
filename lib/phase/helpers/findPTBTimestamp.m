@@ -1,10 +1,11 @@
 function [ PTBTimestamp, found ] = findPTBTimestamp(trialData, phaseConfig)
 % Return the correct timestamp from the (optional) structures, or getSecs() if
-%   nothing suitable is found.
+% nothing suitable is found.
 %
 % Suitable locations: 
-% * `startTimestamp` field in `phaseConfig`
-% * `${PHASENAME}Start` or `${PHASENAME}StartTS` in `trialData`.
+%
+% - `startTimestamp` field in `phaseConfig`
+% - `${PHASENAME}Start` or `${PHASENAME}StartTS` in `trialData`.
 %
 % Args:
 %   trialData: A table of trial information

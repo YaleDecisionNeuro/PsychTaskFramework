@@ -1,10 +1,9 @@
 function [ trialData ] = UVRA_showChoice(trialData, blockConfig, phaseConfig)
 % Executes the monetary R&A trial stage of showing the task choice
-%   to the subject. 
+% to the subject. 
 %
-% Choice values are derived from `trialData` and,
-%   if need be, `blockConfig`. They are displayed vertically and expect a
-%   subject response.
+% Choice values are derived from `trialData` and, if need be, `blockConfig`.
+% They are displayed vertically and expect a subject response.
 %
 % Args:
 %   trialData: The information collected from trials

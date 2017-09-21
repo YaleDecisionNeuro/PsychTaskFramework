@@ -12,7 +12,7 @@ function [ Data ] = RA(subjectId)
 %
 % Returns:
 %   DataObject struct: A `DataObject` with a record of the participant's
-%     choices.
+%   choices.
 
 addpath(genpath('./lib')); % Add PTF functions on Matlab's path
 addpath(genpath('./tasks/RA'));

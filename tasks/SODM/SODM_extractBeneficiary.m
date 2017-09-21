@@ -5,7 +5,7 @@ function [ beneficiary ] = SODM_extractBeneficiary(blockConfig)
 %   blockConfig: The block settings
 %
 % Returns:
-%   beneficiary: An array of possible beneficiaries (self or other). 
+%   beneficiary: String naming the beneficiary for the current condition
 
   try
     beneficiary = blockConfig.runSetup.conditions.beneficiary;

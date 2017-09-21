@@ -1,23 +1,22 @@
-function [ trialData ] = UVRA_feedback(trialData, blockConfig, callback)
+function [ trialData ] = UVRA_feedback(trialData, blockConfig)
 % Draws feedback of choice for a specified time. 
 %
-% Based on the value in `trialData.choice`, it draws the feedback
-%   that confirms to the player which option they chose (or whether they chose
-%   at all) and displays it for `blockConfig.trial.legacyPhases.feedback.duration`. Can be
-%   re-used for tasks that offer two options in a choice.
+% Based on the value in `trialData.choice`, it draws the feedback that confirms
+% to the player which option they chose (or whether they chose at all) and
+% displays it for `blockConfig.trial.legacyPhases.feedback.duration`. Can be
+% re-used for tasks that offer two options in a choice.
 %
 % UVRA_feedback differs from phase_feedback by drawing the feedback vertically.
 %
 % Args:
-%   trialData: The information collected from trials
+%   trialData: The participant data from a trial
 %   blockConfig: The block settings
-%   callback: A retrieval of previous information
 %
 % Returns:
 %   trialData: The information collected from trials.
 %
 % Todo: 
-%   Modularize drawFeedback so that it can draw things vertically in order
+%   Modularize `drawFeedback` so that it can draw things vertically in order
 %   to render this function unnecessary
 
 W = blockConfig.device.windowWidth; % width

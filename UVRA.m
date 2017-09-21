@@ -1,13 +1,13 @@
 function [ Data ] = UVRA(subjectId)
-% UVRA Task script for a monetary R&A task with relaxed test-taking conditions.
-%   ("U" stands for "unlimited", "V" for vertical layout of the choices.)
+% Task script for a monetary R&A task with relaxed test-taking conditions.
+% ("U" stands for "unlimited", "V" for vertical layout of the choices.)
 %
 % Like all main tasks scripts, this function loads config, executes requisite
-%   blocks, and records data for the subject whose ID is passed as an argument.
+% blocks, and records data for the subject whose ID is passed as an argument.
 
-%% Add subfolders we'll be using to path
 addpath(genpath('./lib'));
 addpath(genpath('./tasks/UVRA'));
+% Add subfolders we'll be using to path
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Setup
