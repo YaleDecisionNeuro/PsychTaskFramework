@@ -1,4 +1,4 @@
-function [ trialData ] = UVRA_feedback(trialData, blockConfig)
+function [ trialData ] = UVRA_feedback(trialData, blockConfig, ~)
 % Draws feedback of choice for a specified time. 
 %
 % Based on the value in `trialData.choice`, it draws the feedback that confirms
