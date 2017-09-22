@@ -7,7 +7,7 @@ function s = test_defaults(initial_config)
   
   s.debug = false;
   Screen('Preference', 'SkipSyncTests', 1);
-  s.device.screenId = 1; % min(1, max(Screen('Screens')));
+  s.device.screenId = 0; % min(1, max(Screen('Screens')));
   
   s.device.breakKeys = {'Space', '5%'};
   s.device.choiceKeys = {'LeftArrow', 'RightArrow'};
