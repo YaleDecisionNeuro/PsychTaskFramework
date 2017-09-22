@@ -2,6 +2,9 @@ function unloadPTB(varargin)
 % Closes windows & textures from the passed config(s). Resets Screen config.
 %
 % closeScreen accepts arbitrarily many config structs.
+%
+% Args:
+%   config1, config2, ...: Any number of configuration objects
 
 windowIds = unique(cell2mat(cellfun(@getWindowId, varargin, 'UniformOutput', false)));
 textureIds = unique(cell2mat(cellfun(@getTextureIds, varargin, 'UniformOutput', false)));
@@ -19,6 +22,13 @@ end
 
 %% Helper functions to help extract fields and catch errors
 function windowId = getWindowId(config)
+% Extract window ID fields
+%
+% Args:
+%   config: The program configuration (settings)
+%
+% Returns:
+%   windowId: A defined window.
   try
     windowId = config.device.windowPtr;
   catch
@@ -27,6 +37,13 @@ function windowId = getWindowId(config)
 end
 
 function textureIds = getTextureIds(config)
+% Extract texture ID fields
+%
+% Args:
+%   config: The program configuration (settings)
+%
+% Returns:
+%   textureIds: A defined image texture.
   try
     textureArray = values(config.runSetup.textures);
     textureIds = cellfun(@(x) x.textureId, textureArray, 'UniformOutput', true);

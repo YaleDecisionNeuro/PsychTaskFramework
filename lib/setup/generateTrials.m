@@ -1,21 +1,35 @@
 function [ trialTbl ] = generateTrials(levelConfig)
-% GENERATETRIALS Generates a table of risk&ambiguity trials that contain all
+% Generates a table of risk&ambiguity trials that contain all
 %   combinations of `levelConfig` struct subfields.
 %
-% NOTE: The generator is specific to the risk/ambiguity task. It expects that %
-% the struct will contain `stakes` and at least one of (`probs`, `ambigs`)
-% fields.  % It will also combine them in a particular way (specifically,
-% assuming that all ambiguous % trials are coupled with .5 probability, and all
-% probability trials have at % least one appearance with zero ambiguity). It
-% distributes all other subfields % it finds randomly across thus generated
-% trials.
+% Args:
+%   levelConfig: A configuration level containing trial information
+% 
+% Returns:
+%   trialTbl: A table of all the trial information to be collected.
 %
-% If you wish to omit any ambiguous trials but do not wish to delete the struct
-% field, you can also pass an empty matrix to achieve the same result.
+% Note: 
+%   The generator is specific to the risk/ambiguity task. It expects that the
+%   struct will contain `stakes` and at least one of (`probs`, `ambigs`)
+%   fields.  It will also combine them in a particular way (specifically,
+%   assuming that all ambiguous trials are coupled with .5 probability, and all
+%   probability trials have at least one appearance with zero ambiguity). It
+%   distributes all other subfields it finds randomly across thus generated
+%   trials.
 %
-% Generally speaking: if your task only differs slightly from the monetary R&A
-% task, you should be able to use this script with minimum alteration. If your
-% task is substantially different, you might have to roll your own.
+% Note:
+%   If you wish to omit any ambiguous trials but do not wish to delete the
+%   struct field, you can also pass an empty matrix to achieve the same result.
+%
+%   There is currently no way to disabuse generateTrials of the assumption that
+%   the midpoint of ambiguity occluder is at 0.5.
+%
+%
+% Generally speaking: if your task only differs slightly from the monetary
+% R&A task, you should be able to use this script with minimum alteration. If
+% your task is substantially different, you might have to roll your own.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% 1. Generate the basics -- assuming field names contain well-defined content
 allStakes = levelConfig.stakes;
@@ -86,7 +100,17 @@ for k = 1:numel(getFields)
 end
 end
 
+%% Helper function
 function val = existingValueOrDefault(structVar, fieldname, default)
+% Define a value from an existing value or a default setting
+%
+% Args:
+%   structVar: An existing (alternative) variable
+%   fieldname: A defined field
+%   default: A preselected variable used when no alternative is given 
+%
+% Returns:
+%   val: An existing or default value
   if ~exist('default', 'var')
     default = NaN;
   end

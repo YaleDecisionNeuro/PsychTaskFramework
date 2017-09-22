@@ -1,12 +1,17 @@
 function [ trialData ] = phase_response(trialData, blockConfig, phaseConfig)
-% PHASE_RESPONSE The response script that handles the display of the response
-%   prompt and the eventual response or non-response. Takes standard phase
-%   script arguments.
+% Draw response prompt and handle potential response keypress or lack thereof.
+%
+% Takes standard phase script arguments.
+%
+% Args:
+%   trialData: The participant data from a trial
+%   blockConfig: The block settings
+%   phaseConfig: The phase settings
+%
+% Returns:
+%   trialData: Updated participant data from a trial.
 
-%% Helper values
 windowPtr = blockConfig.device.windowPtr;
-
-%% Response prompt
 drawResponsePrompt(trialData, blockConfig);
 
 %% Draw
@@ -24,7 +29,16 @@ end
 end
 
 function trialData = timeAndRecordResponse(trialData, blockConfig)
-  [keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
+% Time the duration and record the participant response.
+%
+% Args:
+%   trialData: The participant data from a trial
+%   blockConfig: The block settings
+%
+% Returns:
+%   trialData: The participant data from a trial.
+
+[keyisdown, trialData.rt, keycode, trialData.rt_ci] = ...
     waitForKey({'1!', '2@'}, blockConfig.trial.legacyPhases.response.duration);
 
   %% Record choice & assign feedback color

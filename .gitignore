@@ -8,3 +8,5 @@ Sikuli_java_std*
 log.html
 report.html
 output.xml
+build
+*.asv

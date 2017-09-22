@@ -1,12 +1,17 @@
 function [ Summary ] = experimentSummary(Data, blockId, trialId, bagMap)
-% EXPERIMENTSUMMARY Selects block and trial from Data.blocks.recorded and
-%   returns information necessary for lottery realization in a per-trial
-%   struct. If `bagMap` is supplied, it will use it instead of the default
-%   lookup map. NOTE: This is different from the original behavior of
-%   `experimentSummary`, which returned a human-readable struct array that
-%   encompassed *all* trials.
+% Picks a trial; returns info necessary for in-person lottery realization. 
 %
-% NOTE: You might want to load the bagMap via `readtable` from a CSV/XLS file.
+% Warning:
+%   **Deprecated.** Use methods that evaluate lotteries instead.
+%   
+% If `bagMap` is supplied, it will use it instead of the default
+% lookup map. 
+%
+% You might want to load the bagMap via `readtable` from a CSV/XLS file.
+%
+% Note: 
+%   This is different from the original behavior of `experimentSummary`, which
+%   returned a human-readable struct array that encompassed *all* trials.
 
 if ~exist('bagMap', 'var')
   probs = [.5 .5 .5 .5 .25 .25 .75 .75]';

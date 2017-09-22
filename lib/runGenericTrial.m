@@ -1,9 +1,16 @@
 function trialData = runGenericTrial(trialData, blockConfig)
-% RunGenericTrial Fully generalized workhorse function to display any phases of
-%   an individual trial, as defined using PhaseConfig objects in
-%   blockConfig.trial.phases.
+% Runs through all the phases of an arbitrarily defined trial.
+%
+% Fully generalized workhorse function to display any phases of an individual
+% trial, as defined using PhaseConfig objects in blockConfig.trial.phases.
+%
+% Args:
+%   trialData: Table of properties of the trial about to be run
+%   blockConfig: The block settings
+%
+% Returns:
+%   trialData: Table of trial properties + information gathered from a trial.
 
-% Record the properties of this trial to trialData
 trialData.trialStartTime = datevec(now);
 
 % Create convenience variables

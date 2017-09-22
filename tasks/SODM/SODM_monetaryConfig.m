@@ -1,5 +1,12 @@
 function c = SODM_monetaryConfig(initial_config)
-% SODM_CONFIG_MONETARY Configure monetary blocks of the self/other task
+% Configure monetary blocks of the self/other task.
+%
+% Args:
+%   initial_config: Task config struct to modify
+%
+% Returns:
+%   Config struct specific to the monetary conditions of the self/other task
+
 if exist('initial_config', 'var')
   c = initial_config;
 else

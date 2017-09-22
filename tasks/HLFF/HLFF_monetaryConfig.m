@@ -1,5 +1,12 @@
 function c = HLFF_monetaryConfig(initial_config)
-% HLFF_monetaryConfig Configure monetary blocks of high-/low-fat food task
+% Configure monetary blocks of high-/low-fat food task.
+%
+% Args:
+%   initial_config: Task config struct to modify
+%
+% Returns:
+%   Config struct specific to the HLFF monetary condition
+
   if exist('initial_config', 'var')
     c = initial_config;
   else

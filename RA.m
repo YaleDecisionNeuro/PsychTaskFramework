@@ -1,17 +1,20 @@
 function [ Data ] = RA(subjectId)
-% RA Main task script for the monetary risk and ambiguity task. Loads config,
-%   executes requisite blocks, and records data for the subject whose ID is
-%   passed as an argument.
+% Main task script for the monetary risk and ambiguity task in gains and losses
 %
-% It bears noting that in its general outline, this script can be written to
-% conduct any form of the trial -- all of RA_Practice, RA_Gains, and RA_Loss
-% can be established here. (If you add logic for condition assignment and
-% detection of past recorded trials, you'll be able to invoke this script with
-% the same call for both sessions -- it will just keep adding the new data to
-% `.recordedBlocks`).
+% Loads config and DataObject, generates and executes requisite blocks, and
+% records data for the subject whose `subjectId` is passed as an argument.
+%
+% If `subjectId` is not given, the task runs a shorter practice version of
+% itself.
+%
+% Args:
+%   subjectId (int, optional): A participant ID
+%
+% Returns:
+%   DataObject struct: A `DataObject` with a record of the participant's
+%   choices.
 
-%% Add subfolders we'll be using to path
-addpath(genpath('./lib'));
+addpath(genpath('./lib')); % Add PTF functions on Matlab's path
 addpath(genpath('./tasks/RA'));
 % NOTE: genpath gets the directory and all its subdirectories
 

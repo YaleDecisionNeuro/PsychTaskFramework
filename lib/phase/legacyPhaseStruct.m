@@ -7,15 +7,18 @@ function [ phases_RA ] = legacyPhaseStruct
 % the same arguments that the phase function in lib/phase does. (In general,
 % this is `sampleFn(trialData, blockConfig, phaseConfig)`.)
 %
-% By design, showChoicePhaseFn is left blank. `runRATrial` will complain if it is
-% not set, or if any of the phase function handles below are unset. While you
-% might avoid setting it by writing your own trial script, it is recommended
-% that you still leverage these config; it will make your task easier to
-% maintain and understand for your collaborators.
+% By design, showChoicePhaseFn is left blank. `runRATrial` will complain if it
+% is not set, or if any of the phase function handles below are unset. While
+% you might avoid setting it by writing your own trial script, it is
+% recommended that you still leverage these config; it will make your task
+% easier to maintain and understand for your collaborators.
 %
 % By design, s.game.responsePhaseFn is set to @phase_response; however, if your
 % showChoice function collects responses during the display, it can be set to
 % NaN.
+%
+% Returns:
+%   phases_RA: The phase settings for risk and ambiguity tasks.
 
 phases_RA.showChoice = struct;
 phases_RA.showChoice.phaseScript = @phase_showChoice;
@@ -41,12 +44,12 @@ phases_RA.intertrial.duration = NaN;
 % [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 %
 % These have to be in each block, in some order -- in most fMRI block designs,
-% the block has to be constant. Some designs might want to shuffle these in
-% particular ways, just like items in `s.trial.generate`; other designs might want
-% to omit ITIs altogether.
+%   the block has to be constant. Some designs might want to shuffle these in
+%   particular ways, just like items in `s.trial.generate`; other designs might want
+%   to omit ITIs altogether.
 %
 % However, current method of shuffling ITIs will work as long as their number
-% divides the number of trials within a block without remainder.
-% Color indices. Currently, they refer to `s.draw.lottery.box.probColors`
-% and `s.draw.lottery.box.colorKey`.
+%   divides the number of trials within a block without remainder.
+%   Color indices. Currently, they refer to `s.draw.lottery.box.probColors`
+%   and `s.draw.lottery.box.colorKey`.
 end

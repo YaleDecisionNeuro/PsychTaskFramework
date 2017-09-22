@@ -1,7 +1,20 @@
 function [ Data, existed ] = loadOrCreate(subjectId, fname)
-% LOADORCREATE Load a subject data file. If it does not exist, create it.
-% (Currently assumes that subject data is stored in a struct called Data,
-% and that the folders in the path to `fname` all exist.)
+% Load a subject data file. If it does not exist, create it.
+%
+% Args:
+%   subjectID: A participant ID
+%   fname: A filename
+%
+% Returns:
+%   2-element tuple containing
+%
+%   - **Data**: Participant information.
+%   - **existed**: Boolean reporting whether the file previously existed, or
+%       had to be created.
+%
+% Warning: 
+%   Currently assumes that subject data is stored in a struct called Data,
+%   and that the folders in the path to `fname` all exist.
 
 [path, ~, ~] = fileparts(fname);
 if ~exist(path, 'dir')

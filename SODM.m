@@ -1,13 +1,12 @@
 function [ Data ] = SODM(subjectId)
-% SODM Runs a self-other monetary and medical decision-making task and records
-%   its results for the subject whose subject number is passed in. Modeled
-%   on (and largely copy-pasted from) RA.m, to test out image implementation
-%   (#5).
+% Runs a self-other monetary and medical decision-making task and records
+% its results for the subject whose subject number is passed in. Modeled on
+% (and largely copy-pasted from) RA.m, to test out image implementation (#5).
 
-%% Add subfolders we'll be using to path
 addpath(genpath('./lib'));
 addpath(genpath('./tasks/SODM'));
 addpath('./tasks/MDM');
+% Add subfolders we'll be using to path
 % NOTE: genpath gets the directory and all its subdirectories
 
 %% Load config

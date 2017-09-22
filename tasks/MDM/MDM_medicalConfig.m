@@ -1,8 +1,13 @@
 function c = MDM_medicalConfig(initial_config)
-  % MDM_CONFIG Return config specific to the medical portion of MDM by
-  %   modifying the general MDM_blockDefaults pass as argument.
+  % Return config specific to the medical portion of MDM by modifying the
+  % general `MDM_blockDefaults` pass as argument.
+  %
+  % Args:
+  %   initial_config: Task config struct to modify
+  %
+  % Returns:
+  %   Config struct specific to the MDM medical condition
 
-  % Load defaults
   c = initial_config;
 
   %% Block properties

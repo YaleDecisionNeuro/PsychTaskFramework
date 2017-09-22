@@ -1,5 +1,20 @@
 function drawRef(blockConfig, trialData)
-% DRAWREF Draws the stable reference value on screen.
+% Draws the stable reference value on screen.
+%
+% To get the side and reference value, it uses getReferenceSideAndValue, which
+% searches the structures supplied as arguments.
+%
+% If blockConfig.draw.lottery.verticalLayout is set to true, the reference will
+% be drawn to the side vertically rather than horizontally.
+%
+% Args:
+%   blockConfig: The block settings
+%   trialData: Trial properties and collected participant data
+%
+% Returns:
+%   Like all draw functions, it has no return.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% 1. Obtain values
 [ referenceSide, referenceValue ] = getReferenceSideAndValue(trialData, blockConfig);

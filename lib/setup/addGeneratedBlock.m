@@ -1,5 +1,16 @@
 function [ DataObject ] = addGeneratedBlock(DataObject, blockTrials, config, conditions)
-% Properly stores block components (trials and config) in a DataObject.
+% Properly stores ordered block components (trials and config) in a DataObject.
+%
+% Args:
+%   DataObject: An object storing block components
+%   blockTrials: A table of trials set up for each block
+%   config: A configuration of the block components 
+%   conditions: A structure of how to configure block components
+%
+% Returns:
+%   DataObject: An object storing block components.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 % 1. Initialize and check arguments
 if ~isfield(DataObject, 'blocks')

@@ -1,9 +1,19 @@
 function [ textureMap ] = loadTexturesFromConfig(configStruct, textureMap)
-% LOADTEXTURESFROMCONFIG Given a `configStruct`, it will extract file paths
-%   named `.img` and return a container mapping valid image filenames to
-%   a struct containing PTB's `.textureId` and their dimentsions in `.dims`.
-%   If provided with a previously generated `textureMap`, it will avoid
-%   redundant loading of previously loaded images.
+% Create a texture map of images and image information.
+%
+% Given a `configStruct`, it will extract file paths named `.img` and return a
+% container mapping valid image filenames to a struct containing PTB's
+% `.textureId` and their dimensions in `.dims`. If provided with a previously
+% generated `textureMap`, it will avoid redundant loading of previously loaded
+% images.
+%
+% Args:
+%   configStruct: A configuration structure containing named images
+%   textureMap: Optionally, a previously created textureMap to update
+%
+% Returns:
+%   textureMap: A data structure of texture pointer and dimensions mapped to a
+%     filename.
 
 if ~exist('textureMap', 'var')
   textureMap = containers.Map;
@@ -41,8 +51,16 @@ end
 end
 
 function [ filenames ] = extractImagesFromConfig(configStruct)
-% EXTRACTIMAGESFROMCONFIG scours `configStruct` for any fields named `img` that
+% Creates files of existing images. 
+%
+% Scours `configStruct` for any fields named `img` that
 %   contain a character array.  It returns a cell array of all of these fields.
+%
+% Args:
+%   configStruct: A configuration structure containing named images
+% 
+% Returns:
+%   filenames: A defined file.
 
 filenames = {};
 names = fieldnames(configStruct);

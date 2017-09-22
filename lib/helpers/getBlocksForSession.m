@@ -1,10 +1,23 @@
 function [ firstIdx, lastIdx ] = getBlocksForSession(DataObject, blocksPerSession)
-  % Find the indices for the blocks to begin and end the current session.
-  %
-  % NOTE: If all blocks have been done already, `lastIdx` will be an empty
-  % vector. This will prevent any loop of the form k:lastIdx from running, but
-  % you should make sure you don't rely on the numericity of lastIdx in other
-  % ways.
+% Find the indices for the blocks to begin and end the current session.
+%
+% Args:
+%   DataObject: An object containing block information
+%   blocksPerSession: The number of blocks to run this session 
+%
+% Returns:
+%   2-element tuple containing
+%
+%   - **firstIdx**: The index of the first block.
+%   - **lastIdx**: The index of the last block.
+%  
+% Note: 
+%   If all blocks have been done already, `lastIdx` will be an empty
+%   vector. This will prevent any loop of the form k:lastIdx from running, but
+%   you should make sure you don't rely on the numericity of lastIdx in other
+%   ways.
+ 
+  0; % to prevent sphinx from thinking that the next comment is more docstring
 
   % Extract relevant values from DataObject
   blocksSoFar = DataObject.numFinishedBlocks;

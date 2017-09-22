@@ -1,9 +1,11 @@
 function s = SODM_blockDefaults()
-% SODM_CONFIG Return general block config for the medical decision-making
-%   task by modifying the default ones from `config`.
+% Return general block config for the medical decision-making task by modifying
+% the default ones from `configDefaults`.
+%
+% Returns:
+%   The config struct with settings shared across all SODM conditions.
 
-% Load defaults
-s = configDefaults();
+s = configDefaults(); % Load defaults
 
 %% Machine config
 s.task.taskPath = ['tasks' filesep 'SODM'];

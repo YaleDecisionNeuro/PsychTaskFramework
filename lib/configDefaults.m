@@ -12,14 +12,27 @@ function s = configDefaults(changes)
 % these defaults to serve all RA block kinds. RA_lossConfig would then modify
 % the result of *that* call for loss-domain blocks, like so:
 %
-%   config = RA_blockDefaults(configDefaults);
-%   lossConfig = RA_lossConfig(config);
+%     config = RA_blockDefaults(configDefaults);
+%     lossConfig = RA_lossConfig(config);
 %
 % Most often, `XYZ_blockDefaults` will use `configDefaults` as a starting point
 % without an argument. That is a useful option if you don't expect making any
 % modifications to configDefaults for all your tasks.
 %
-% TODO: Implement `changes` to bring some order to post-return alterations.
+% Args:
+%   changes: A field of modifications made to the original set-up (not implemented)
+%
+% Note:
+%   `changes` is not actually implemented yet. Instead, directly modify the
+%   structure returned by the function.
+% 
+% Returns:
+%   struct: The default config struct with all standard task settings
+%
+% Todo: 
+%   Implement `changes` to bring some order to post-return alterations.
+
+0; % to prevent sphinx for grabbing the headline for autodoc
 
 %%% Defaults
 %% Debugging
@@ -46,18 +59,18 @@ s.device.saveAfterBlock = true;
 s.device.saveAfterTrial = false;
 
 % Which keys does the device listen to?
-% `breakKeys` are what "press key to start" phases will wait for. The default
+% - `breakKeys` are what "press key to start" phases will wait for. The default
 %   is '5%', as that's what many fMRI scanners use to signal the start of
 %   recording.
 s.device.breakKeys = {'5%'};
-% `choiceKeys` are the keys that the subject is directed to use to signal their
+% - `choiceKeys` are the keys that the subject is directed to use to signal their
 %   choice.
 s.device.choiceKeys = {'1!', '2@'};
 
 %% Graphics defaults
 % To prevent yourself from having to change many config in many places, use
-% `s.graphicDefault.X` to define property `X` for a particular display feature. This
-% way, you'll only have to change it in one spot,
+% `s.graphicDefault.X` to define property `X` for a particular display feature.
+% This way, you'll only have to change it in one spot,
 s.graphicDefault.fontName = 'Arial';
 s.graphicDefault.fontColor = [255 255 255];
 s.graphicDefault.fontSize = 42;
@@ -73,10 +86,10 @@ s.graphicDefault.padding = 10; % px to leave between objects
 % write will rely on these values; the way you choose to encode them in the
 % config is up to you. (This might change in future versions.)
 %
-% The defaults pertain to R&A task objects. This chiefly means the lottery
-% box and associated labels; the reference value (i.e. alternative to the
-% lottery); and the graphical properties of the response prompt, feedback
-% display, and intertrial-interval indicator.
+% The defaults pertain to R&A task objects. This chiefly means the lottery box
+% and associated labels; the reference value (i.e. alternative to the lottery);
+% and the graphical properties of the response prompt, feedback display, and
+% intertrial-interval indicator.
 
 % R&A: Box properties
 s.draw.lottery.box.dims = [150 300];
@@ -147,8 +160,9 @@ s.task.blockLength = 1; % NOTE: Deprecated in favor of numBlocks
 % IMPORTANT: These are *crucial* items to set, as they define what components
 % your task will be using.
 %
-% NOTE: It is important to ensure that whatever trial script you'll be using
-% will be on the MATLAB path, i.e. added with `addpath(script_location)`.
+% NOTE: 
+%   It is important to ensure that whatever trial script you'll be using will
+%   be on the MATLAB path, i.e. added with `addpath(script_location)`.
 %
 % You can learn more about function handles at
 % https://www.mathworks.com/help/matlab/matlab_prog/creating-a-function-handle.html.)
@@ -194,19 +208,21 @@ s.task.fnHandles.referenceDrawFn = @drawRef;
 % Configure what values your trials will be generated with, and what functions
 % and actions each trial's phases should use.
 
-% `.phases` is a cell array of PhaseConfigs (see lib/phase/phaseConfig.m).
-% Each cell defines what phase function oversees the execution of the
-% phase, what action should be taken at the end of the phase, how long the
-% phase should last and, optionally, what draw scripts should be invoked.
+% `.phases` is a cell array of PhaseConfigs (see lib/phase/phaseConfig.m). Each
+% cell defines what phase function oversees the execution of the phase, what
+% action should be taken at the end of the phase, how long the phase should
+% last and, optionally, what draw scripts should be invoked. 
+%
 % See tasks/HLFF/HLFF_blockDefaults for an example.
 s.trial.phases = cell.empty;
 
 % %% Legacy phase scripts
-% NOTE: This section only applies if you're using @runRATrial as your trial
-% script. @runGenericTrial does not check these config.
+% NOTE: 
+%   This section only applies if you're using @runRATrial as your trial script.
+%   @runGenericTrial does not check these config.
 %
-% If you wish to run "old-school" Levylab R&A task with legacy config,
-% you should fill `s.legacyPhases` with a call to `legacyPhaseStruct`. (You can,
+% If you wish to run "old-school" Levylab R&A task with legacy config, you
+% should fill `s.legacyPhases` with a call to `legacyPhaseStruct`. (You can,
 % and should, run the task with the new phase architecture, but this will
 % remain an option.) Check out lib/phase/legacyPhaseStruct.m for details.
 s.trial.legacyPhases = struct.empty;
@@ -216,27 +232,28 @@ s.trial.legacyPhases = struct.empty;
 % requisite values necessary to render the trial. See examples.
 s.trial.importFile = char.empty;
 
-% DEPRECATION NOTE: The following programmatic generation of trials might be a
-% sufficient headache that you might only want to do it once and then save the
-% results in `c.trial.importFile`.
+% DEPRECATION NOTE: 
+%   The following programmatic generation of trials might be a sufficient
+%   headache that you might only want to do it once and then save the results
+%   in `c.trial.importFile`.
 %
 % These values are R&A-centric in that generateTrials and generateBlocks only
-% knows how to generate different combinations of stakes, probs, and ambigs.
-% If you want to generate combinations beyond that, you might have to write
-% your own functions for it.
+% knows how to generate different combinations of stakes, probs, and ambigs. If
+% you want to generate combinations beyond that, you might have to write your
+% own functions for it.
 
 % Stakes, or payoffs, are the possible win-values in the lottery. Stakes_loss
 % are the possible loss values in the lottery. Reference is the available
 % no-risk alternative.
 %
 % If you're using images or textual labels, you will need to use *indices* of
-% s.runSetup.lookups.txt and s.runSetup.lookups.img. For instance, if the textual
-% description of possible outcomes is {"no cookies", "one cookie", "two
+% s.runSetup.lookups.txt and s.runSetup.lookups.img. For instance, if the
+% textual description of possible outcomes is {"no cookies", "one cookie", "two
 % cookies", "a dozen cookies"}, and you want possible lottery win values to be
 % two cookies, loss value to be no cookie and sure option to be one cookie,
 % you'd need to use
 %
-%   stakes = [2]; stakes_loss = 0; reference = 1;
+%     stakes = [2]; stakes_loss = 0; reference = 1;
 %
 % in order to get s.runSetup.lookups.txt{2} in case of a win.
 s.trial.generate.stakes = [5, 6, 7, 8];
@@ -259,14 +276,14 @@ s.trial.generate.ambigs = [.24 .5 .74];
 % trials within the block.
 %
 % If you need trials of constant length, intertrial period should be extended
-% by whatever time the subjects saved by answering early. In order to do
-% that, set `s.task.constantBlockDuration` to `true`.
+% by whatever time the subjects saved by answering early. In order to do that,
+% set `s.task.constantBlockDuration` to `true`.
 s.trial.generate.ITIs = 5;
 % NOTE: Values for the fMRI R&A task are
 %   [4 * ones(1, 10), 6 * ones(1, 10), 8 * ones(1, 10)];
 
-% Color indices. Currently, they refer to `s.draw.lottery.box.probColors`
-% and `s.draw.lottery.box.colorKey`.
+% Color indices. Currently, they refer to `s.draw.lottery.box.probColors` and
+% `s.draw.lottery.box.colorKey`.
 s.trial.generate.colors = [1 2];
 
 % How many times should a unique stakes-prob-ambig combination be repeated in
@@ -277,26 +294,27 @@ s.trial.generate.repeats = 1;
 % block, this is where you would define them. See the implemented task configs
 % for examples.
 %
-% If `.catchIdx` is left as NaN, the catch trial(s) will be inserted into
-% a random position in the block. If it is a number n, it will be injected at
+% If `.catchIdx` is left as NaN, the catch trial(s) will be inserted into a
+% random position in the block. If it is a number n, it will be injected at
 % n-th row.
 %
-% NOTE: The ITI for the catch trial(s) should be defined here, not in the `ITIs`
-% field above.
+% NOTE: 
+%   The ITI for the catch trial(s) should be defined here, not in the `ITIs`
+%   field above.
 s.trial.generate.catchTrial = table.empty;
 s.trial.generate.catchIdx = NaN;
 
-% If you wish to display the reference value on different sides in
-% different trials, you might want to uncomment. 1 refers conventionally to 
-% the left or the top choice.
+% If you wish to display the reference value on different sides in different
+% trials, you might want to uncomment. 1 refers conventionally to the left or
+% the top choice.
 % 
 % It ranges from 1 to n, where n is the number of keys in 
 % s.device.choiceKeys.
 % s.trial.generate.refSide = [1 2];
 
 %%% Run config
-% This will be specific to each block that you run. None of these config have
-% a default, although default is suggested.
+% This will be specific to each block that you run. None of these config have a
+% default, although default is suggested.
 
 %% Block properties
 % Block name is useful to quickly identify the properties used to run a trial
@@ -307,8 +325,8 @@ s.runSetup.blockName = char.empty;
 
 %% Lookup tables
 % If you're using any images or map your payoff values to a textual label,
-% you'd define the lookup tables here! For an example, see MDM_blockDefaults. For an
-% explanation, see the README.
+% you'd define the lookup tables here! For an example, see MDM_blockDefaults.
+% For an explanation, see the README.
 s.runSetup.lookups.txt = cell.empty;
 s.runSetup.lookups.img = cell.empty;
 
@@ -316,7 +334,7 @@ s.runSetup.lookups.img = cell.empty;
 % As a rule, if your lookups contain any images, you will need to generate
 % PsychToolBox textures. This framework expects you to do this by populating
 %
-%   config.runSetup.textures = loadTexturesFromConfig(config);
+%     config.runSetup.textures = loadTexturesFromConfig(config);
 %
 % at a point in your task master script when PTB is already loaded.
 s.runSetup.textures = cell.empty;

@@ -1,9 +1,16 @@
 function drawResponsePrompt(trialData, blockConfig)
-% DRAWRESPONSEPROMPT Draws the response prompt symbol (by default, green oval).
+% Draws the response prompt symbol (by default, green oval).
 %
-% FIXME: Nigh-duplicate code with drawITI. Factor out the general "draw an
-% object in the center when provided the center and
-% blockConfig.draw.(object)".
+% Args:
+%   trialData: Trial properties and collected participant data
+%   blockConfig: The block settings
+%
+% Returns:
+%   Like all draw functions, it has no return.
+%
+% Todo: 
+%   Nigh-duplicate code with drawITI. Factor out the general "draw an object in
+%   the center when provided the center and blockConfig.draw.(object)".
 
 windowPtr = blockConfig.device.windowPtr;
 W = blockConfig.device.windowWidth; % width

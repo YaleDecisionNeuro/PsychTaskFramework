@@ -1,10 +1,23 @@
 function drawLotto(trialData, blockConfig)
-% DrawLotto Using an open PTB screen and other properties of blockConfig,
-%   draws a lottery with values specified in trialData in the center of
-%   the screen.
+% Draws a lottery as specified in trialData in the center of the screen.
 %
-% If blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
+% Uses an open PTB screen and other properties of blockConfig. If
+% blockConfig.draw.lottery.offCenterByPx exists, drawLotto will shift
 % the lottery by the specified amount of pixels.
+%
+% Note:
+%   If you wish to draw multiple lotteries or determine the offset dynamically,
+%   you will need to hot-patch the arguments to this function. A redress is
+%   under development.
+%
+% Args:
+%   trialData: Trial properties and collected participant data
+%   blockConfig: The block settings 
+%
+% Returns:
+%   Like all draw functions, it has no return.
+
+0; % to prevent sphinx from thinking that the next comment is more docstring
 
 %% 1. Extract config
 % Device
@@ -118,6 +131,11 @@ end
 %% Nested functions,
 % (as it's useful to separate the logic while accessing to prior computations)
 function drawPayoffImageAndLabel(payoffs)
+% Draw the lottery image with label and correct placement on screen.
+%
+% Args:
+%   payoffs: The possible outcomes of the lottery
+%
   % 1. Draw labels
   Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.stakes.fontSize);
   lookupTbl = blockConfig.runSetup.lookups.txt;
@@ -153,6 +171,11 @@ function drawPayoffImageAndLabel(payoffs)
 end
 
 function drawPayoffAmount(payoffs)
+% Draw monetary values of lottery based on location of lottery image.
+%
+% Args:
+%   payoffs: The possible outcomes of the lottery
+%
   % 1. Get text dimensions & string
   Screen(windowPtr, 'TextSize', blockConfig.draw.lottery.stakes.fontSize);
   [ topPayoffString, topPayoffDims ] = dollarFormatter(payoffs(1), windowPtr);
