@@ -21,10 +21,10 @@ end
 
 l = length(arr);
 if l > n
-  warning('Cutting `arr` down from %d to %d...', l, n);
+  fprintf('Cutting `arr` down from %d to %d...\n', l, n);
   arr = arr(1:n);
 elseif l < n
-  warning('Extending `arr` from %d to %d...', l, n);
+  fprintf('Extending `arr` from %d to %d...\n', l, n);
   arr = repmat(arr(:), floor(n / l), 1);
   remainder = rem(n, l);
   if remainder > 0
