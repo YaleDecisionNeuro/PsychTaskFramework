@@ -7,7 +7,7 @@ classdef blockLengthTest < matlab.unittest.TestCase
       function trialProperties(testCase)
         testCase.TrialNumber = 20;
         testCase.TestConfig.task = struct;
-        testCase.TestConfig.task.numBlocks = 1;
+        testCase.TestConfig.task.blocksPerCondition = 1;
         testCase.TestConfig.task.blocksPerSession = 1;
         % testCase.TestConfig.task.blockLength = 1;
       end
@@ -21,7 +21,7 @@ classdef blockLengthTest < matlab.unittest.TestCase
       testCase.verifyEqual(actual, expected);
 
       % two blocks
-      testCase.TestConfig.task.numBlocks = 2;
+      testCase.TestConfig.task.blocksPerCondition = 2;
       actual = getBlockLengths(testCase.TestConfig, testCase.TrialNumber);
       expected = [10; 10];
       testCase.verifyEqual(actual, expected);
@@ -29,7 +29,7 @@ classdef blockLengthTest < matlab.unittest.TestCase
     % 2. Basic generation with blockLength only
     function blockLengthOnly(testCase)
       % one block
-      testCase.TestConfig.task = rmfield(testCase.TestConfig.task, 'numBlocks');
+      testCase.TestConfig.task = rmfield(testCase.TestConfig.task, 'blocksPerCondition');
       testCase.TestConfig.task.blockLength = 20;
       actual = getBlockLengths(testCase.TestConfig, testCase.TrialNumber);
       expected = [20];
@@ -53,7 +53,7 @@ classdef blockLengthTest < matlab.unittest.TestCase
     % 3b. If numBlocks is not set but blockLength is & includes catch trials,
     %     returned block lengths subtract numCatchTrials
     function blockLengthIncludesCatchTrials(testCase)
-      testCase.TestConfig.task = rmfield(testCase.TestConfig.task, 'numBlocks');
+      testCase.TestConfig.task = rmfield(testCase.TestConfig.task, 'blocksPerCondition');
       testCase.TestConfig.task.blockLength = 12;
       actual = getBlockLengths(testCase.TestConfig, testCase.TrialNumber, 2);
       expected = [10; 10];
@@ -63,7 +63,7 @@ classdef blockLengthTest < matlab.unittest.TestCase
     %% Corner cases that raise warnings - things that aren't divisible
     % numBlocks trumps blockLength but raises a warning
     function numBlocksTrumpsBlockLength(testCase)
-      testCase.TestConfig.task.numBlocks = 2;
+      testCase.TestConfig.task.blocksPerCondition = 2;
       testCase.TestConfig.task.blockLength = 20;
       % actual = getBlockLengths(testCase.TestConfig, testCase.TrialNumber);
       expected = [10; 10];
@@ -75,7 +75,7 @@ classdef blockLengthTest < matlab.unittest.TestCase
 
     % numBlocks is heeded but trials are redistributed
     function redistributeLeftoversForNumBlocks(testCase)
-      testCase.TestConfig.task.numBlocks = 3;
+      testCase.TestConfig.task.blocksPerCondition = 3;
       expected = [7; 7; 6];
       actual = testCase.verifyWarning(@() ...
         getBlockLengths(testCase.TestConfig, testCase.TrialNumber), ...
@@ -85,9 +85,8 @@ classdef blockLengthTest < matlab.unittest.TestCase
 
     % blockLength wins, adds block with leftover trials
     function addBlockForNumBlocks(testCase)
-      testCase.TestConfig.task.numBlocks = false;
-      testCase.TestConfig.task.numSessions = false;
-      testCase.TestConfig.task.numBlocksPerSession = false;
+      testCase.TestConfig.task.blocksPerCondition = false;
+      testCase.TestConfig.task.blocksPerSession = false;
       testCase.TestConfig.task.blockLength = 6;
       expected = [6; 6; 6; 2];
       actual = testCase.verifyWarning(@() ...
@@ -98,7 +97,7 @@ classdef blockLengthTest < matlab.unittest.TestCase
 
     %% 4. Function intelligently fills in from other settings
     function fillInNumBlocksFromOtherSettings(testCase)
-      testCase.TestConfig.task.numBlocks = false;
+      testCase.TestConfig.task.blocksPerCondition = false;
       testCase.TestConfig.task.blocksPerSession = 4;
       testCase.TestConfig.task.blockLength = false;
       actual = getBlockLengths(testCase.TestConfig, testCase.TrialNumber);

@@ -32,6 +32,7 @@ s.trial.legacyPhases.showChoice.phaseScript = @phase_showChoice;
 s.task.fnHandles.referenceDrawFn = @drawRef;
 s.task.blockLength = 21;
 s.task.numBlocks = 4;
+s.task.blocksPerCondition = 4;
 s.task.blocksPerSession = 4;
 
 s.trial.legacyPhases.showChoice.action = @action_display;

@@ -36,6 +36,7 @@ s.task.fnHandles.referenceDrawFn = @drawRef;
 % Useful for generation purposes
 s.task.blockLength = 20;
 s.task.numBlocks = 6;
+s.task.blocksPerCondition = 2;
 
 %% Available trial values
 s.trial.generate.probs = [.25 .5 .75];
