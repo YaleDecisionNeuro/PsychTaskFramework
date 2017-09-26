@@ -30,6 +30,7 @@ function s = UVRA_blockDefaults()
   % Fitting trials into blocks and blocks into sessions
   s.task.blockLength = 20; % trials per block
   s.task.numBlocks = 6; % blocks per game
+  s.task.blocksPerCondition = 6;
   s.task.blocksPerSession = 3;
 
   % Winning pay-offs

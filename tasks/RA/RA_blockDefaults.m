@@ -21,6 +21,7 @@ s.runSetup.conditions.payoffKind = 'Monetary';
 s.runSetup.conditions.domain = 'Gains';
 s.task.blockLength = 31; % Useful for generation purposes
 s.task.numBlocks = 8;
+s.task.blocksPerCondition = 4;
 s.task.blocksPerSession = 4;
 
 s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function

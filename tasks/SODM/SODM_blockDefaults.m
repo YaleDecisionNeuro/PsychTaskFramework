@@ -29,6 +29,7 @@ s.task.taskName = 'SODM';
 s.task.blockLength = 19;
 s.task.blocksPerSession = 8;
 s.task.numBlocks = 8;
+s.task.blocksPerCondition = 2; % self and other are separate conditions
 
 s.task.fnHandles.trialFn = @runRATrial; % RA-specific trial function
 s.task.fnHandles.preBlockFn = @SODM_preBlock;
