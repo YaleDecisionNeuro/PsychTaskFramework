@@ -58,7 +58,7 @@ s.trial.generate.reference = 2;
 s.trial.generate.ITIs = s.trial.legacyPhases.intertrial.duration;
 
 s.trial.generate.catchIdx = 1;
-catchVals = struct('stakes', 2, 'probs', NaN, 'ambigs', [], ...
-  'stakes_loss', 1, 'reference', 2, 'colors', NaN, 'ITIs', 5);
+catchVals = struct('stakes', 2, 'probs', 0.5, 'ambigs', [], ...
+  'stakes_loss', 1, 'reference', 2, 'colors', 1, 'ITIs', 5);
 s.trial.generate.catchTrial = generateTrials(catchVals);
 end

@@ -5,9 +5,7 @@ function [ Data ] = SODM(subjectId)
 
 addpath(genpath('./lib'));
 addpath(genpath('./tasks/SODM'));
-addpath('./tasks/MDM');
 % Add subfolders we'll be using to path
-% NOTE: genpath gets the directory and all its subdirectories
 
 %% Load config
 config = SODM_blockDefaults();
@@ -37,63 +35,9 @@ if ~isnan(subjectId)
   end
 end
 
-% Disambiguate config here
-monConfig = SODM_monetaryConfig(config);
-medConfig = SODM_medicalConfig(config);
-
 %% Generate trials if not generated already
 if ~isfield(Data, 'blocks') || isempty(Data.blocks)
-  % NOTE: Generating each one separately with two repeats, so that there isn't
-  % a cluster of high values in self vs. other
-  medSelfBlocks = generateBlocks(medConfig, medConfig.trial.generate.catchTrial, ...
-    medConfig.trial.generate.catchIdx);
-  medOtherBlocks = generateBlocks(medConfig, medConfig.trial.generate.catchTrial, ...
-    medConfig.trial.generate.catchIdx);
-  monSelfBlocks = generateBlocks(monConfig, monConfig.trial.generate.catchTrial, ...
-    monConfig.trial.generate.catchIdx);
-  monOtherBlocks = generateBlocks(monConfig, monConfig.trial.generate.catchTrial, ...
-    monConfig.trial.generate.catchIdx);
-
-  medBlocks = [medSelfBlocks; medOtherBlocks];
-  monBlocks = [monSelfBlocks; monOtherBlocks];
-
-  sortOrder = mod(Data.subjectId, 4);
-  selfIdx = [1 0 1 0]; % 0 is friend, 1 is self
-  medIdx = [1 1 0 0];  % 0 is monetary, 1 is medical
-
-  switch sortOrder
-    case 0
-      % Keep order
-    case 1
-      selfIdx = 1 - selfIdx;
-    case 2
-      medIdx = 1 - medIdx;
-    case 3
-      selfIdx = 1 - selfIdx;
-      medIdx = 1 - medIdx;
-  end
-  % Repeat the order for the second round
-  selfIdx = repmat(selfIdx, 1, 2);
-  medIdx = repmat(medIdx, 1, 2);
-  beneficiaryLookup = {'Friend', 'Self'};
-
-  % Logic: Do mon/med blocks first, pass self/other to them depending on selfIdx
-  numBlocks = length(selfIdx);
-  Data.numFinishedBlocks = 0;
-  for blockIdx = 1:numBlocks
-    blockKind = medIdx(blockIdx);
-    beneficiaryKind = selfIdx(blockIdx);
-    beneficiaryStr = beneficiaryLookup{beneficiaryKind + 1};
-    withinKindIdx = sum(medIdx(1 : blockIdx) == blockKind);
-
-    if blockKind == 1
-      medConfig.runSetup.conditions.beneficiary = beneficiaryStr;
-      Data = addGeneratedBlock(Data, medBlocks{withinKindIdx}, medConfig);
-    else
-      monConfig.runSetup.conditions.beneficiary = beneficiaryStr;
-      Data = addGeneratedBlock(Data, monBlocks{withinKindIdx}, monConfig);
-    end
-  end
+  Data.blocks = SODM_generateBlocks(subjectId, config);
 end
 
 % Select which blocks to run
@@ -114,5 +58,5 @@ for blockIdx = firstBlockIdx:lastBlockIdx
 end
 
 % Close window
-unloadPTB(monConfig, medConfig);
+unloadPTB(config);
 end
