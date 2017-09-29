@@ -1,10 +1,18 @@
 function [ blocks ] = splitTrialsIntoBlocks(trials, blockConfig, conditions) 
-% Splits a table of trials into blocks based on getBlockLengths(blockConfig)
+% Splits a table of trials into blocks based on provided configuration
 %
 % Args:
+%   trials: a `table` in which each row defines a single trial's properties
+%   blockConfig:
+%   conditions (optional): a struct with arbitrary fields that describe the
+%     condition that blockConfig defines
 %   
+% Returns:
+%   a cell array of ready-to-run blocks
+  [ catchTrial, catchIdx ] = getCatchTrial(blockConfig);
+  catchTrialCount = height(catchTrial) * length(catchIdx);
 
-  blockLengths = getBlockLengths(blockConfig, height(trials));
+  blockLengths = getBlockLengths(blockConfig, height(trials), catchTrialCount);
   blockNum = length(blockLengths);
   blocks = cell(blockNum, 1); % Pre-allocate
 
@@ -24,7 +32,7 @@ function [ blocks ] = splitTrialsIntoBlocks(trials, blockConfig, conditions)
       end
     else
       if isfield(blockConfig.runSetup, 'conditions')
-        warning('`conditions` was not passed; using blockConfig.runSetup.conditions.');
+        % warning('`conditions` was not passed; using blockConfig.runSetup.conditions.');
         conditions = blockConfig.runSetup.conditions;
       else
         warning('`conditions` was neither passed nor defined; making conditions blank.');
@@ -33,17 +41,13 @@ function [ blocks ] = splitTrialsIntoBlocks(trials, blockConfig, conditions)
     end
 
     % Insert constant catch trial at catchIdx of each block
-    if isfield(blockConfig, 'trial') && ...  %isfield(blockConfig.trial, 'catchTrial') || ...
-      isfield(blockConfig.trial, 'generate') && ...
-        isfield(blockConfig.trial.generate, 'catchTrial')
-      catchTrial = blockConfig.trial.generate.catchTrial;
+    if ~isempty(catchTrial)
+      if isnan(catchIdx)
+        catchIdx = randi(height(blockTrials));
+      end
+
       try
-        if isfield(blockConfig.trial.generate, 'catchIdx')
-          catchIdx = blockConfig.trial.generate.catchIdx;
-          blockTrials = injectRowAtIndex(blockTrials, catchTrial, catchIdx);
-        else
-          blockTrials = injectRowAtIndex(blockTrials, catchTrial, randi(height(blockTrials)));
-        end
+        blockTrials = injectRowAtIndex(blockTrials, catchTrial, catchIdx);
       catch ME
         warning(['Attempt to add a catch trial raised the %s exception. ', ...
           'The catch trial was not added.'], ME.identifier);
@@ -53,5 +57,19 @@ function [ blocks ] = splitTrialsIntoBlocks(trials, blockConfig, conditions)
     % blocks{k} = trialTbl;
     blocks{k} = struct('trials', blockTrials, 'config', blockConfig, ...
       'conditions', conditions, 'data', table(), 'finished', false);
+  end
+end
+
+function [ catchTrial, catchIdx ] = getCatchTrial(blockConfig)
+  catchTrial = [];
+  catchIdx = NaN;
+  if isfield(blockConfig, 'trial') && ...  %isfield(blockConfig.trial, 'catchTrial') || ...
+    isfield(blockConfig.trial, 'generate')
+    if isfield(blockConfig.trial.generate, 'catchTrial')
+      catchTrial = blockConfig.trial.generate.catchTrial;
+    end
+    if isfield(blockConfig.trial.generate, 'catchIdx')
+      catchIdx = blockConfig.trial.generate.catchIdx;
+    end
   end
 end
