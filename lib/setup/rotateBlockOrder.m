@@ -21,8 +21,18 @@ function [ newOrder ] = rotateBlockOrder(orderMatrix, determinantNumber, determi
 % of same-condition blocks and the pattern of such contiguities. You might wish
 % to look at `circshift` for another way of rotating the order matrix or
 % `randperm` for a completely random permutation.
+%
+% Note: 
+%   If determinantNumber is NaN (e.g. because no subject ID was assigned for a
+%   practice run), rotateBlockOrder will return the original orderMatrix
+%   without running determinantFn.
 
 conditionCount = length(unique(orderMatrix));
+
+if isnan(determinantNumber)
+  newOrder = orderMatrix;
+  return;
+end
 
 if exist('determinantFn', 'var')  
   if ~isFunction(determinantFn)
